@@ -1,0 +1,41 @@
+nurbs >> Nurbs
+Main functions
+ nrbmak
+ nrbtform
+ nrbkntins
+ nrbdegelev
+ nrbderiv
+ nrbdeval
+ nrbkntmult
+ nrbreverse
+ nrbtransp
+ nrbline
+ nrbcirc
+ nrbrect
+ nrb4surf
+ nrbeval
+ nrbextrude
+ nrbrevolve
+ nrbruled
+ nrbcoons
+ nrbplot
+Low level functions
+ bspeval
+ bspderiv
+ bspkntins
+ bspdegelev
+Vector and Transformation Utilities 
+ vecnorm
+ vecmag
+ vecmag2
+ vecangle
+ vecdot
+ veccross
+ vecrotx
+ vecroty
+ vecrotz
+ vecscale
+ vectrans
+Misc Utilities
+ deg2rad
+ rad2deg
