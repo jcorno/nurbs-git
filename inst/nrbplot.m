@@ -68,7 +68,7 @@ cmap='copper';
 for i=3:2:nargs
   Param = eval(['p' int2str((i-3)/2 +1)]);
   Value = eval(['v' int2str((i-3)/2 +1)]);
-  if ~isstr(Param)
+  if ~ischar(Param)
     error('Parameter must be a string')
   elseif size(Param,1)~=1
     error('Parameter must be a non-empty single row string.')
@@ -76,13 +76,13 @@ for i=3:2:nargs
   switch lower(Param)
   case 'light'
     light = lower(Value);
-    if ~isstr(light)
+    if ~ischar(light)
       error('light must be a string.')
     elseif ~(strcmp(light,'off') | strcmp(light,'on'))
       error('light must be off | on')
     end
   case 'colormap'
-    if isstr(Value)
+    if ischar(Value)
       cmap = lower(Value);
     elseif size(Value,2) ~= 3
       error('colormap must be a string or have exactly three columns.')
