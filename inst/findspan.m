@@ -15,17 +15,20 @@ function s = findspan(n,p,u,U)
 %    u - parametric point
 %    U - knot sequence
 % 
+%    U(1) <= u <= U(end)
 %  RETURN:
 % 
 %    s - knot span
 % 
 %  Algorithm A2.1 from 'The NURBS BOOK' pg68
-                                                
+                    
                                                 % int findspan(int n, int p, double u, double *U) {
-                                                
+if ((nargin ~= 4) || (u<U(1)) || (u>U(end))) 
+  print_usage ()
+end
                                                 %   int low, high, mid;                                                
                                                 %   // special case
-if (u==U(n+2)), s=n; return,  end               %   if (u == U[n+1]) return(n);
+if (u>=U(n+2)), s=n; return,  end               %   if (u == U[n+1]) return(n);
                                                 %
                                                 %   // do binary search
 low = p;                                        %   low = p;

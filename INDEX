@@ -19,6 +19,7 @@ Main functions
  nrbruled
  nrbcoons
  nrbplot
+ nrbsrfgradient
 Low level functions
  bspeval
  bspderiv
