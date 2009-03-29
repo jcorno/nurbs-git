@@ -123,7 +123,7 @@ if iscell(nurbs.knots)
     w = pnts(4,:);
     p = pnts(1:3,:);
     if foption
-       p = p./w;
+       p = p./repmat(w,[3, 1]);
     end
         
   end
