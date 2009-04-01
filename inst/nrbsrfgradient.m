@@ -1,27 +1,27 @@
-## Copyright (C) 2009 Carlo de Falco
-## 
-## This program is free software; you can redistribute it and/or modify
-## it under the terms of the GNU General Public License as published by
-## the Free Software Foundation; either version 2 of the License, or
-## (at your option) any later version.
-## 
-## This program is distributed in the hope that it will be useful,
-## but WITHOUT ANY WARRANTY; without even the implied warranty of
-## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-## GNU General Public License for more details.
-## 
-## You should have received a copy of the GNU General Public License
-## along with this program; if not, write to the Free Software
-## Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+%% Copyright (C) 2009 Carlo de Falco
+%% 
+%% This program is free software; you can redistribute it and/or modify
+%% it under the terms of the GNU General Public License as published by
+%% the Free Software Foundation; either version 2 of the License, or
+%% (at your option) any later version.
+%% 
+%% This program is distributed in the hope that it will be useful,
+%% but WITHOUT ANY WARRANTY; without even the implied warranty of
+%% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+%% GNU General Public License for more details.
+%% 
+%% You should have received a copy of the GNU General Public License
+%% along with this program; if not, write to the Free Software
+%% Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
-## -*- texinfo -*-
-## @deftypefn {Function File} {[@var{dzdx}, @var{dzdy}]=} nrbsrfgradient (@var{nrb}, @var{nrbder}, @var{u}, @var{v})
-## Compute the gradient of a NURBS surface.
-## @seealso{nrbderiv}
-## @end deftypefn
+%% -*- texinfo -*-
+%% @deftypefn {Function File} {[@var{dzdx}, @var{dzdy}]=} nrbsrfgradient (@var{nrb}, @var{nrbder}, @var{u}, @var{v})
+%% Compute the gradient of a NURBS surface.
+%% @seealso{nrbderiv}
+%% @end deftypefn
 
-## Author: Carlo de Falco <carlo@guglielmo.local>
-## Created: 2009-03-17
+%% Author: Carlo de Falco <carlo@guglielmo.local>
+%% Created: 2009-03-17
 
 function [dzdx, dzdy]  = nrbsrfgradient (nrb, nrbder, u, v)
 
@@ -85,3 +85,65 @@ endfunction
 %! quiver(squeeze(P(1,:,:)), squeeze(P(2,:,:)), dzdx, dzdy)
 %! assert(dzdy, dzdx,  10*eps);
 
+%!shared isrf
+%!test
+%! mcp = 3;
+%! ncp = 2;
+%! p = 2;
+%! q = 2;
+%! cntl = ones(4,mcp+1,ncp+1);
+%! cntl(3,:,:) = 0;
+%! 
+%! sq2_1 = sqrt(2)-1;
+%! sq2_2 = sqrt(2)/2;
+%! 
+%! cntl(1,:,:) = [1     3/2       2;
+%!                1     3/2       2;
+%!                sq2_1 sq2_1*3/2 sq2_1*2;
+%!                0     0         0];
+%!  
+%! cntl(2,:,:) = [0     0         0;
+%!                sq2_1 sq2_1*3/2 sq2_1*2;
+%!                1     3/2       2;
+%!                1     3/2       2];
+%!         
+%! cntl(4,2:3,1:3) = (1+1/sqrt(2))/2;
+%! 
+%! cntl(1,:,:) .*= cntl(4,:,:);
+%! cntl(2,:,:) .*= cntl(4,:,:);
+%! 
+%! u_knot=[0 0 0 1/2 1 1 1];
+%! v_knot=[0 0 0     1 1 1];
+%! knots = {u_knot, v_knot};
+%! 
+%! srf  = nrbmak(cntl, knots);
+%! isrf = nrbkntins(srf, {setdiff(linspace(0,1,15), u_knot),  ...
+%! 		       setdiff(linspace(0,1,15), v_knot)});
+%! isrf.coefs(3,:,:) = isrf.coefs(1,:,:);
+%! isrfd = nrbderiv(isrf);
+%! [P, w] = nrbeval(isrf, {linspace(0,1,20),
+%!      linspace(0,1,15)});
+%! [dzdx, dzdy]  = nrbsrfgradient (isrf, isrfd, linspace(0,1,20),
+%!      linspace(0,1,15));
+%! assert(dzdx, ones(size(dzdx)),10*eps);
+%! assert(dzdy, zeros(size(dzdx)),10*eps);
+%!
+%!test
+%! isrf = nrbtform(isrf, vecrotz(pi/4));
+%! isrfd = nrbderiv(isrf);
+%! [P, w] = nrbeval(isrf, {linspace(0,1,20),
+%!      linspace(0,1,15)});
+%! [dzdx, dzdy]  = nrbsrfgradient (isrf, isrfd, linspace(0,1,20),
+%!      linspace(0,1,15));
+%! assert(dzdx, dzdy,100*eps);
+%!
+%!test
+%! isrf = nrbtform(isrf, vecrotz(-pi/4));
+%! isrf = nrbtform(isrf, vecroty(pi/4));
+%! isrfd = nrbderiv(isrf);
+%! [P, w] = nrbeval(isrf, {linspace(0,1,20),
+%!      linspace(0,1,15)});
+%! [dzdx, dzdy]  = nrbsrfgradient (isrf, isrfd, linspace(0,1,20),
+%!      linspace(0,1,15));
+%! assert(dzdx, zeros(size(dzdx)),100*eps);
+%! assert(dzdy, zeros(size(dzdx)),100*eps);
