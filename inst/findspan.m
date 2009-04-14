@@ -1,4 +1,4 @@
-function s = findspan(n,p,u,U)                
+function sv = findspan(n,p,uv,U)                
 % FINDSPAN  Find the span of a B-Spline knot vector at a parametric point
 % -------------------------------------------------------------------------
 % ADAPTATION of FINDSPAN from C
@@ -22,26 +22,40 @@ function s = findspan(n,p,u,U)
 % 
 %  Algorithm A2.1 from 'The NURBS BOOK' pg68
                     
-                                                % int findspan(int n, int p, double u, double *U) {
-if ((nargin ~= 4) || (u<U(1)) || (u>U(end))) 
+if ((nargin ~= 4) || any(uv<U(1)) || any(uv>U(end))) 
   print_usage ()
 end
-                                                %   int low, high, mid;                                                
-                                                %   // special case
-if (u>=U(n+2)), s=n; return,  end               %   if (u == U[n+1]) return(n);
-                                                %
-                                                %   // do binary search
-low = p;                                        %   low = p;
-high = n + 1;                                   %   high = n + 1;
-mid = floor((low + high) / 2);                  %   mid = (low + high) / 2;
-while (u < U(mid+1) || u >= U(mid+2))           %   while (u < U[mid] || u >= U[mid+1])  {
-    if (u < U(mid+1))                           %     if (u < U[mid])
-        high = mid;                             %       high = mid;
-    else                                        %     else
-        low = mid;                              %       low = mid;                  
-    end 
-    mid = floor((low + high) / 2);              %     mid = (low + high) / 2;
-end                                             %   }
-                                                %
-s = mid;                                        %   return(mid);
-                                                %   }
+
+for ii = 1:numel(uv)
+
+  u = uv(ii);
+  if (u>=U(n+2));
+    s=n; 
+  else
+                                                                                            
+    low = p;                                        
+    high = n + 1;                                   
+    mid = floor((low + high) / 2);                  
+    while (u < U(mid+1) || u >= U(mid+2))           
+      if (u < U(mid+1))                           
+	high = mid;                             
+      else                                        
+	low = mid;                              
+      end 
+      mid = floor((low + high) / 2);              
+    end                                             
+  end
+                                      
+  s = mid;                                        
+  sv(ii) = s;
+
+end
+
+%!test
+%!  n = 3; 
+%!  U = [0 0 0 1/2 1 1 1]; 
+%!  p = 2; 
+%!  u = linspace(0, 1, 10);  
+%!  s = findspan(n, p, u, U); 
+%!  assert (s, [2*ones(1, 5) 3*ones(1, 5)]);
+
