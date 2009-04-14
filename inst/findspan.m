@@ -26,6 +26,8 @@ if ((nargin ~= 4) || any(uv<U(1)) || any(uv>U(end)))
   print_usage ()
 end
 
+sv = zeros(1, numel(uv));
+
 for ii = 1:numel(uv)
 
   u = uv(ii);

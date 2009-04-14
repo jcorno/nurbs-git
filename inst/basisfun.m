@@ -33,9 +33,11 @@ function B = basisfun(iv,uv,p,U)
 %   
 %    OUTPUT:
 %   
-%      N - Basis functions vector[p+1]
+%      N - Basis functions vector(numel(u)x(p+1))
 %   
 %    Algorithm A2.2 from 'The NURBS BOOK' pg70.
+
+B = zeros(numel(uv), p+1);
                                                
 for jj = 1:numel(uv) 
 
