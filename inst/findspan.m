@@ -1,4 +1,4 @@
-function sv = findspan(n,p,uv,U)                
+function sv = findspan (n, p, uv, U)                
 % FINDSPAN  Find the span of a B-Spline knot vector at a parametric point
 % -------------------------------------------------------------------------
 % ADAPTATION of FINDSPAN from C
@@ -58,6 +58,6 @@ end
 %!  U = [0 0 0 1/2 1 1 1]; 
 %!  p = 2; 
 %!  u = linspace(0, 1, 10);  
-%!  s = findspan(n, p, u, U); 
+%!  s = findspan (n, p, u, U); 
 %!  assert (s, [2*ones(1, 5) 3*ones(1, 5)]);
 

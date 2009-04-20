@@ -13,7 +13,7 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
-function B = numbasisfun(iv,uv,p,U)
+function B = numbasisfun (iv, uv, p, U)
 
 % BASISFUN  List non-zero Basis functions for B-Spline in a given knot-span
 %
@@ -33,16 +33,16 @@ function B = numbasisfun(iv,uv,p,U)
 %      N - Basis functions (numel(u)x(p+1))
 %   
 
-B = bsxfun(@(a, b) a+b,iv-p, (0:p).');
+B = bsxfun (@(a, b) a+b,iv-p, (0:p).').';
 
 %!test
 %!  n = 3; 
 %!  U = [0 0 0 1/2 1 1 1]; 
 %!  p = 2; 
-%!  u = linspace(0, 1, 10);  
-%!  s = findspan(n, p, u, U); 
+%!  u = linspace (0, 1, 10);  
+%!  s = findspan (n, p, u, U); 
 %!  Bref = [0   0   0   0   0   1   1   1   1   1
 %!          1   1   1   1   1   2   2   2   2   2
 %!          2   2   2   2   2   3   3   3   3   3];
-%!  B = numbasisfun(s, u, p, U);
+%!  B = numbasisfun (s, u, p, U);
 %!  assert (B, Bref)

@@ -13,7 +13,7 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
-function B = basisfun(iv,uv,p,U)
+function B = basisfun (iv, uv, p, U)
 
 % BASISFUN  Basis function for B-Spline
 % -------------------------------------------------------------------------
@@ -71,8 +71,8 @@ end
 %!  n = 3; 
 %!  U = [0 0 0 1/2 1 1 1]; 
 %!  p = 2; 
-%!  u = linspace(0, 1, 10);  
-%!  s = findspan(n, p, u, U); 
+%!  u = linspace (0, 1, 10);  
+%!  s = findspan (n, p, u, U);  
 %!  Bref = [1.00000   0.00000   0.00000
 %!          0.60494   0.37037   0.02469
 %!          0.30864   0.59259   0.09877
@@ -83,5 +83,5 @@ end
 %!          0.09877   0.59259   0.30864
 %!          0.02469   0.37037   0.60494
 %!          0.00000   0.00000   1.00000];
-%!  B = basisfun(s, u, p, U);
+%!  B = basisfun (s, u, p, U);
 %!  assert (B, Bref, 1e-5);
