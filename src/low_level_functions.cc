@@ -36,7 +36,7 @@ static bool bspeval_bad_arguments(const octave_value_list& args);
 static double bincoeff(int n, int k);
 
 // Exports functions:
-// bspeval, bspderiv, findspan
+// bspeval, bspderiv, findspan, basisfun
 
 // PKG_ADD: autoload ("bspeval", "low_level_functions.oct");
 DEFUN_DLD(bspeval, args, nargout,"\n\
@@ -60,9 +60,9 @@ DEFUN_DLD(bspeval, args, nargout,"\n\
   
 
   int       d = args(0).int_value();
-  Matrix    c = args(1).matrix_value();
-  RowVector k = args(2).row_vector_value();
-  NDArray   u = args(3).array_value();
+  const Matrix    c = args(1).matrix_value();
+  const RowVector k = args(2).row_vector_value();
+  const NDArray   u = args(3).array_value();
   
   octave_idx_type nu = u.length();
   octave_idx_type mc = c.rows(),
@@ -129,8 +129,8 @@ DEFUN_DLD(bspderiv, args, nargout,"\n\
   //  return octave_value_list(); 
   
   int       d = args(0).int_value();
-  Matrix    c = args(1).matrix_value();
-  RowVector k = args(2).row_vector_value();
+  const Matrix    c = args(1).matrix_value();
+  const RowVector k = args(2).row_vector_value();
   octave_value_list retval;
   octave_idx_type mc = c.rows(), nc = c.cols(), nk = k.numel();
   Matrix dc (mc, nc-1, 0.0);
@@ -221,8 +221,8 @@ DEFUN_DLD(findspan, args, nargout,"\n\
   octave_value_list retval;
   int       n = args(0).idx_type_value();
   int       p = args(1).idx_type_value();
-  NDArray   u = args(2).array_value();
-  RowVector U = args(3).row_vector_value();
+  const NDArray   u = args(2).array_value();
+  const RowVector U = args(3).row_vector_value();
   NDArray   s(u);
 
   if (!error_state)
@@ -299,10 +299,10 @@ DEFUN_DLD(basisfun, args, nargout, "\n\
 {
 
   octave_value_list retval;
-  NDArray   i = args(0).array_value();
-  NDArray   u = args(1).array_value();
+  const NDArray   i = args(0).array_value();
+  const NDArray   u = args(1).array_value();
   int       p = args(2).idx_type_value();
-  RowVector U = args(3).row_vector_value();
+  const RowVector U = args(3).row_vector_value();
   RowVector N(p+1, 0.0);
   Matrix    B(u.length(), p+1, 0.0);
   
