@@ -29,12 +29,10 @@ end
 sv = zeros(1, numel(uv));
 
 for ii = 1:numel(uv)
-
   u = uv(ii);
   if (u>=U(n+2));
     s=n; 
   else
-                                                                                            
     low = p;                                        
     high = n + 1;                                   
     mid = floor((low + high) / 2);                  
@@ -46,11 +44,9 @@ for ii = 1:numel(uv)
       end 
       mid = floor((low + high) / 2);              
     end                                             
+    s = mid;                                        
   end
-                                      
-  s = mid;                                        
   sv(ii) = s;
-
 end
 
 %!test
