@@ -1,8 +1,6 @@
 function surf = nrbcylind(height,radius,center,sang,eang)
 % 
-% Function Name:
-% 
-%   nrbcylind - Construct a cylinder or cylindrical patch.
+% NRBCYLIND: Construct a cylinder or cylindrical patch.
 % 
 % Calling Sequence:
 % 

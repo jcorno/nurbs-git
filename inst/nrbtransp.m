@@ -1,8 +1,6 @@
 function tsrf = nrbtransp(srf)
 % 
-% Function Name:
-% 
-%   nrbtransp - Transpose a NURBS surface, by swapping U and V directions.
+% NRBTRANSP: Transpose a NURBS surface, by swapping U and V directions.
 % 
 % Calling Sequence:
 % 

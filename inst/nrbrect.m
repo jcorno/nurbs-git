@@ -1,8 +1,6 @@
 function curve = nrbrect(w,h)
 % 
-% Function Name:
-% 
-%   nrbrect - Construct NURBS representation of a rectangle.
+% NRBRECT: Construct NURBS representation of a rectangle.
 % 
 % Calling Sequence:
 % 

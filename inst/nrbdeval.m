@@ -1,5 +1,6 @@
 function [pnt,jac] = nrbdeval(nurbs, dnurbs, tt)
-% Evaluation of the derivative NURBS curve or surface.
+
+% NRBDEVAL: Evaluation of the derivative NURBS curve or surface.
 %
 %     [pnt, jac] = nrbdeval(crv, dcrv, tt)
 %     [pnt, jac] = nrbdeval(srf, dsrf, {tu tv})

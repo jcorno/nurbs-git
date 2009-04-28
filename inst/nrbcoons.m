@@ -1,8 +1,6 @@
 function srf = nrbcoons(u1, u2, v1, v2)
 % 
-% Function Name:
-% 
-%   nrbcoons - Construction of a Coons patch.
+% NRBCOONS: Construction of a Coons patch.
 % 
 % Calling Sequence:
 % 

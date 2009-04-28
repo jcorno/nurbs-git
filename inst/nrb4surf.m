@@ -1,8 +1,6 @@
 function srf = nrb4surf(p11,p12,p21,p22)
 % 
-% Function Name:
-% 
-%   nrb4surf - Constructs a NURBS bilinear surface.
+% NRB4SURF: Constructs a NURBS bilinear surface.
 % 
 % Calling Sequence:
 % 

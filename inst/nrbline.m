@@ -1,8 +1,6 @@
 function curve = nrbline(p1,p2)
 % 
-% Function Name:
-% 
-%   nrbline - Construct a straight line.
+% NRBLINE: Construct a straight line.
 % 
 % Calling Sequence:
 % 

@@ -1,8 +1,6 @@
 function nvec = vecnorm(vec)
 % 
-% Function Name:
-% 
-%   vecnorm - Normalise the vectors.
+% VECNORM: Normalise the vectors.
 % 
 % Calling Sequence:
 % 

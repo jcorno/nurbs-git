@@ -40,21 +40,26 @@ static double bincoeff(int n, int k);
 
 // PKG_ADD: autoload ("bspeval", "low_level_functions.oct");
 DEFUN_DLD(bspeval, args, nargout,"\n\
- BSPEVAL  Evaluate B-Spline at parametric points\n\
- Calling Sequence:\n\
-\n\
-    p = bspeval(d,c,k,u)\n\
-\n\
-     INPUT:\b\
-\n\
-        d - Degree of the B-Spline.\n\
-        c - Control Points, matrix of size (dim,nc).\n\
-        k - Knot sequence, row vector of size nk.\n\
-        u - Parametric evaluation points, row vector of size nu.\n\
-\n\
-     OUTPUT:\n\
-\n\
-        p - Evaluated points, matrix of size (dim,nu)\n")
+ BSPEVAL:  Evaluate B-Spline at parametric points\n	\
+\n							\
+\n							\
+\n							\
+\n							\
+ Calling Sequence:\n					\
+\n							\
+   p = bspeval(d,c,k,u)\n				\
+\n							\
+    INPUT:\n						\
+\n							\
+       d - Degree of the B-Spline.\n			\
+       c - Control Points, matrix of size (dim,nc).\n	\
+       k - Knot sequence, row vector of size nk.\n			\
+       u - Parametric evaluation points, row vector of size nu.\n	\
+ \n									\
+    OUTPUT:\n								\
+\n									\
+       p - Evaluated points, matrix of size (dim,nu)\n			\
+")
 {
   
   
@@ -105,24 +110,26 @@ DEFUN_DLD(bspeval, args, nargout,"\n\
 
 // PKG_ADD: autoload ("bspderiv", "low_level_functions.oct");
 DEFUN_DLD(bspderiv, args, nargout,"\n\
- BSPDERIV  B-Spline derivative\n     \
-\n\
- Calling Sequence:\n\
-\n\
-          [dc,dk] = bspderiv(d,c,k)\n\
-\n\
-  INPUT:\n\
- \n\
-    d - degree of the B-Spline\n\
-    c - control points double  matrix(mc,nc)\n\
-    k - knot sequence  double  vector(nk)\n\
- \n\
-  OUTPUT:\n\
- \n\
-    dc - control points of the derivative     double  matrix(mc,nc)\n\
-    dk - knot sequence of the derivative      double  vector(nk)\n\
- \n\
-  Modified version of Algorithm A3.3 from 'The NURBS BOOK' pg98.\n\
+ BSPDERIV:  B-Spline derivative\n		\
+\n						\
+\n						\
+\n						\
+ Calling Sequence:\n				\
+\n						\
+          [dc,dk] = bspderiv(d,c,k)\n		\
+\n						\
+  INPUT:\n					\
+ \n						\
+    d - degree of the B-Spline\n		\
+    c - control points double  matrix(mc,nc)\n	\
+    k - knot sequence  double  vector(nk)\n	\
+ \n						\
+  OUTPUT:\n					\
+ \n									\
+    dc - control points of the derivative     double  matrix(mc,nc)\n	\
+    dk - knot sequence of the derivative      double  vector(nk)\n	\
+ \n									\
+  Modified version of Algorithm A3.3 from 'The NURBS BOOK' pg98.\n	\
 ")
 {
   //if (bspderiv_bad_arguments(args, nargout)) 
@@ -158,6 +165,9 @@ DEFUN_DLD(bspderiv, args, nargout,"\n\
   return(retval);
 }
 
+
+static int findspan(int n, int p, double u, const RowVector& U)
+
 // Find the knot span of the parametric point u. 
 //
 // INPUT:
@@ -173,7 +183,6 @@ DEFUN_DLD(bspderiv, args, nargout,"\n\
 //
 // Algorithm A2.1 from 'The NURBS BOOK' pg68
 
-static int findspan(int n, int p, double u, const RowVector& U)
 {
   int low, high, mid;
   // special case
@@ -197,25 +206,26 @@ static int findspan(int n, int p, double u, const RowVector& U)
 }
 
 // PKG_ADD: autoload ("findspan", "low_level_functions.oct");
-DEFUN_DLD(findspan, args, nargout,"\n\
- FINDSPAN  Find the span of a B-Spline knot vector at a parametric point \n\
- Calling Sequence:\n\
-\n\
-   s = findspan(n,p,u,U)\n\
-\n\
-  INPUT:\n\
-\n\
-    n - number of control points - 1\n\
-    p - spline degree\n\
-    u - parametric point\n\
-    U - knot sequence\n\
-\n\
-    U(1) <= u <= U(end)\n\
-  RETURN:\n\
- \n\
-    s - knot span\n\
- \n\
-  Algorithm A2.1 from 'The NURBS BOOK' pg68\n")
+DEFUN_DLD(findspan, args, nargout,"\n                                   \
+FINDSPAN: Find the span of a B-Spline knot vector at a parametric point\n \
+Calling Sequence:\n							\
+\n									\
+   s = findspan(n,p,u,U)\n						\
+\n									\
+  INPUT:\n								\
+\n									\
+    n - number of control points - 1\n					\
+    p - spline degree\n							\
+    u - parametric point\n						\
+    U - knot sequence\n							\
+\n									\
+    U(1) <= u <= U(end)\n						\
+  RETURN:\n								\
+ \n									\
+    s - knot span\n							\
+ \n									\
+  Algorithm A2.1 from 'The NURBS BOOK' pg68\n				\
+")
 {
 
   octave_value_list retval;
@@ -237,6 +247,8 @@ DEFUN_DLD(findspan, args, nargout,"\n\
 } 
 
 
+
+static void basisfun(int i, double u, int p, const RowVector& U, RowVector& N)
 // Basis Function. 
 //
 // INPUT:
@@ -251,8 +263,6 @@ DEFUN_DLD(findspan, args, nargout,"\n\
 //   N - Basis functions vector[p+1]
 //
 // Algorithm A2.2 from 'The NURBS BOOK' pg70.
-
-static void basisfun(int i, double u, int p, const RowVector& U, RowVector& N)
 {
   int j,r;
   double saved, temp;
@@ -282,20 +292,21 @@ static void basisfun(int i, double u, int p, const RowVector& U, RowVector& N)
 
 // PKG_ADD: autoload ("basisfun", "low_level_functions.oct");
 DEFUN_DLD(basisfun, args, nargout, "\n\
- Basis Function. \n\
-\n\
- INPUT:\n\
-\n\
-   i - knot span  ( from FindSpan() )\n\
-   u - parametric point\n\
-   p - spline degree\n\
-   U - knot sequence\n\
-\n\
- OUTPUT:\n\
-\n\
-   N - Basis functions vector[p+1]\n\
-\n\
- Algorithm A2.2 from 'The NURBS BOOK' pg70.\n")
+ BASISFUN: Compute B-Spline Basis Functions \n	\
+\n						\
+ INPUT:\n					\
+\n						\
+   i - knot span  ( from FindSpan() )\n		\
+   u - parametric point\n			\
+   p - spline degree\n				\
+   U - knot sequence\n				\
+\n						\
+ OUTPUT:\n					\
+\n						\
+   N - Basis functions vector[p+1]\n		\
+\n						\
+ Algorithm A2.2 from 'The NURBS BOOK' pg70.\n	\
+")
 {
 
   octave_value_list retval;
@@ -319,35 +330,10 @@ DEFUN_DLD(basisfun, args, nargout, "\n\
   return retval;
 } 
 
-/*
 
-%!shared n, U, p, u, s
-%!test
-%!  n = 3; 
-%!  U = [0 0 0 1/2 1 1 1]; 
-%!  p = 2; 
-%!  u = linspace(0, 1, 10);  
-%!  s = findspan(n, p, u, U); 
-%!  assert (s, [2*ones(1, 5) 3*ones(1, 5)]);
-%!test
-%!  Bref = [1.00000   0.00000   0.00000
-%!          0.60494   0.37037   0.02469
-%!          0.30864   0.59259   0.09877
-%!          0.11111   0.66667   0.22222
-%!          0.01235   0.59259   0.39506
-%!          0.39506   0.59259   0.01235
-%!          0.22222   0.66667   0.11111
-%!          0.09877   0.59259   0.30864
-%!          0.02469   0.37037   0.60494
-%!          0.00000   0.00000   1.00000];
-%!  B = basisfun(s, u, p, U);
-%!  assert (B, Bref, 1e-5);
-
- */
-
+static double gammaln(double xx)
 // Compute logarithm of the gamma function
 // Algorithm from 'Numerical Recipes in C, 2nd Edition' pg214.
-static double gammaln(double xx)
 {
   double x,y,tmp,ser;
   static double cof[6] = {76.18009172947146,-86.50532032291677,
@@ -362,10 +348,10 @@ static double gammaln(double xx)
   return -tmp+log(2.5066282746310005*ser/x);
 }
 
+static double factln(int n)
 // computes ln(n!)
 // Numerical Recipes in C
 // Algorithm from 'Numerical Recipes in C, 2nd Edition' pg215.
-static double factln(int n)
 {
   static int ntop = 0;
   static double a[101];
@@ -379,6 +365,7 @@ static double factln(int n)
   return a[n];
 }
 
+static double bincoeff(int n, int k)
 // Computes the binomial coefficient.
 //
 //     ( n )      n!
@@ -386,7 +373,6 @@ static double factln(int n)
 //     ( k )   k!(n-k)!
 //
 // Algorithm from 'Numerical Recipes in C, 2nd Edition' pg215.
-static double bincoeff(int n, int k)
 {
   return floor(0.5+exp(factln(n)-factln(k)-factln(n-k)));
 }
@@ -423,3 +409,26 @@ static bool bspeval_bad_arguments(const octave_value_list& args)
 } 
 
 
+/*
+%!shared n, U, p, u, s
+%!test
+%!  n = 3; 
+%!  U = [0 0 0 1/2 1 1 1]; 
+%!  p = 2; 
+%!  u = linspace(0, 1, 10);  
+%!  s = findspan(n, p, u, U); 
+%!  assert (s, [2*ones(1, 5) 3*ones(1, 5)]);
+%!test
+%!  Bref = [1.00000   0.00000   0.00000
+%!          0.60494   0.37037   0.02469
+%!          0.30864   0.59259   0.09877
+%!          0.11111   0.66667   0.22222
+%!          0.01235   0.59259   0.39506
+%!          0.39506   0.59259   0.01235
+%!          0.22222   0.66667   0.11111
+%!          0.09877   0.59259   0.30864
+%!          0.02469   0.37037   0.60494
+%!          0.00000   0.00000   1.00000];
+%!  B = basisfun(s, u, p, U);
+%!  assert (B, Bref, 1e-5);
+*/

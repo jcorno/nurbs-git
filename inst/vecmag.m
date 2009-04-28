@@ -1,8 +1,6 @@
 function mag = vecmag(vec)
 % 
-% Function Name:
-% 
-%   vecmag - Magnitude of the vectors
+% VECMAG: Magnitude of the vectors
 % 
 % Calling Sequence:
 % 

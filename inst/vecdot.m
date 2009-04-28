@@ -1,8 +1,6 @@
 function dot = vecdot(vec1,vec2)
 % 
-% Function Name:
-% 
-%   vecdot - The dot product of two vectors.
+% VECDOT: The dot product of two vectors.
 % 
 % Calling Sequence:
 % 

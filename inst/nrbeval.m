@@ -1,8 +1,6 @@
 function [p,w] = nrbeval(nurbs,tt)
 % 
-% Function Name:
-% 
-%   nrbeval - Evaluate a NURBS at parameteric points
+% NRBEVAL: Evaluate a NURBS at parameteric points
 % 
 % Calling Sequence:
 % 

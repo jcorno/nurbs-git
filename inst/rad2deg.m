@@ -1,8 +1,6 @@
 function deg = rad2deg(rad)
 % 
-% Function Name:
-% 
-%   rad2deg - Convert radians to degrees.
+% RAD2DEG: Convert radians to degrees.
 % 
 % Calling Sequence:
 % 

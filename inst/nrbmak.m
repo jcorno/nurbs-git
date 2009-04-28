@@ -1,8 +1,6 @@
 function nurbs = nrbmak(coefs,knots)
 %
-% Function Name:
-% 
-%   nrbmak - Construct the NURBS structure given the control points
+% NRBMAK: Construct the NURBS structure given the control points
 %            and the knots.
 % 
 % Calling Sequence:

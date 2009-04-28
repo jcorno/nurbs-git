@@ -1,8 +1,6 @@
 function curve = nrbcirc(radius,center,sang,eang)
 % 
-% Function Name:
-% 
-%   nrbcirc - Construct a circular arc.
+% NRBCIRC: Construct a circular arc.
 % 
 % Calling Sequence:
 % 

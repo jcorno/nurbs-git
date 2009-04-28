@@ -1,8 +1,6 @@
 function rx = vecrotx(angle)
 % 
-% Function Name:
-% 
-%   vecrotx - Transformation matrix for a rotation around the x axis. 
+% VECROTX: Transformation matrix for a rotation around the x axis. 
 % 
 % Calling Sequence:
 % 

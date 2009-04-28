@@ -1,8 +1,6 @@
 function rz = vecrotz(angle)
 % 
-% Function Name:
-% 
-%   vecrotz - Transformation matrix for a rotation around the z axis. 
+% VECROTZ: Transformation matrix for a rotation around the z axis. 
 % 
 % Calling Sequence:
 % 

@@ -1,9 +1,8 @@
 function ang = vecangle(num,den)
+
 % 
-% Function Name:
-% 
-%   vecangle - An alternative to atan, returning an arctangent in the 
-%              range 0 to 2*pi.
+% VECANGLE: An alternative to atan, returning an arctangent in the 
+%             range 0 to 2*pi.
 % 
 % Calling Sequence:
 % 

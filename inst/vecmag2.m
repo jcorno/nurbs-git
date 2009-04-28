@@ -1,8 +1,6 @@
 function mag = vecmag2(vec)
 % 
-% Function Name:
-% 
-%   vecmag - Squared magnitude of the vectors
+% VECMAG2: Squared magnitude of the vectors
 % 
 % Calling Sequence:
 % 

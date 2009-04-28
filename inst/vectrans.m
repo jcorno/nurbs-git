@@ -1,8 +1,6 @@
 function dd = vectrans(vector)
 % 
-% Function Name:
-% 
-%   vectrans - Transformation matrix for a translation.
+% VECTRANS: Transformation matrix for a translation.
 % 
 % Calling Sequence:
 % 

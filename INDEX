@@ -1,5 +1,5 @@
 nurbs >> Nurbs
-Main functions
+NURBS curves and surfaces
  nrbmak
  nrbtform
  nrbkntins
@@ -20,11 +20,15 @@ Main functions
  nrbcoons
  nrbplot
  nrbsrfgradient
-Low level functions
+NURBS basis functions
+ nrbbasisfun
+ nrbbasisfunder
+B-Spline functions
  bspeval
  bspderiv
  bspkntins
  bspdegelev
+ basisfunder
 Vector and Transformation Utilities 
  vecnorm
  vecmag

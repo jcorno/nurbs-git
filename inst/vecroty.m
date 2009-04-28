@@ -1,8 +1,6 @@
 function ry = vecroty(angle)
 % 
-% Function Name:
-% 
-%   vecroty - Transformation matrix for a rotation around the y axis. 
+% VECROTY: Transformation matrix for a rotation around the y axis. 
 % 
 % Calling Sequence:
 % 

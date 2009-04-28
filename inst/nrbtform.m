@@ -1,8 +1,7 @@
 function nurbs = nrbtform(nurbs,tmat)
+
 % 
-% Function Name:
-% 
-%   nrbtform - Apply transformation matrix to the NURBS.
+% NRBTFORM - Apply transformation matrix to the NURBS.
 % 
 % Calling Sequence:
 % 

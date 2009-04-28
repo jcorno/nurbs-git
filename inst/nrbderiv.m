@@ -1,9 +1,7 @@
 function dnurbs = nrbderiv(nurbs)
 % 
-% Function Name:
-% 
-%   nrbderiv - Construct the first derivative representation of a
-%              NURBS curve or surface.
+% NRBDERIV: Construct the first derivative representation of a
+%           NURBS curve or surface.
 % 
 % Calling Sequence:
 % 

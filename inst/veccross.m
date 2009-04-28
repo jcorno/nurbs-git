@@ -1,8 +1,6 @@
 function cross = veccross(vec1,vec2)
 % 
-% Function Name:
-% 
-%   veccross - The cross product of two vectors.
+% VECCROSS: The cross product of two vectors.
 % 
 % Calling Sequence:
 % 

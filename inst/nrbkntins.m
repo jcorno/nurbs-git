@@ -1,9 +1,7 @@
 function inurbs = nrbkntins(nurbs,iknots)
 % 
-% Function Name:
-% 
-%   nrbkntins - Insert a single or multiple knots into a NURBS curve or
-%               surface.
+% NRBKNTINS: Insert a single or multiple knots into a NURBS curve or
+%            surface.
 % 
 % Calling Sequence:
 % 
