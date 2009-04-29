@@ -54,7 +54,7 @@ function [B, id] = nrbbasisfun (points, nrb)
     
     [B, id] = __nrb_crv_basisfun__ (points, nrb);
     
-  else    %% NURBS surface
+  else                       %% NURBS surface
 
     [B, id] = __nrb_srf_basisfun__ (points, nrb); 
 
