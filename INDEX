@@ -29,6 +29,7 @@ B-Spline functions
  bspkntins
  bspdegelev
  basisfunder
+ findspan
 Vector and Transformation Utilities 
  vecnorm
  vecmag

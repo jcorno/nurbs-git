@@ -206,7 +206,7 @@ static int findspan(int n, int p, double u, const RowVector& U)
 }
 
 // PKG_ADD: autoload ("findspan", "low_level_functions.oct");
-DEFUN_DLD(findspan, args, nargout,"\n                                   \
+DEFUN_DLD(findspan, args, nargout,"\
 FINDSPAN: Find the span of a B-Spline knot vector at a parametric point\n \
 Calling Sequence:\n							\
 \n									\
