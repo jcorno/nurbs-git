@@ -16,10 +16,6 @@
 function [ic,ik] = bspdegelev(d,c,k,t)
 
 % BSPDEGELEV:  Degree elevate a univariate B-Spline. 
-%
-% -------------------------------------------------------------------------
-% ADAPTATION of BSPDEGELEV from C Routine
-% -------------------------------------------------------------------------
 % 
 % Calling Sequence:
 % 

@@ -17,10 +17,6 @@ function [ic,ik] = bspkntins(d,c,k,u)
 
 % BSPKNTINS:  Insert knots into a B-Spline
 %
-% -------------------------------------------------------------------------
-% ADAPTATION of BSPKNTINS from C Routine
-% -------------------------------------------------------------------------
-%
 % Calling Sequence:
 % 
 %   [ic,ik] = bspkntins(d,c,k,u)

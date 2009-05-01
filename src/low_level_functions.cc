@@ -39,12 +39,10 @@ static double bincoeff(int n, int k);
 // bspeval, bspderiv, findspan, basisfun
 
 // PKG_ADD: autoload ("bspeval", "low_level_functions.oct");
-DEFUN_DLD(bspeval, args, nargout,"\n\
- BSPEVAL:  Evaluate B-Spline at parametric points\n	\
-\n							\
-\n							\
-\n							\
-\n							\
+DEFUN_DLD(bspeval, args, nargout,"\
+ BSPEVAL:  Evaluate B-Spline at parametric points\n\
+\n\
+\n\
  Calling Sequence:\n					\
 \n							\
    p = bspeval(d,c,k,u)\n				\
@@ -110,10 +108,9 @@ DEFUN_DLD(bspeval, args, nargout,"\n\
 
 // PKG_ADD: autoload ("bspderiv", "low_level_functions.oct");
 DEFUN_DLD(bspderiv, args, nargout,"\n\
- BSPDERIV:  B-Spline derivative\n		\
-\n						\
-\n						\
-\n						\
+ BSPDERIV:  B-Spline derivative\n\
+\n\
+\n\
  Calling Sequence:\n				\
 \n						\
           [dc,dk] = bspderiv(d,c,k)\n		\
@@ -208,6 +205,8 @@ static int findspan(int n, int p, double u, const RowVector& U)
 // PKG_ADD: autoload ("findspan", "low_level_functions.oct");
 DEFUN_DLD(findspan, args, nargout,"\
 FINDSPAN: Find the span of a B-Spline knot vector at a parametric point\n \
+\n\
+\n\
 Calling Sequence:\n							\
 \n									\
    s = findspan(n,p,u,U)\n						\

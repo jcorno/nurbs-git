@@ -16,10 +16,6 @@
 function [dc,dk] = bspderiv(d,c,k)
 
 % BSPDERIV:  B-Spline derivative
-%
-% -------------------------------------------------------------------------
-% ADAPTATION of BSPDERIV from C Routine
-% -------------------------------------------------------------------------
 % 
 %  MATLAB SYNTAX:
 % 

@@ -15,8 +15,6 @@
 
 function srf = nrbruled(crv1, crv2)
 
-% 
-% 
 % NRBRULED: Construct a ruled surface between two NURBS curves.
 % 
 % Calling Sequence:
