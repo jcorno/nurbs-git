@@ -19,9 +19,9 @@ function [B, id] = nrbbasisfun (points, nrb)
 %
 % Calling Sequence:
 % 
-%   B      = basisfun (u, crv)
-%   B      = basisfun ({u, v}, srf)
-%   [B, N] = basisfun ({u, v}, srf)
+%   B      = nrbbasisfun (u, crv)
+%   B      = nrbbasisfun ({u, v}, srf)
+%   [B, N] = nrbbasisfun ({u, v}, srf)
 %
 %    INPUT:
 %   
