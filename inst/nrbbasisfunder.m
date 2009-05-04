@@ -102,7 +102,7 @@ function varargout = nrbbasisfunder (points, nrb)
     q    = nrb.order(2) -1;
 
     if (iscell(points))
-      [u, v] = meshgrid(points{1}, points{2});
+      [v, u] = meshgrid(points{2}, points{1});
       u = reshape(u, 1, []); v = reshape(v, 1, []);
     else
       u = points(1,:,:)(:).';
@@ -133,7 +133,7 @@ function varargout = nrbbasisfunder (points, nrb)
 
     
     for k=1:npt
-      [Jkb, Ika] = meshgrid(Jk(k, :), Ik(k, :)); 
+      [Ika, Jkb] = meshgrid(Ik(k, :), Jk(k, :)); 
       
       N(k, :)    = sub2ind([m+1, n+1], Ika(:)+1, Jkb(:)+1);
       wIkaJkb(1:p+1, 1:q+1) = reshape (w(N(k, :)), p+1, q+1); 
@@ -180,7 +180,7 @@ function varargout = nrbbasisfunder (points, nrb)
 %! mcp = 2; ncp = 3;
 %! knots = {[zeros(1,p), linspace(0,1,mcp-p+2), ones(1,p)], [zeros(1,q), linspace(0,1,ncp-q+2), ones(1,q)]};
 %! Lx  = 1; Ly  = 1;
-%! [cntl(1,:,:), cntl(2,:,:)] = meshgrid(linspace(0, Lx, ncp+1), linspace(0, Ly, mcp+1) );
+%! [cntl(2,:,:), cntl(1,:,:)] = meshgrid(linspace(0, Ly, ncp+1), linspace(0, Lx, mcp+1) );
 %! cntl(4,:,:) = 1:numel(cntl(1,:,:));
 %! nrb = nrbmak(cntl, knots);
 %! [u(1,:,:), u(2,:,:)] = meshgrid(rand (1, 20), rand (1, 20));

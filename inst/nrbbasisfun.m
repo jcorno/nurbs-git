@@ -84,7 +84,7 @@ function [B, id] = nrbbasisfun (points, nrb)
     q    = nrb.order(2) -1;
 
     if (iscell(points))
-      [u, v] = meshgrid(points{1}, points{2});
+      [v, u] = meshgrid(points{2}, points{1});
       u = reshape(u, 1, []); v = reshape(v, 1, []);
     else
       u = points(1,:);
