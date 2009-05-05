@@ -56,7 +56,16 @@ function [B, id] = nrbbasisfun (points, nrb)
     
   else                       %% NURBS surface
 
-    [B, id] = __nrb_srf_basisfun__ (points, nrb); 
+    if (iscell(points))
+      [v, u] = meshgrid(points{2}, points{1});
+      p(1,:,:) = u;
+      p(2,:,:) = v;
+      p = reshape(p, 2, []);
+    else
+      p = points;
+    end
+    
+    [B, id] = __nrb_srf_basisfun__ (p, nrb); 
 
   end
 
@@ -74,53 +83,6 @@ function [B, id] = nrbbasisfun (points, nrb)
     B     = bsxfun (@(x,y) x./y, N, sum (N,2));
 
   end
-
-  function [B, N] = __nrb_srf_basisfun__ (points, nrb);
-
-    m    = size (nrb.coefs, 2) -1;
-    n    = size (nrb.coefs, 3) -1;
-    
-    p    = nrb.order(1) -1;
-    q    = nrb.order(2) -1;
-
-    if (iscell(points))
-      [v, u] = meshgrid(points{2}, points{1});
-      u = reshape(u, 1, []); v = reshape(v, 1, []);
-    else
-      u = points(1,:);
-      v = points(2,:);
-    end
-
-    npt = length(u);
-
-    U    = nrb.knots{1};
-    V    = nrb.knots{2};
-    
-    w    = squeeze(nrb.coefs(4,:,:));
-
-    spu  =  findspan (m, p, u, U); 
-    Ik   =  numbasisfun (spu, u, p, U);
-
-    spv  =  findspan (n, q, v, V);
-    Jk   =  numbasisfun (spv, v, q, V);
-    
-    NuIkuk = basisfun (spu, u, p, U);
-    NvJkvk = basisfun (spv, v, q, V);
-
-    for k=1:npt
-      [Jkb, Ika] = meshgrid(Jk(k, :), Ik(k, :)); 
-      indIkJk(k, :)    = sub2ind([m+1, n+1], Ika(:)+1, Jkb(:)+1);
-      wIkaJkb(1:p+1, 1:q+1) = reshape (w(indIkJk(k, :)), p+1, q+1); 
-
-      NuIkukaNvJkvk(1:p+1, 1:q+1) = (NuIkuk(k, :).' * NvJkvk(k, :));
-      RIkJk(k, :) = (NuIkukaNvJkvk .* wIkaJkb ./ sum(sum(NuIkukaNvJkvk .* wIkaJkb)))(:).';
-    end
-    
-    B = RIkJk;
-    N = indIkJk;
-    
-  end
-  
   
 
 %!test
