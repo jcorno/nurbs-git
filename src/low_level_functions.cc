@@ -25,6 +25,7 @@
 
 static int findspan(int n, int p, double u, const RowVector& U);
 static void basisfun(int i, double u, int p, const RowVector& U, RowVector& N);
+static void basisfunder (int i, int pl, double uu, const RowVector& u_knotl, int nders, NDArray& dersv);
 static double factln(int n);
 static double gammaln(double xx);
 static double bincoeff(int n, int k);
@@ -32,6 +33,58 @@ static bool bspeval_bad_arguments(const octave_value_list& args);
 
 // Exported functions:
 // bspeval, bspderiv, findspan, basisfun, __nrb_srf_basisfun__, __nrb_srf_basisfun_der__
+
+// PKG_ADD: autoload ("basisfunder", "low_level_functions.oct");
+DEFUN_DLD(basisfunder, args, nargout,"\n\
+ BASISFUNDER:  B-Spline Basis function derivatives\n\
+\n\
+ Calling Sequence:\n\
+\n\
+   ders = basisfunder (i, pl, u, k, nd)\n\
+\n\
+    INPUT:\n\
+\n\
+      i   - knot span\n\
+      pl  - degree of curve\n\
+      u   - parametric points\n\
+      k   - knot vector\n\
+      nd  - number of derivatives to compute\n\
+\n\
+    OUTPUT:\n\
+\n\
+      ders - ders(n, i, :) (i-1)-th derivative at n-th point\n\
+")
+{
+  octave_value_list retval;
+
+  const RowVector i = args(0).row_vector_value ();
+  int pl = args(1).int_value ();
+  const RowVector u = args(2).row_vector_value ();
+  const RowVector U = args(3).row_vector_value ();
+  int nd = args(4).int_value ();
+
+  if (!error_state)
+    {
+      if (i.length () != u.length ())
+	print_usage ();
+ 
+      NDArray dersv (dim_vector (i.length (), nd+1, pl+1), 0.0);
+      NDArray ders(dim_vector(nd+1, pl+1), 0.0);
+      for ( octave_idx_type jj(0); jj < i.length (); jj++)
+	{
+	  basisfunder (int (i(jj)), pl, u(jj), U, nd, ders);
+
+	  for (octave_idx_type kk(0); kk < nd+1; kk++)
+	    for (octave_idx_type ll(0); ll < pl+1; ll++)
+	      {
+		dersv(jj, kk, ll) = ders(kk, ll);
+	      }
+	}
+      retval(0) = dersv;
+    }
+  return retval;
+}
+
 
 // PKG_ADD: autoload ("__nrb_srf_basisfun_der__", "low_level_functions.oct");
 DEFUN_DLD(__nrb_srf_basisfun_der__, args, nargout,"\
@@ -646,6 +699,100 @@ static bool bspeval_bad_arguments(const octave_value_list& args)
     } 
   return false; 
 } 
+
+
+static void basisfunder (int i, int pl, double u, const RowVector& u_knotl, int nders, NDArray& ders)
+{
+  
+  //     ders = zeros(nders+1,pl+1);
+  Matrix ndu(octave_idx_type(pl+1), octave_idx_type(pl+1), 0.0); // ndu = zeros(pl+1,pl+1);
+  RowVector left(octave_idx_type(pl+1), 0.0);                    // left = zeros(pl+1);
+  RowVector right(left);                                         // right = zeros(pl+1);
+  Matrix a(2, octave_idx_type(pl+1), 0.0);                       // a = zeros(2,pl+1);
+  double saved = 0.0, d = 0.0, temp = 1.0;
+  octave_idx_type s1(0), s2(1), rk, pk, j, k, r, j1, j2;
+
+  
+  ndu(0,0) = 1;                                                   // ndu(1,1) = 1;
+  
+  for (j=1; j<=pl; j++)                                           // for j = 1:pl
+    {
+      left(j) = u - u_knotl(i+1-j);                               // left(j+1) = u - u_knotl(i+1-j);
+      right(j) = u_knotl(i+j) - u;                                // right(j+1) = u_knotl(i+j) - u;
+      saved = 0.0;                                                // saved = 0;
+      for (r=0; r<=j-1; r++)                                      // for r = 0:j-1
+	{
+	  ndu(j, r) = right(r+1) + left(j-r);                     // ndu(j+1,r+1) = right(r+2) + left(j-r+1);
+	  temp = ndu(r,j-1)/ndu(j,r);                             // temp = ndu(r+1,j)/ndu(j+1,r+1);
+	  ndu(r,j) = saved + right(r+1)*temp;                     // ndu(r+1,j+1) = saved + right(r+2)*temp;
+	  saved = left(j-r)*temp;                                 // saved = left(j-r+1)*temp;
+	}                                                         // end
+      ndu(j,j) = saved;                                           // ndu(j+1,j+1) = saved;
+    }                                                             // end
+
+  for (j=0; j<=pl; j++)                                           // for j = 0:pl
+    ders(0,j) = ndu(j,pl);                                        // ders(1,j+1) = ndu(j+1,pl+1);
+                                                                  // end
+      
+  for (r=0; r<=pl; r++)                                           // for r = 0:pl
+    {
+      s1 = 0;                                                     // s1 = 0;
+      s2 = 1;                                                     // s2 = 1;
+      a(0,0) = 1;                                                 // a(1,1) = 1;
+        for (k=1; k<=nders; k++)                                  // for k = 1:nders %compute kth derivative
+	  {
+
+	    d = 0.0;                                              // d = 0;
+	    rk = r-k;                                             // rk = r-k;
+	    pk = pl - k;                                          // pk = pl-k;
+	    
+	    if (r >= k)                                           // if (r >= k)
+	      {
+		a(s2, 0) = a(s1, 0)/ndu(pk+1,rk);                 // a(s2+1,1) = a(s1+1,1)/ndu(pk+2,rk+1);
+		d = a(s2, 0)*ndu(rk,pk);                          // d = a(s2+1,1)*ndu(rk+1,pk+1);
+	      }                                                   // end
+	    
+	    if (rk >= -1)                                         // if (rk >= -1)
+	      j1 = 1;                                             // j1 = 1;
+	    else                                                  // else 
+	      j1 = -rk;                                           // j1 = -rk;
+	                                                          // end
+
+	    if ((r-1) <= pk)                                      // if ((r-1) <= pk)
+	      j2 = k-1;                                           // j2 = k-1;
+	    else                                                  // else 
+	     j2 = pl-r;                                           // j2 = pl-r;
+                                                                  // end
+
+	    for (j=j1; j <= j2; j++)                              // for j = j1:j2
+	      {
+		a(s2,j) = (a(s1,j) - a(s1,j-1))/ndu(pk+1,rk+j);   // a(s2+1,j+1) = (a(s1+1,j+1) - a(s1+1,j))/ndu(pk+2,rk+j+1);
+		d += a(s2,j)*ndu(rk+j,pk);                        // d = d + a(s2+1,j+1)*ndu(rk+j+1,pk+1);
+	      }                                                   // end
+
+	    if (r <= pk)                                          // if (r <= pk)
+	      {
+		a(s2,k) = -a(s1,k-1)/ndu(pk+1,r);                 // a(s2+1,k+1) = -a(s1+1,k)/ndu(pk+2,r+1);
+		d += a(s2,k)*ndu(r,pk);                           // d = d + a(s2+1,k+1)*ndu(r+1,pk+1);
+	      }	                                                  // end
+	    
+	    ders(k,r) = d;                                        // ders(k+1,r+1) = d;
+	    j = s1;                                               // j = s1;
+	    s1 = s2;                                              // s1 = s2;
+	    s2 = j;                                               // s2 = j;
+	  }                                                       // end
+    }                                                             // end
+
+  r = pl;                                                         // r = pl;
+  for (k=1; k <= nders; k++)                                      // for k = 1:nders
+    {
+      for (j=0; j<=pl; j++)                                       // for j = 0:pl
+	ders(k,j) = ders(k,j)*r;                                  // ders(k+1,j+1) = ders(k+1,j+1)*r;
+                                                                  // end
+      r = r*(pl-k);                                               // r = r*(pl-k);
+    }                                                             // end
+  
+}
 
 
 /*

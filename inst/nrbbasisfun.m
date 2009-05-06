@@ -22,11 +22,12 @@ function [B, id] = nrbbasisfun (points, nrb)
 %   B      = nrbbasisfun (u, crv)
 %   B      = nrbbasisfun ({u, v}, srf)
 %   [B, N] = nrbbasisfun ({u, v}, srf)
+%   [B, N] = nrbbasisfun (p, srf)
 %
 %    INPUT:
 %   
-%      u   - parametric points along u direction
-%      v   - parametric points along v direction
+%      u or p(1,:,:)  - parametric points along u direction
+%      v or p(2,:,:)  - parametric points along v direction
 %      crv - NURBS curve
 %      srf - NURBS surface
 %   
