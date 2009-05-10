@@ -32,20 +32,15 @@ function [B, N] = __nrb_srf_basisfun__ (points, nrb);
     
     w    = squeeze(nrb.coefs(4,:,:));
 
-    spu  =  findspan (m, p, u, U); 
-    Ik   =  numbasisfun (spu, u, p, U);
-
-    spv  =  findspan (n, q, v, V);
-    Jk   =  numbasisfun (spv, v, q, V);
-    
+    spu    = findspan (m, p, u, U); 
+    spv    = findspan (n, q, v, V);
     NuIkuk = basisfun (spu, u, p, U);
     NvJkvk = basisfun (spv, v, q, V);
 
-    for k=1:npt
-      [Jkb, Ika] = meshgrid(Jk(k, :), Ik(k, :)); 
-      indIkJk(k, :)    = sub2ind([m+1, n+1], Ika(:)+1, Jkb(:)+1);
-      wIkaJkb(1:p+1, 1:q+1) = reshape (w(indIkJk(k, :)), p+1, q+1); 
+    indIkJk = nrbnumbasisfun (points, nrb);
 
+    for k=1:npt
+      wIkaJkb(1:p+1, 1:q+1) = reshape (w(indIkJk(k, :)), p+1, q+1); 
       NuIkukaNvJkvk(1:p+1, 1:q+1) = (NuIkuk(k, :).' * NvJkvk(k, :));
       RIkJk(k, :) = (NuIkukaNvJkvk .* wIkaJkb ./ sum(sum(NuIkukaNvJkvk .* wIkaJkb)))(:).';
     end
