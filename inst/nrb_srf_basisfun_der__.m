@@ -33,11 +33,9 @@ function [Bu, Bv, N] = nrb_srf_basisfun_der__ (points, nrb);
   w    = squeeze(nrb.coefs(4,:,:));
   
   spu  =  findspan (m, p, u, U); 
-  Ik   =  numbasisfun (spu, u, p, U);
-  
   spv  =  findspan (n, q, v, V);
-  Jk   =  numbasisfun (spv, v, q, V);
-  
+  N    =  nrbnumbasisfun (points, nrb);
+
   NuIkuk = basisfun (spu, u, p, U);
   NvJkvk = basisfun (spv, v, q, V);
   
@@ -49,9 +47,6 @@ function [Bu, Bv, N] = nrb_srf_basisfun_der__ (points, nrb);
   
   
   for k=1:npt
-    [Ika, Jkb] = meshgrid(Ik(k, :), Jk(k, :)); 
-    
-    N(k, :)    = sub2ind([m+1, n+1], Ika(:)+1, Jkb(:)+1);
     wIkaJkb(1:p+1, 1:q+1) = reshape (w(N(k, :)), p+1, q+1); 
     
     Num    = (NuIkuk(k, :).' * NvJkvk(k, :)) .* wIkaJkb;
