@@ -32,7 +32,7 @@ static double bincoeff(int n, int k);
 static bool bspeval_bad_arguments(const octave_value_list& args);
 
 // Exported functions:
-// bspeval, bspderiv, findspan, basisfun, __nrb_srf_basisfun__, __nrb_srf_basisfun_der__
+// bspeval, bspderiv, findspan, basisfun, nrb_srf_basisfun__, nrb_srf_basisfun_der__
 
 // PKG_ADD: autoload ("basisfunder", "low_level_functions.oct");
 DEFUN_DLD(basisfunder, args, nargout,"\n\
@@ -86,12 +86,12 @@ DEFUN_DLD(basisfunder, args, nargout,"\n\
 }
 
 
-// PKG_ADD: autoload ("__nrb_srf_basisfun_der__", "low_level_functions.oct");
-DEFUN_DLD(__nrb_srf_basisfun_der__, args, nargout,"\
- __NRB_SRF_BASISFUN_DER__:  Undocumented private function	\
+// PKG_ADD: autoload ("nrb_srf_basisfun_der__", "low_level_functions.oct");
+DEFUN_DLD(nrb_srf_basisfun_der__, args, nargout,"\
+ NRB_SRF_BASISFUN_DER__:  Undocumented private function	\
 ")
 {
-  //function [Bu, Bv, N] = __nrb_srf_basisfun_der__ (points, nrb);
+  //function [Bu, Bv, N] = nrb_srf_basisfun_der__ (points, nrb);
 
   octave_value_list retval, newargs;
 
@@ -226,9 +226,9 @@ DEFUN_DLD(__nrb_srf_basisfun_der__, args, nargout,"\
   return retval;
 }
 
-// PKG_ADD: autoload ("__nrb_srf_basisfun__", "low_level_functions.oct");
-DEFUN_DLD(__nrb_srf_basisfun__, args, nargout,"\
- __NRB_SRF_BASISFUN__:  Undocumented private function\
+// PKG_ADD: autoload ("nrb_srf_basisfun__", "low_level_functions.oct");
+DEFUN_DLD(nrb_srf_basisfun__, args, nargout,"\
+ NRB_SRF_BASISFUN__:  Undocumented private function\
 ")
 {
 

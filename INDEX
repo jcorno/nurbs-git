@@ -23,6 +23,8 @@ NURBS curves and surfaces
 NURBS basis functions
  nrbbasisfun
  nrbbasisfunder
+ nrbnumbasisfun
+ nrbbasisfungradient
 B-Spline functions
  bspeval
  bspderiv
