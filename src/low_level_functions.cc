@@ -336,20 +336,20 @@ DEFUN_DLD(bspeval, args, nargout,"\
  BSPEVAL:  Evaluate B-Spline at parametric points\n\
 \n\
 \n\
- Calling Sequence:\n					\
-\n							\
-   p = bspeval(d,c,k,u)\n				\
-\n							\
-    INPUT:\n						\
-\n							\
-       d - Degree of the B-Spline.\n			\
-       c - Control Points, matrix of size (dim,nc).\n	\
-       k - Knot sequence, row vector of size nk.\n			\
-       u - Parametric evaluation points, row vector of size nu.\n	\
- \n									\
-    OUTPUT:\n								\
-\n									\
-       p - Evaluated points, matrix of size (dim,nu)\n			\
+ Calling Sequence:\n\
+\n\
+   p = bspeval(d,c,k,u)\n\
+\n\
+    INPUT:\n\
+\n\
+       d - Degree of the B-Spline.\n\
+       c - Control Points, matrix of size (dim,nc).\n\
+       k - Knot sequence, row vector of size nk.\n\
+       u - Parametric evaluation points, row vector of size nu.\n\
+ \n\
+    OUTPUT:\n\
+\n\
+       p - Evaluated points, matrix of size (dim,nu)\n\
 ")
 {
   
@@ -404,22 +404,22 @@ DEFUN_DLD(bspderiv, args, nargout,"\n\
  BSPDERIV:  B-Spline derivative\n\
 \n\
 \n\
- Calling Sequence:\n				\
-\n						\
-          [dc,dk] = bspderiv(d,c,k)\n		\
-\n						\
-  INPUT:\n					\
- \n						\
-    d - degree of the B-Spline\n		\
-    c - control points double  matrix(mc,nc)\n	\
-    k - knot sequence  double  vector(nk)\n	\
- \n						\
-  OUTPUT:\n					\
- \n									\
-    dc - control points of the derivative     double  matrix(mc,nc)\n	\
-    dk - knot sequence of the derivative      double  vector(nk)\n	\
- \n									\
-  Modified version of Algorithm A3.3 from 'The NURBS BOOK' pg98.\n	\
+ Calling Sequence:\n\
+\n\
+          [dc,dk] = bspderiv(d,c,k)\n\
+\n\
+  INPUT:\n\
+ \n\
+    d - degree of the B-Spline\n\
+    c - control points double  matrix(mc,nc)\n\
+    k - knot sequence  double  vector(nk)\n\
+ \n\
+  OUTPUT:\n\
+ \n\
+    dc - control points of the derivative     double  matrix(mc,nc)\n\
+    dk - knot sequence of the derivative      double  vector(nk)\n\
+ \n\
+  Modified version of Algorithm A3.3 from 'The NURBS BOOK' pg98.\n\
 ")
 {
   //if (bspderiv_bad_arguments(args, nargout)) 
@@ -497,26 +497,26 @@ static int findspan(int n, int p, double u, const RowVector& U)
 
 // PKG_ADD: autoload ("findspan", "low_level_functions.oct");
 DEFUN_DLD(findspan, args, nargout,"\
-FINDSPAN: Find the span of a B-Spline knot vector at a parametric point\n \
+FINDSPAN: Find the span of a B-Spline knot vector at a parametric point\n\
 \n\
 \n\
-Calling Sequence:\n							\
-\n									\
-   s = findspan(n,p,u,U)\n						\
-\n									\
-  INPUT:\n								\
-\n									\
-    n - number of control points - 1\n					\
-    p - spline degree\n							\
-    u - parametric point\n						\
-    U - knot sequence\n							\
-\n									\
-    U(1) <= u <= U(end)\n						\
-  RETURN:\n								\
- \n									\
-    s - knot span\n							\
- \n									\
-  Algorithm A2.1 from 'The NURBS BOOK' pg68\n				\
+Calling Sequence:\n\
+\n\
+   s = findspan(n,p,u,U)\n\
+\n\
+  INPUT:\n\
+\n\
+    n - number of control points - 1\n\
+    p - spline degree\n\
+    u - parametric point\n\
+    U - knot sequence\n\
+\n\
+    U(1) <= u <= U(end)\n\
+  RETURN:\n\
+ \n\
+    s - knot span\n\
+ \n\
+  Algorithm A2.1 from 'The NURBS BOOK' pg68\n\
 ")
 {
 
@@ -584,20 +584,20 @@ static void basisfun(int i, double u, int p, const RowVector& U, RowVector& N)
 
 // PKG_ADD: autoload ("basisfun", "low_level_functions.oct");
 DEFUN_DLD(basisfun, args, nargout, "\n\
- BASISFUN: Compute B-Spline Basis Functions \n	\
-\n						\
- INPUT:\n					\
-\n						\
-   i - knot span  ( from FindSpan() )\n		\
-   u - parametric point\n			\
-   p - spline degree\n				\
-   U - knot sequence\n				\
-\n						\
- OUTPUT:\n					\
-\n						\
-   N - Basis functions vector[p+1]\n		\
-\n						\
- Algorithm A2.2 from 'The NURBS BOOK' pg70.\n	\
+ BASISFUN: Compute B-Spline Basis Functions \n\
+\n\
+ INPUT:\n\
+\n\
+   i - knot span  ( from FindSpan() )\n\
+   u - parametric point\n\
+   p - spline degree\n\
+   U - knot sequence\n\
+\n\
+ OUTPUT:\n\
+\n\
+   N - Basis functions vector[p+1]\n\
+\n\
+ Algorithm A2.2 from 'The NURBS BOOK' pg70.\n\
 ")
 {
 

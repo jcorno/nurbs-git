@@ -42,24 +42,27 @@
 %% Author: Carlo de Falco <carlo@guglielmo.local>
 %% Created: 2009-04-29
 
-function [varargout]  = nrbbasisfungradient (dz, dxy)
+function [varargout]  = nrbbasisfungradient (dz, N, nrb)
 
-  if (iscell(dz) && iscell(dxy))
+  if (iscell(dz))
 
     dzdu=dz{1}; 
     dzdv=dz{2}; 
-    dxdu=dxy{1}; 
-    dydu=dxy{2};
-    dxdv=dxy{3};
-    dydv=dxy{4};
- 
+
+    X = squeeze(nrb.coefs(1,:,:)./nrb.coefs(4,:,:));
+    Y = squeeze(nrb.coefs(2,:,:)./nrb.coefs(4,:,:));
+
+    dxdu=sum(X(N).*dzdu, 2)(:, ones(columns(N),1)); 
+    dydu=sum(Y(N).*dzdu, 2)(:, ones(columns(N),1));
+    dxdv=sum(X(N).*dzdv, 2)(:, ones(columns(N),1));
+    dydv=sum(Y(N).*dzdv, 2)(:, ones(columns(N),1));
+    
     detjac = dxdu.*dydv - dydu.*dxdv;
     
     varargout{1} = ( dydv .* dzdu - dydu .*dzdv)./detjac;
     varargout{2} = (-dxdv .* dzdu + dxdu .*dzdv)./detjac;
-
- 
-  elseif (~iscell(dz) && ~iscell(dxy) && (nargout==1))
+    %%keyboard
+  elseif (~iscell(dz) && (nargout==1))
 
     varargout{1} = dzdu ./ dxdu;
 
