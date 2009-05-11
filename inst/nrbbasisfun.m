@@ -41,19 +41,19 @@ function [B, id] = nrbbasisfun (points, nrb)
 %          point. size(N) == size(B)
 %   
 
-  if (   (nargin<2) 
-      || (nargout>2)
-      || (~isstruct(nrb))
-      || (iscell(points) && ~iscell(nrb.knots))
-      || (~iscell(points) && iscell(nrb.knots) && (size(points,1)~=2))
-      || (~iscell(nrb.knots) && (nargout>1))
+  if (   (nargin<2) ...
+      || (nargout>2) ...
+      || (~isstruct(nrb)) ...
+      || (iscell(points) && ~iscell(nrb.knots)) ...
+      || (~iscell(points) && iscell(nrb.knots) && (size(points,1)~=2)) ...
+      || (~iscell(nrb.knots) && (nargout>1)) ...
       )
     print_usage();
   end
                             
   if (~iscell(nrb.knots))    %% NURBS curve
     
-    [B, id] = __nrb_crv_basisfun__ (points, nrb);
+    [B, id] = nrb_crv_basisfun__ (points, nrb);
     
   else                       %% NURBS surface
 
@@ -66,11 +66,12 @@ function [B, id] = nrbbasisfun (points, nrb)
       p = points;
     end
     
-    [B, id] = __nrb_srf_basisfun__ (p, nrb); 
+    [B, id] = nrb_srf_basisfun__ (p, nrb); 
 
   end
+end
 
-  function [B, nbfu] = __nrb_crv_basisfun__ (points, nrb);
+  function [B, nbfu] = nrb_crv_basisfun__ (points, nrb);
     n    = size (nrb.coefs, 2) -1;
     p    = nrb.order -1;
     u    = points;

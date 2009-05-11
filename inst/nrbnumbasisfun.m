@@ -36,11 +36,11 @@ function idx = nrbnumbasisfun (points, nrb)
 %          point. size(N) == size(B)
 %   
 
-  if (   (nargin<2) 
-      || (nargout>1)
-      || (~isstruct(nrb))
-      || (iscell(points) && ~iscell(nrb.knots))
-      || (~iscell(points) && iscell(nrb.knots) && (size(points,1)~=2))
+  if (   (nargin<2) ...
+      || (nargout>1) ...
+      || (~isstruct(nrb)) ...
+      || (iscell(points) && ~iscell(nrb.knots)) ...
+      || (~iscell(points) && iscell(nrb.knots) && (size(points,1)~=2)) ...
       )
     print_usage();
   end
@@ -62,18 +62,18 @@ function idx = nrbnumbasisfun (points, nrb)
       p = points;
     end
     
-    idx = __nrb_srf_numbasisfun__ (p, nrb); 
+    idx = nrb_srf_numbasisfun__ (p, nrb); 
 
   end
   
 end
 
-function idx = __nrb_srf_numbasisfun__ (points, nrb)
+function idx = nrb_srf_numbasisfun__ (points, nrb)
   
   m   = nrb.number(1)-1;
   n   = nrb.number(2)-1;
   
-  npt = columns(points);
+  npt = size(points,2);
   u   = points(1,:);
   v   = points(2,:);
 

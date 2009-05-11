@@ -47,19 +47,19 @@ function varargout = nrbbasisfunder (points, nrb)
 %   
 
   
-  if (   (nargin<2) 
-      || (nargout>3)
-      || (~isstruct(nrb))
-      || (iscell(points) && ~iscell(nrb.knots))
-      || (~iscell(points) && iscell(nrb.knots) && (size(points,1)~=2))
-      || (~iscell(nrb.knots) && (nargout>2))
+  if (   (nargin<2) ...
+      || (nargout>3) ...
+      || (~isstruct(nrb)) ...
+      || (iscell(points) && ~iscell(nrb.knots)) ...
+      || (~iscell(points) && iscell(nrb.knots) && (size(points,1)~=2)) ...
+      || (~iscell(nrb.knots) && (nargout>2)) ...
       )
     print_usage();
   end
                             
   if (~iscell(nrb.knots))    %% NURBS curve
     
-    [varargout{1}, varargout{2}] = __nrb_crv_basisfun_der__ (points, nrb);
+    [varargout{1}, varargout{2}] = nrb_crv_basisfun_der__ (points, nrb);
 
   else                       %% NURBS surface
 
@@ -72,11 +72,12 @@ function varargout = nrbbasisfunder (points, nrb)
       p = points;
     end
     
-    [varargout{1}, varargout{2}, varargout{3}] = __nrb_srf_basisfun_der__ (p, nrb);
+    [varargout{1}, varargout{2}, varargout{3}] = nrb_srf_basisfun_der__ (p, nrb);
 
   end
+end
 
-  function [Bu, nbfu] = __nrb_crv_basisfun_der__ (points, nrb);
+  function [Bu, nbfu] = nrb_crv_basisfun_der__ (points, nrb);
     n    = size (nrb.coefs, 2) -1;
     p    = nrb.order -1;
     u    = points;

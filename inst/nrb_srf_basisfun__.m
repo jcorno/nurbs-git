@@ -13,7 +13,7 @@
 %% You should have received a copy of the GNU General Public License
 %% along with this program; if not, see <http://www.gnu.org/licenses/>.
 
-function [B, N] = __nrb_srf_basisfun__ (points, nrb);
+function [B, N] = nrb_srf_basisfun__ (points, nrb);
 
   %%  __NRB_SRF_BASISFUN__: Undocumented internal function
 
@@ -42,7 +42,7 @@ function [B, N] = __nrb_srf_basisfun__ (points, nrb);
     for k=1:npt
       wIkaJkb(1:p+1, 1:q+1) = reshape (w(indIkJk(k, :)), p+1, q+1); 
       NuIkukaNvJkvk(1:p+1, 1:q+1) = (NuIkuk(k, :).' * NvJkvk(k, :));
-      RIkJk(k, :) = (NuIkukaNvJkvk .* wIkaJkb ./ sum(sum(NuIkukaNvJkvk .* wIkaJkb)))(:).';
+      RIkJk(k, :) = reshape((NuIkukaNvJkvk .* wIkaJkb ./ sum(sum(NuIkukaNvJkvk .* wIkaJkb))),1,[]);
     end
     
     B = RIkJk;

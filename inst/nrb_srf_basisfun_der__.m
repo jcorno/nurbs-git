@@ -13,7 +13,7 @@
 %% You should have received a copy of the GNU General Public License
 %% along with this program; if not, see <http://www.gnu.org/licenses/>.
 
-function [Bu, Bv, N] = __nrb_srf_basisfun_der__ (points, nrb);
+function [Bu, Bv, N] = nrb_srf_basisfun_der__ (points, nrb);
 
   %%  __NRB_SRF_BASISFUN_DER__: Undocumented internal function
 
@@ -61,8 +61,8 @@ function [Bu, Bv, N] = __nrb_srf_basisfun_der__ (points, nrb);
     Denom_du = sum(sum(Num_du));
     Denom_dv = sum(sum(Num_dv));
     
-    Bu(k, :) = (Num_du/Denom - Denom_du.*Num/Denom.^2)(:).';
-    Bv(k, :) = (Num_dv/Denom - Denom_dv.*Num/Denom.^2)(:).';
+    Bu(k, :) = reshape((Num_du/Denom - Denom_du.*Num/Denom.^2),1,[]);
+    Bv(k, :) = reshape((Num_dv/Denom - Denom_dv.*Num/Denom.^2),1,[]);
   end
   
 end

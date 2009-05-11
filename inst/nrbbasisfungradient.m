@@ -52,10 +52,15 @@ function [varargout]  = nrbbasisfungradient (dz, N, nrb)
     X = squeeze(nrb.coefs(1,:,:)./nrb.coefs(4,:,:));
     Y = squeeze(nrb.coefs(2,:,:)./nrb.coefs(4,:,:));
 
-    dxdu=sum(X(N).*dzdu, 2)(:, ones(columns(N),1)); 
-    dydu=sum(Y(N).*dzdu, 2)(:, ones(columns(N),1));
-    dxdv=sum(X(N).*dzdv, 2)(:, ones(columns(N),1));
-    dydv=sum(Y(N).*dzdv, 2)(:, ones(columns(N),1));
+    nfun = size(N,2);
+    tmp = sum(X(N).*dzdu, 2);
+    dxdu= tmp(:, ones(nfun,1)); 
+    tmp = sum(Y(N).*dzdu, 2);
+    dydu= tmp(:, ones(nfun,1));
+    tmp = sum(X(N).*dzdv, 2);
+    dxdv= tmp(:, ones(nfun,1));
+    tmp = sum(Y(N).*dzdv, 2);
+    dydv= tmp(:, ones(nfun,1));
     
     detjac = dxdu.*dydv - dydu.*dxdv;
     
