@@ -25,9 +25,9 @@
 
 function [dzdx, dzdy]  = nrbsrfgradient (nrb, nrbder, u, v)
 
-  if ((nargin != 4) || (nargout>2))
+  if ((nargin ~= 4) || (nargout>2))
     print_usage();
-  endif
+  end
     
   [np, dp] = nrbdeval (nrb, nrbder, {u, v});
 
@@ -43,7 +43,7 @@ function [dzdx, dzdy]  = nrbsrfgradient (nrb, nrbder, u, v)
   dzdx = ( dydv .* dzdu - dydu .*dzdv)./detjac;
   dzdy = (-dxdv .* dzdu + dxdu .*dzdv)./detjac;
   
-endfunction
+end
 
 
 %!shared nrb, cntl, k, rec
