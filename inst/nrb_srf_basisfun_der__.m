@@ -36,18 +36,17 @@ function [Bu, Bv, N] = nrb_srf_basisfun_der__ (points, nrb);
   spv  =  findspan (n, q, v, V);
   N    =  nrbnumbasisfun (points, nrb);
 
-  NuIkuk = basisfun (spu, u, p, U);
+  NuIkuk = basisfun (spu, u, p, U); 
   NvJkvk = basisfun (spv, v, q, V);
   
   NuIkukprime = basisfunder (spu, p, u, U, 1);
-  NuIkukprime = squeeze(NuIkukprime(:,2,:));
+  NuIkukprime = reshape (NuIkukprime(:,2,:), npt, []);
   
   NvJkvkprime = basisfunder (spv, q, v, V, 1);
-  NvJkvkprime = squeeze(NvJkvkprime(:,2,:));
-  
+  NvJkvkprime = reshape (NvJkvkprime(:,2,:), npt, []);
   
   for k=1:npt
-    wIkaJkb(1:p+1, 1:q+1) = reshape (w(N(k, :)), p+1, q+1); 
+    wIkaJkb(1:p+1, 1:q+1) = reshape (w(N(k, :)), p+1, q+1);
     
     Num    = (NuIkuk(k, :).' * NvJkvk(k, :)) .* wIkaJkb;
     Num_du = (NuIkukprime(k, :).' * NvJkvk(k, :)) .* wIkaJkb;

@@ -168,14 +168,12 @@ DEFUN_DLD(nrb_srf_basisfun_der__, args, nargout,"\
 
      
       newargs(4) = 1; newargs(3) = U; newargs(2) = u; newargs(1) = p; newargs(0) = spu;
-      NDArray NuIkukprime_tmp = feval (std::string("basisfunder"), newargs, 1)(0).array_value (); //   NuIkukprime = basisfunder (spu, p, u, U, 1);
-      idx2(0) = idx_vector(':'); idx2(1) = 2; idx2(2) = idx_vector(':');
-      NDArray NuIkukprime (NuIkukprime_tmp.index (idx2).squeeze ()); // NuIkukprime = squeeze(NuJkukprime(:,2,:));
+      NDArray NuIkukprime = feval (std::string("basisfunder"), newargs, 1)(0).array_value (); //   NuIkukprime = basisfunder (spu, p, u, U, 1);
+                                                                                              //   NuIkukprime = squeeze(NuJkukprime(:,2,:));
       
       newargs(4) = 1; newargs(3) = V; newargs(2) = v; newargs(1) = q; newargs(0) = spv;
-      NDArray NvJkvkprime_tmp = feval (std::string("basisfunder"), newargs, 1)(0).array_value (); //   NvJkvkprime = basisfunder (spv, q, v, V, 1);
-      idx2(0) = idx_vector(':'); idx2(1) = 2; idx2(2) = idx_vector(':');
-      NDArray NvJkvkprime (NvJkvkprime_tmp.index (idx2).squeeze ()); // NvJkvkprime = squeeze(NvJkvkprime(:,2,:));
+      NDArray NvJkvkprime = feval (std::string("basisfunder"), newargs, 1)(0).array_value (); //   NvJkvkprime = basisfunder (spv, q, v, V, 1);
+                                                                                              //   NvJkvkprime = squeeze(NvJkvkprime(:,2,:));
       
       for (octave_idx_type k(0); k < npt; k++) 
 	for (octave_idx_type ii(0); ii < p+1; ii++) 
@@ -184,10 +182,10 @@ DEFUN_DLD(nrb_srf_basisfun_der__, args, nargout,"\
 	      Num(k, ii+jj*(p+1)) = NuIkuk(k, ii) * NvJkvk(k, jj) * w(Ik(k, ii), Jk(k, jj));
 	      Denom(k) += Num(k, ii+jj*(p+1));
 
-	      Num_du(k, ii+jj*(p+1)) = NuIkukprime(k, ii) * NvJkvk(k, jj) * w(Ik(k, ii), Jk(k, jj));
+	      Num_du(k, ii+jj*(p+1)) = NuIkukprime(k, 1, ii) * NvJkvk(k, jj) * w(Ik(k, ii), Jk(k, jj));
 	      Denom_du(k) += Num_du(k, ii+jj*(p+1));
 
-	      Num_dv(k, ii+jj*(p+1)) = NuIkuk(k, ii) * NvJkvkprime(k, jj) * w(Ik(k, ii), Jk(k, jj));
+	      Num_dv(k, ii+jj*(p+1)) = NuIkuk(k, ii) * NvJkvkprime(k, 1, jj) * w(Ik(k, ii), Jk(k, jj));
 	      Denom_dv(k) += Num_dv(k, ii+jj*(p+1));
 	    }
 
