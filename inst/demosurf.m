@@ -1,5 +1,5 @@
 function demosurf
-% Shows a simple test surface
+% DEMOSURF: Shows a simple test surface
 %
 
 % D.M. Spink

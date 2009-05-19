@@ -15,7 +15,7 @@
 
 function B = numbasisfun (iv, uv, p, U)
 
-% BASISFUN  List non-zero Basis functions for B-Spline in a given knot-span
+% NUMBASISFUN:  List non-zero Basis functions for B-Spline in a given knot-span
 %
 % Calling Sequence:
 % 

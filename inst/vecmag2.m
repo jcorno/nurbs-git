@@ -1,6 +1,6 @@
 function mag = vecmag2(vec)
 % 
-% VECMAG2: Squared magnitude of the vectors
+% VECMAG2: Squared magnitude of a set of vectors.
 % 
 % Calling Sequence:
 % 
@@ -9,7 +9,7 @@ function mag = vecmag2(vec)
 % Parameters:
 % 
 %   vec		: An array of column vectors represented by a matrix of
-% 		size (dim,nv), where is the dimension of the vector and
+% 		size (dim,nv), where dim is the dimension of the vector and
 % 		nv the number of vectors.
 % 
 %   mvec	: Squared magnitude of the vectors, vector of size (1,nv).

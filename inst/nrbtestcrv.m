@@ -1,5 +1,5 @@
 function crv = nrbtestcrv
-% Constructs a simple test curve. 
+% NRBTESTCRV: Constructs a simple test curve. 
 
 % D.M. Spink
 % Copyright (c) 2000

@@ -1,6 +1,6 @@
 function rnrb = nrbreverse(nrb)
 %
-% NRBREVERSE - Reverse the evaluation direction of a NURBS curve or surface.
+% NRBREVERSE: Reverse the evaluation direction of a NURBS curve or surface.
 % 
 % Calling Sequence:
 % 

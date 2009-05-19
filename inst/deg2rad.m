@@ -1,6 +1,5 @@
 function rad = deg2rad(deg)
- 
- 
+  
 % DEG2RAD: Convert degrees to radians.
 % 
 % Calling Sequence:

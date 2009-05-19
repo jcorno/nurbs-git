@@ -15,7 +15,7 @@
 
 function demotorus
 
-% A second demonstration of surface construction
+% DEMOTORUS: A second demonstration of surface construction
 % by revolution.
 %
 

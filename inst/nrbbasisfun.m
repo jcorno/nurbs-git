@@ -15,7 +15,7 @@
 
 function [B, id] = nrbbasisfun (points, nrb)
 
-% NRBBASISFUN  Basis functions for NURBS
+% NRBBASISFUN: Basis functions for NURBS
 %
 % Calling Sequence:
 % 

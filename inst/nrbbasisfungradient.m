@@ -17,7 +17,7 @@
 %% -*- texinfo -*-
 %% @deftypefn {Function File} {[@var{dRdx}, @var{dRdy}]=} nrbbasisfungradient (@{@var{dzdu}, @var{dzdv}@}, @{@var{dxdu}, @var{dydu}, @var{dxdv}, @var{dydv}@})
 %% @deftypefnx {Function File} {[@var{dRdx}]=} nrbbasisfungradient (@var{dzdu}, @var{dxdu})
-%% Compute the gradient of the basis functions of a NURBS surface at the
+%% NRBBASISFUNGRADIENT Compute the gradient of the basis functions of a NURBS surface at the
 %% specified parametric points.
 %%
 %% INPUT:

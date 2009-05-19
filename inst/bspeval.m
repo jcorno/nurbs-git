@@ -15,7 +15,7 @@
 
 function p = bspeval(d,c,k,u)
 
-% BSPEVAL:  Evaluate B-Spline at parametric points
+% BSPEVAL:  Evaluate B-Spline at parametric points.
 % 
 % Calling Sequence:
 % 

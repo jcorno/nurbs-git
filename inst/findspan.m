@@ -15,7 +15,7 @@
 
 function sv = findspan (n, p, uv, U)                
 
-% FINDSPAN  Find the span of a B-Spline knot vector at a parametric point
+% FINDSPAN:  Find the span of a B-Spline knot vector at a parametric point
 %
 % Calling Sequence:
 % 

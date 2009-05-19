@@ -15,7 +15,7 @@
 
 function idx = nrbnumbasisfun (points, nrb)
 
-% NRBNUMBASISFUN  Numbering of basis functions for NURBS
+% NRBNUMBASISFUN:  Numbering of basis functions for NURBS
 %
 % Calling Sequence:
 % 

@@ -16,11 +16,11 @@
 
 %% -*- texinfo -*-
 %% @deftypefn {Function File} {[@var{dzdx}, @var{dzdy}]=} nrbsrfgradient (@var{nrb}, @var{nrbder}, @var{u}, @var{v})
-%% Compute the gradient of a NURBS surface.
+%% NRBSRFGRADIENT: Compute the gradient of a NURBS surface.
 %% @seealso{nrbderiv}
 %% @end deftypefn
 
-%% Author: Carlo de Falco <carlo@guglielmo.local>
+%% Author: Carlo de Falco <cdf _AT_ users.sourceforge.net>
 %% Created: 2009-03-17
 
 function [dzdx, dzdy]  = nrbsrfgradient (nrb, nrbder, u, v)

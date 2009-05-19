@@ -15,7 +15,7 @@
 
 function [dc,dk] = bspderiv(d,c,k)
 
-% BSPDERIV:  B-Spline derivative
+% BSPDERIV:  B-Spline derivative.
 % 
 %  MATLAB SYNTAX:
 % 

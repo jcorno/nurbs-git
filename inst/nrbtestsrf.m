@@ -1,5 +1,5 @@
 function srf = nrbtestsrf
-% Constructs a simple test surface.
+% NRBTESTSRF: Constructs a simple test surface.
 
 %  D.M. Spink
 %  Copyright (c) 2000.
