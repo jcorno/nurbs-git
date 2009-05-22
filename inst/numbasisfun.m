@@ -43,6 +43,6 @@ B = bsxfun (@(a, b) a+b,iv-p, (0:p).').';
 %!  s = findspan (n, p, u, U); 
 %!  Bref = [0   0   0   0   0   1   1   1   1   1
 %!          1   1   1   1   1   2   2   2   2   2
-%!          2   2   2   2   2   3   3   3   3   3];
+%!          2   2   2   2   2   3   3   3   3   3].';
 %!  B = numbasisfun (s, u, p, U);
 %!  assert (B, Bref)
