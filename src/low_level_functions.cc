@@ -57,9 +57,9 @@ DEFUN_DLD(basisfunder, args, nargout,"\n\
 {
   octave_value_list retval;
 
-  const RowVector i = args(0).row_vector_value ();
+  const NDArray i = args(0).array_value ();
   int pl = args(1).int_value ();
-  const RowVector u = args(2).row_vector_value ();
+  const NDArray u = args(2).array_value ();
   const RowVector U = args(3).row_vector_value ();
   int nd = args(4).int_value ();
 
