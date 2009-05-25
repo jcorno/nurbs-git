@@ -1,7 +1,13 @@
-all: low_level_functions.oct
+OCTFILES = bspderiv.oct nrb_srf_basisfun_der__.oct\
+basisfun.oct bspeval.oct basisfunder.oct findspan.oct nrb_srf_basisfun__.oct
 
-%.oct: %.cc
-	mkoctfile $<
+all: $(OCTFILES)
+
+low_level_functions.o: low_level_functions.cc
+	mkoctfile -c $<
+
+%.oct:  %.cc low_level_functions.o
+	mkoctfile $< low_level_functions.o
 
 clean:
-	-rm *.o core octave-core *.oct *~
+	-rm -f *.o core octave-core *.oct *~

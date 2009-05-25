@@ -15,16 +15,6 @@
    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
-static int findspan(int n, int p, double u, 
-		    const RowVector& U);
-
-static void basisfun(int i, double u, int p, 
-		     const RowVector& U, RowVector& N);
-
-static double factln(int n);
-
-static double gammaln(double xx);
-
-static bool bspeval_bad_arguments(const octave_value_list& args);
-
-static double bincoeff(int n, int k);
+int findspan(int n, int p, double u, const RowVector& U);
+void basisfun(int i, double u, int p, const RowVector& U, RowVector& N);
+void basisfunder (int i, int pl, double uu, const RowVector& u_knotl, int nders, NDArray& dersv);
