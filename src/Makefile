@@ -1,5 +1,5 @@
 OCTFILES = bspderiv.oct nrb_srf_basisfun_der__.oct\
-basisfun.oct bspeval.oct basisfunder.oct findspan.oct nrb_srf_basisfun__.oct
+basisfun.oct bspeval.oct basisfunder.oct nrb_srf_basisfun__.oct
 
 all: $(OCTFILES)
 
