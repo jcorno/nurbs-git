@@ -20,6 +20,7 @@
 
 #include <octave/oct.h>
 #include "low_level_functions.h"
+#include <iostream>
 
 int findspan(int n, int p, double u, const RowVector& U)
 
@@ -36,8 +37,14 @@ int findspan(int n, int p, double u, const RowVector& U)
 //
 //   s - knot span
 //
+// Note: This is NOT
 // Algorithm A2.1 from 'The NURBS BOOK' pg68
+// as that algorithm only works for nonperiodic
+// knot vectors, nonetheless the results should 
+// be EXACTLY the same if U is nonperiodic
 
+/*
+Below is the original implementation from the NURBS Book
 {
   int low, high, mid;
   // special case
@@ -59,8 +66,15 @@ int findspan(int n, int p, double u, const RowVector& U)
 
   return(mid);
 }
+*/
 
-
+{
+  // FIXME : this implementation has linear, rather than log complexity
+  int ret = 0;
+  while ((ret++ < n) && (U(ret) <= u)) {
+  };
+  return (ret-1);
+}
 
 void basisfun(int i, double u, int p, const RowVector& U, RowVector& N)
 
