@@ -15,6 +15,26 @@
    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
-int findspan(int n, int p, double u, const RowVector& U);
+octave_idx_type findspan(int n, int p, double u, const RowVector& U);
+
 void basisfun(int i, double u, int p, const RowVector& U, RowVector& N);
-void basisfunder (int i, int pl, double uu, const RowVector& u_knotl, int nders, NDArray& dersv);
+
+void basisfunder (int i, int pl, double uu, const RowVector& u_knotl, 
+		  int nders, NDArray& dersv);
+
+int curvederivcpts (octave_idx_type n, octave_idx_type p, 
+		    const RowVector &U, const NDArray &P, 
+		    octave_idx_type  d, octave_idx_type r1, 
+		    octave_idx_type r2, 
+		    Matrix &pk);
+
+int surfderivcpts (octave_idx_type n, octave_idx_type  p, const RowVector& U, 
+		   octave_idx_type m, octave_idx_type q, const RowVector& V, 
+		   const Matrix& P, octave_idx_type d, octave_idx_type r1, 
+		   octave_idx_type r2, octave_idx_type s1, 
+		   octave_idx_type s2, NDArray &pkl);
+
+int surfderiveval (octave_idx_type n, octave_idx_type p, RowVector U, 
+		   octave_idx_type m, octave_idx_type q, RowVector V, 
+		   Matrix P, double u, double v, octave_idx_type d, 
+		   Matrix &skl);

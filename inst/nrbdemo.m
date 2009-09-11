@@ -13,6 +13,9 @@
 %% You should have received a copy of the GNU General Public License
 %% along with this program; if not, see <http://www.gnu.org/licenses/>.
 
+%% nrbdemo ()
+%% demos for the nurbs package
+
 function nrbdemo()
 
 lst = {'3D Line', 'demoline', 'Rectangle','demorect', ...

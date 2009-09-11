@@ -22,7 +22,7 @@
 #include "low_level_functions.h"
 #include <iostream>
 
-int findspan(int n, int p, double u, const RowVector& U)
+octave_idx_type findspan(int n, int p, double u, const RowVector& U)
 
 // Find the knot span of the parametric point u. 
 //
@@ -229,3 +229,145 @@ void basisfunder (int i, int pl, double u, const RowVector& u_knotl, int nders, 
 }
 
 
+int curvederivcpts (octave_idx_type n, octave_idx_type p, 
+		    const RowVector &U, const NDArray &P, 
+		    octave_idx_type  d, octave_idx_type r1, 
+		    octave_idx_type r2, Matrix &pk)
+{
+  octave_idx_type r = r2 - r1;
+  for (octave_idx_type i(0); i<=r; i++)
+    pk(0, i) = P(r1+i);
+
+  for (octave_idx_type k (1); k<=d; k++)
+    {
+      octave_idx_type tmp = p - k + 1;
+      for (octave_idx_type i (0); i<=r-k; i++)
+	{
+	  pk (k, i) = tmp * (pk(k-1,i+1)-pk(k-1,i)) / 
+	    (U(r1+i+p+1)-U(r1+i+k));
+	}
+    }
+  return 0;
+}
+
+
+
+int surfderivcpts (octave_idx_type n, octave_idx_type  p, const RowVector& U, 
+		   octave_idx_type m, octave_idx_type q, const RowVector& V, 
+		   const Matrix& P, octave_idx_type d, octave_idx_type r1, 
+		   octave_idx_type r2, octave_idx_type s1, 
+		   octave_idx_type s2, NDArray &pkl)
+{
+
+  octave_idx_type r = r2-r1, s = s2-s1;  
+  octave_idx_type du = d <= p ? d : p;   
+  octave_idx_type dv = d <= q ? d : q; 
+  
+  Array<octave_idx_type> idxta (4, 0);
+  Array<idx_vector> idxva (4, idx_vector (':'));
+  dim_vector idxa; idxa.resize (4);
+  idxa(0) = (du+1); idxa(1) = (dv+1); 
+  idxa(2) = (r+1);  idxa(3) = (s+1); 
+  
+  pkl.resize (idxa, 0.0); 
+      
+  for (octave_idx_type j(s1); j<=s2; j++)
+    {
+    
+      Matrix temp (du+1 <= n+1 ? du+1 : n+1, n+1, 0.0);
+      curvederivcpts (n, p, U, P.extract (0, j, P.rows()-1, P.cols ()-1), du, r1, r2, temp);
+      for (octave_idx_type k(0); k<=du; k++)
+	{
+
+	  for ( octave_idx_type i(0); i<=r-k; i++)
+	    {	
+
+	      idxta (0) = k; idxta (1) = 0;
+	      idxta (2) = i; idxta (3) = j;
+	      pkl(idxta) = temp (k, i);
+	    }
+	}
+    }
+
+  for (octave_idx_type k (0); k<=du; k++)
+    {
+
+      for (octave_idx_type i(0); i<=r-k; i++)
+	{
+
+	  octave_idx_type dd = d-k <= dv ? d-k : dv;
+	  Matrix temp (dd+1 <= m+1 ? dd+1 : m+1, m+1, 0.0);
+	  
+	  idxva (0) = idx_vector(k); idxva (1) = idx_vector(0);
+	  idxva (2) = idx_vector(i); idxva (3) = idx_vector(':');
+	  NDArray temp2 (pkl.index (idxva));
+	  curvederivcpts (m, q, V, temp2.squeeze (), dd, 0, s, temp);
+	  
+	  for (octave_idx_type l(1); l<=dd; l++)
+	    {
+
+	      for (octave_idx_type j(0); j<=s-l; j++)
+		{
+
+		  idxta (0) = k; idxta (1) = l;
+		  idxta (2) = i; idxta (3) = j;
+		  pkl(idxta) = temp (l, j);
+		}
+	    }
+	}
+    }
+
+  return (0);
+}
+
+
+int surfderiveval (octave_idx_type n, octave_idx_type p, RowVector U, 
+		   octave_idx_type m, octave_idx_type q, RowVector V, 
+		   Matrix P, double u, double v, octave_idx_type d, 
+		   Matrix &skl)
+{
+  Array<octave_idx_type> idx(4, 0);
+  octave_idx_type du = d <= p ? d: p;   
+  octave_idx_type dv = d <= q ? d: q;
+  
+  skl.resize (d+1, d+1, 0.0);
+  
+  octave_idx_type uspan = findspan (n, p, u, U);
+  Matrix Nu (p+1, p+1, 0.0);
+  for (octave_idx_type ip(0); ip<=p; ip++)
+    {
+      RowVector temp (ip+1, 0.0);
+      basisfun (uspan, u, ip, U, temp);
+      Nu.insert (temp.transpose (), 0,ip);
+    }
+  
+  octave_idx_type vspan = findspan (n, p, u, U);
+  Matrix Nv (q+1, q+1, 0.0);
+  for (octave_idx_type iq(0); iq<=q; iq++)
+    {
+      RowVector temp (iq+1, 0.0);
+      basisfun (vspan, v, iq, V, temp);
+      Nv.insert (temp.transpose (), 0, iq);
+    }
+  NDArray pkl;
+  surfderivcpts (n, p, U, m, q, V, P, d, uspan-p, uspan, vspan-q, vspan, pkl);
+  
+  for (octave_idx_type k(0); k<=du; k++)
+    {
+      octave_idx_type dd = d-k <= dv ? d-k : dv;
+      for (octave_idx_type l(0);l <= dd; l++)
+	{
+	  skl(k,l) = 0.0;
+	  for (octave_idx_type i(0); i<=q-l; i++)
+	    {
+	      double tmp = 0.0;
+	      for (octave_idx_type j(0); j<=p-k; j++)
+		{
+		  idx(0) = k; idx(1)=l; idx(2)=j; idx(3) =i;
+		  tmp += Nu(j,p-k) * pkl(idx);
+		}
+	      skl(k,l) += Nv(i,q-l) * tmp;
+	    }
+	}
+    }
+}

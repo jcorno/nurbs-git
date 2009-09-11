@@ -13,7 +13,7 @@
 %% You should have received a copy of the GNU General Public License
 %% along with this program; if not, see <http://www.gnu.org/licenses/>.
 
-function sv = findspanc (n, p, uv, U)                
+function sv = findspanc (uv, U)                
 
 % FINDSPANC:  Find the span of a B-Spline knot vector at a parametric point
 %
@@ -23,8 +23,6 @@ function sv = findspanc (n, p, uv, U)
 % 
 %  INPUT:
 % 
-%    n - number of control points - 1
-%    p - spline degree
 %    u - parametric point
 %    U - knot sequence
 % 
@@ -44,7 +42,7 @@ sv = lookup (U, uv, "lr") - 1;
 %!  U = [0 0 0 1/2 1 1 1]; 
 %!  p = 2; 
 %!  u = linspace(0, 1, 10)(2:end-1);  
-%!  s = findspanc (n, p, u, U); 
+%!  s = findspanc (p, u, U); 
 %!  assert (s, [2*ones(1, 4) 3*ones(1, 4)]);
 
 %!test
@@ -52,4 +50,4 @@ sv = lookup (U, uv, "lr") - 1;
 %!  U = [zeros(1,p)  linspace(0,1,m+1-2*p) ones(1,p)];
 %!  u = [ 0.11880   0.55118   0.93141   0.40068   0.35492 0.44392   0.88360   0.35414   0.92186   0.83085 ];
 %!  s = [2   3   4   3   3   3   4   3   4   4];
-%!  assert (findspanc (n, p, u, U), s, 1e-10);
+%!  assert (findspanc (p, u, U), s, 1e-10);
