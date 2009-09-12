@@ -123,8 +123,8 @@ end
 %! mcp = 2; ncp = 3;
 %! knots = {[zeros(1,p), linspace(0,1,mcp-p+2), ones(1,p)], [zeros(1,q), linspace(0,1,ncp-q+2), ones(1,q)]};
 %! Lx  = 1; Ly  = 1;
-%! [cntl(1,:,:), cntl(2,:,:)] = meshgrid(linspace(0, Lx, ncp+1), linspace(0, Ly, mcp+1) );
-%! cntl(4,:,:) = 1:numel(cntl(1,:,:));
+%! [cntl(2,:,:), cntl(1,:,:)] = meshgrid(linspace(0, Ly, mcp+1),linspace(0, Lx, ncp+1));
+%! cntl(4,:,:) = reshape(1:numel(cntl(1,:,:)), size(cntl(1,:,:)));
 %! nrb = nrbmak(cntl, knots);
 %! u = rand (1, 30); v = rand (1, 10);
 %! [B, N] = nrbbasisfun ({u, v}, nrb);
