@@ -91,7 +91,7 @@ DEFUN_DLD(nrbsurfderiveval, args, nargout,"\
       idxa(2) = d+1; idxa(3) = uv.columns (); 
       NDArray skl (idxa, 0.0);
 
-      for (octave_idx_type iu(0); iu<=uv.cols (); iu++)
+      for (octave_idx_type iu(0); iu<uv.cols (); iu++)
 	{
 	  octave_idx_type n = octave_idx_type ((srf.contents("number")(0).row_vector_value())(0) - 1);
 	  octave_idx_type m = octave_idx_type ((srf.contents("number")(0).row_vector_value())(1) - 1);
