@@ -34,7 +34,7 @@ int surfderivcpts (octave_idx_type n, octave_idx_type  p, const RowVector& U,
 		   octave_idx_type r2, octave_idx_type s1, 
 		   octave_idx_type s2, NDArray &pkl);
 
-int surfderiveval (octave_idx_type n, octave_idx_type p, RowVector U, 
-		   octave_idx_type m, octave_idx_type q, RowVector V, 
-		   Matrix P, double u, double v, octave_idx_type d, 
+int surfderiveval (octave_idx_type n, octave_idx_type p, const RowVector &U, 
+		   octave_idx_type m, octave_idx_type q, const RowVector &V, 
+		   const Matrix &P, double u, double v, octave_idx_type d, 
 		   Matrix &skl);

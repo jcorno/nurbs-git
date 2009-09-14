@@ -63,6 +63,7 @@ DEFUN_DLD(surfderiveval, args, nargout,"\
 }
 
 /*
+%!shared srf
 %!test
 %! k = [0 0 0 1 1 1];
 %! c = [0 1/2 1];
@@ -70,10 +71,20 @@ DEFUN_DLD(surfderiveval, args, nargout,"\
 %! srf = nrbmak (coef, {k, k});
 %! skl = surfderiveval (srf.number(1)-1, 
 %!                      srf.order(1)-1, 
-%!                      k, 
+%!                      srf.knots{1}, 
 %!                      srf.number(2)-1, 
 %!                      srf.order(2)-1, 
-%!                      k, 
-%!                      squeeze(coef(1,:,:)), .5, .5, 1) ;
+%!                      srf.knots{2},
+%!                      squeeze(srf.coefs(1,:,:)), .5, .5, 1) ;
+%! assert (skl, [.5 0; 1 0])
+%!test
+%! srf = nrbkntins (srf, {[], rand(1,2)});
+%! skl = surfderiveval (srf.number(1)-1, 
+%!                      srf.order(1)-1, 
+%!                      srf.knots{1},
+%!                      srf.number(2)-1, 
+%!                      srf.order(2)-1, 
+%!                      srf.knots{2},
+%!                      squeeze(srf.coefs(1,:,:)), .5, .5, 1) ;
 %! assert (skl, [.5 0; 1 0])
 */

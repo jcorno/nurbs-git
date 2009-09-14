@@ -155,17 +155,43 @@ DEFUN_DLD(nrbsurfderiveval, args, nargout,"\
 %! [coef(2,:,:), coef(1,:,:)] = meshgrid (c, c);
 %! coef(3,:,:) = coef(1,:,:);
 %! srf = nrbmak (coef, {k, k});
-%! uv  = linspace(0,1,11)([1 1],:);
+%! [u, v] = meshgrid (linspace(0,1,11));
+%! uv = [u(:)';v(:)'];
+%! skl = nrbsurfderiveval (srf, uv, 0);
+%! assert (squeeze (skl (1:2,1,1,:)), nrbeval (srf, uv)(1:2,:), 1e3*eps)
+
+%!test
+%! k = [0 0  1 1];
+%! c = [0 1];
+%! [coef(2,:,:), coef(1,:,:)] = meshgrid (c, c);
+%! coef(3,:,:) = coef(1,:,:);
+%! srf = nrbmak (coef, {k, k});
+%! srf = nrbkntins (srf, {[], rand(2,1)});
+%! [u, v] = meshgrid (linspace(0,1,11));
+%! uv = [u(:)';v(:)'];
+%! skl = nrbsurfderiveval (srf, uv, 0);
+%! assert (squeeze (skl (1:2,1,1,:)), nrbeval (srf, uv)(1:2,:), 1e3*eps)
+
+%!test
+%! k = [0 0  1 1];
+%! c = [0 1];
+%! [coef(2,:,:), coef(1,:,:)] = meshgrid (c, c);
+%! coef(3,:,:) = coef(1,:,:);
+%! srf = nrbmak (coef, {k, k});
+%! [u, v] = meshgrid (linspace(0,1,11));
+%! uv = [u(:)';v(:)'];
 %! skl = nrbsurfderiveval (srf, uv, 1);
 %! assert (squeeze (skl (2,:,:,3)), [.2 1; 0 0])
+%! assert (squeeze (skl (1:2,1,1,:)), nrbeval (srf, uv)(1:2,:), 1e3*eps)
 
-%!shared uv, P, dPdx, d2Pdx2, c1, c2
+%!shared srf, uv, P, dPdx, d2Pdx2, c1, c2
 %!test
-%! uv = [sort(rand(1,10)); (rand(1,10))];
+%! [u, v] = meshgrid (linspace(0,1,10));
+%! uv = [u(:)';v(:)'];
 %! c1 = nrbmak([0 1/2 1; 0 1 0],[0 0 0 1 1 1]);
 %! c1 = nrbtform (c1, vecrotx (pi/2));
 %! c2  = nrbtform(c1, vectrans([0 1 0]));
-%! srf = nrbdegelev (nrbruled (c1, c2), [0, 1]);
+%! srf = nrbdegelev (nrbruled (c1, c2), [3, 1]);
 %! skl = nrbsurfderiveval (srf, uv, 2);
 %! P = squeeze(skl(:,1,1,:));
 %! dPdx = squeeze(skl(:,2,1,:));
@@ -178,13 +204,19 @@ DEFUN_DLD(nrbsurfderiveval, args, nargout,"\
 %! P = squeeze(skl(:,1,1,:));
 %! dPdx = squeeze(skl(:,2,1,:));
 %! d2Pdx2 = squeeze(skl(:,3,1,:));
+%! assert (squeeze (skl (1:2,1,1,:)), nrbeval (srf, uv)(1:2,:), 1e3*eps)
 %!assert(P(3,:), 2*(P(1,:)-P(1,:).^2),100*eps)
 %!assert(dPdx(3,:), 2-4*P(1,:), 100*eps)
 %!assert(d2Pdx2(3,:), -4+0*P(1,:), 100*eps)
-
-%!shared dPdu, d2Pdu2, P
+%!
 %!test
-%! uv  = [sort(rand(1,10)); (rand(1,10))];
+%! skl = nrbsurfderiveval (srf, uv, 0);
+%! assert (squeeze (skl (1:2,1,1,:)), nrbeval (srf, uv)(1:2,:), 1e3*eps)
+
+%!shared dPdu, d2Pdu2, P, srf, uv
+%!test
+%! [u, v] = meshgrid (linspace(0,1,10));
+%! uv = [u(:)';v(:)'];
 %! c1 = nrbmak([0 1/2 1; 0.1 1.6 1.1; 0 0 0],[0 0 0 1 1 1]);
 %! c2 = nrbmak([0 1/2 1; 0.1 1.6 1.1; 1 1 1],[0 0 0 1 1 1]);
 %! srf = nrbdegelev (nrbruled (c1, c2), [0, 1]);
@@ -193,6 +225,12 @@ DEFUN_DLD(nrbsurfderiveval, args, nargout,"\
 %! dPdu = squeeze(skl(:,2,1,:));
 %! dPdv = squeeze(skl(:,1,2,:));
 %! d2Pdu2 = squeeze(skl(:,3,1,:));
+%! assert (squeeze (skl (1:2,1,1,:)), nrbeval (srf, uv)(1:2,:), 1e3*eps)
 %!assert(dPdu(2,:), 3-4*P(1,:),100*eps)
 %!assert(d2Pdu2(2,:), -4+0*P(1,:),100*eps)
+%!
+%!test
+%! skl = nrbsurfderiveval (srf, uv, 0);
+%! assert (squeeze (skl (1:2,1,1,:)), nrbeval (srf, uv)(1:2,:), 1e3*eps)
+
 */
