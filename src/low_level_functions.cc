@@ -275,7 +275,7 @@ int surfderivcpts (octave_idx_type n, octave_idx_type  p, const RowVector& U,
   for (octave_idx_type j(s1); j<=s2; j++)
     {
     
-      Matrix temp (du+1 <= n+1 ? du+1 : n+1, n+1, 0.0);
+      Matrix temp (du <= n ? (du+1) : (n+1), n+1, 0.0);
       curvederivcpts (n, p, U, P.extract (0, j, P.rows()-1, P.cols ()-1), du, r1, r2, temp);
       for (octave_idx_type k(0); k<=du; k++)
 	{
@@ -297,13 +297,13 @@ int surfderivcpts (octave_idx_type n, octave_idx_type  p, const RowVector& U,
       for (octave_idx_type i(0); i<=r-k; i++)
 	{
 
-	  octave_idx_type dd = d-k <= dv ? d-k : dv;
-	  Matrix temp (dd+1 <= m+1 ? dd+1 : m+1, m+1, 0.0);
+	  octave_idx_type dd = (d-k) <= dv ? (d-k) : dv;
+	  Matrix temp (dd <= m ? (dd+1) : (m+1), m+1, 0.0);
 	  
 	  idxva (0) = idx_vector(k); idxva (1) = idx_vector(0);
 	  idxva (2) = idx_vector(i); idxva (3) = idx_vector(':');
 	  NDArray temp2 (pkl.index (idxva));
-	  curvederivcpts (m, q, V, temp2.squeeze (), dd, 0, s, temp);
+	  curvederivcpts (m, q, V.extract (s1, V.length ()-1), temp2.squeeze (), dd, 0, s, temp);
 	  
 	  for (octave_idx_type l(1); l<=dd; l++)
 	    {

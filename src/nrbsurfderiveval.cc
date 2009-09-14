@@ -114,6 +114,7 @@ DEFUN_DLD(nrbsurfderiveval, args, nargout,"\
 	      Matrix Aders;
 	      idx (0) = idx_vector (idim);
 	      Matrix P (NDArray (coefs.index (idx).squeeze ()).matrix_value ());
+	      //std::cout << P << "\n\n\n";
 	      surfderiveval (n, p, knotsu, m, q, knotsv, P, uv(0,iu), uv(1,iu), d, Aders);;      
 	      
 	      for (octave_idx_type k(0); k<=d; k++)
@@ -160,6 +161,7 @@ DEFUN_DLD(nrbsurfderiveval, args, nargout,"\
 %! skl = nrbsurfderiveval (srf, uv, 0);
 %! assert (squeeze (skl (1:2,1,1,:)), nrbeval (srf, uv)(1:2,:), 1e3*eps)
 
+
 %!test
 %! k = [0 0  1 1];
 %! c = [0 1];
@@ -172,17 +174,60 @@ DEFUN_DLD(nrbsurfderiveval, args, nargout,"\
 %! skl = nrbsurfderiveval (srf, uv, 0);
 %! assert (squeeze (skl (1:2,1,1,:)), nrbeval (srf, uv)(1:2,:), 1e3*eps)
 
-%!test
-%! k = [0 0  1 1];
-%! c = [0 1];
-%! [coef(2,:,:), coef(1,:,:)] = meshgrid (c, c);
+%!shared srf, uv
+%!test 
+%! k = [0 0 0 1 1 1];
+%! c = [0 1/2 1];
+%! [coef(1,:,:), coef(2,:,:)] = meshgrid (c, c);
 %! coef(3,:,:) = coef(1,:,:);
 %! srf = nrbmak (coef, {k, k});
+%! ders= nrbderiv (srf);
 %! [u, v] = meshgrid (linspace(0,1,11));
 %! uv = [u(:)';v(:)'];
 %! skl = nrbsurfderiveval (srf, uv, 1);
-%! assert (squeeze (skl (2,:,:,3)), [.2 1; 0 0])
-%! assert (squeeze (skl (1:2,1,1,:)), nrbeval (srf, uv)(1:2,:), 1e3*eps)
+%! [fun, der] = nrbdeval (srf, ders, uv);
+%! assert (squeeze (skl (1:2,1,1,:)), fun(1:2,:), 1e3*eps)
+%! assert (squeeze (skl (1:2,2,1,:)), der{1}(1:2,:), 1e3*eps)
+%! assert (squeeze (skl (1:2,1,2,:)), der{2}(1:2,:), 1e3*eps)
+%!
+%!test 
+%! srf = nrbdegelev (srf, [3, 1]);
+%! ders= nrbderiv (srf);
+%! [fun, der] = nrbdeval (srf, ders, uv);
+%! skl = nrbsurfderiveval (srf, uv, 1);
+%! assert (squeeze (skl (1:2,1,1,:)), fun(1:2,:), 1e3*eps)
+%! assert (squeeze (skl (1:2,2,1,:)), der{1}(1:2,:), 1e3*eps)
+%! assert (squeeze (skl (1:2,1,2,:)), der{2}(1:2,:), 1e3*eps)
+
+%!shared uv
+%!test 
+%! k = [0 0 0 1 1 1];
+%! c = [0 1/2 1];
+%! [coef(2,:,:), coef(1,:,:)] = meshgrid (c, c);
+%! coef(3,:,:) = coef(1,:,:);
+%! srf = nrbmak (coef, {k, k});
+%! ders= nrbderiv (srf);
+%! [u, v] = meshgrid (linspace(0,1,11));
+%! uv = [u(:)';v(:)'];
+%! skl = nrbsurfderiveval (srf, uv, 1);
+%! [fun, der] = nrbdeval (srf, ders, uv);
+%! assert (squeeze (skl (1:2,1,1,:)), fun(1:2,:), 1e3*eps)
+%! assert (squeeze (skl (1:2,2,1,:)), der{1}(1:2,:), 1e3*eps)
+%! assert (squeeze (skl (1:2,1,2,:)), der{2}(1:2,:), 1e3*eps)
+%!
+%!test 
+%! p = q = 3;
+%! mcp = 5; ncp = 5;
+%! Lx  = Ly  = 10*rand(1);
+%! srf = nrbdegelev (nrb4surf ([0 0], [Lx, 0], [0 Ly], [Lx Ly]), [p-1, q-1]);
+%! %%srf = nrbkntins (srf, {linspace(0,1,mcp-p+2)(2:end-1), linspace(0,1,ncp-q+2)(2:end-1)});
+%! %%srf.coefs = permute (srf.coefs, [1 3 2]);
+%! ders= nrbderiv (srf);
+%! [fun, der] = nrbdeval (srf, ders, uv);
+%! skl = nrbsurfderiveval (srf, uv, 1);
+%! assert (squeeze (skl (1:2,1,1,:)), fun(1:2,:), 1e3*eps)
+%! assert (squeeze (skl (1:2,2,1,:)), der{1}(1:2,:), 1e3*eps)
+%! assert (squeeze (skl (1:2,1,2,:)), der{2}(1:2,:), 1e3*eps)
 
 %!shared srf, uv, P, dPdx, d2Pdx2, c1, c2
 %!test
