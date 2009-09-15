@@ -258,12 +258,10 @@ int surfderivcpts (octave_idx_type n, octave_idx_type  p, const RowVector& U,
 		   octave_idx_type r2, octave_idx_type s1, 
 		   octave_idx_type s2, NDArray &pkl)
 {
-
   octave_idx_type r = r2-r1, s = s2-s1;  
   
   octave_idx_type du = d <= p ? d : p;   
   octave_idx_type dv = d <= q ? d : q; 
-  //std::cout << "r1=" << r1 << " r2=" << r2 << " s1=" << s1 << " s2=" << s2 <<  "\n";
   Array<octave_idx_type> idxta (4, 0);
   Array<idx_vector> idxva (4, idx_vector (':'));
   dim_vector idxa; idxa.resize (4);
@@ -282,7 +280,6 @@ int surfderivcpts (octave_idx_type n, octave_idx_type  p, const RowVector& U,
 
 	  for ( octave_idx_type i(0); i<=r-k; i++)
 	    {
-	      //std::cout << "k=" << k << " " << idxa(0) << " i=" << i << " " << idxa(2) <<  " j-s1=" << j << " " << idxa(3)<< "\n";
 	      assert (k<idxa(0) && i<idxa(2) && j-s1<idxa(3));
 	      idxta (0) = k; idxta (1) = 0;
 	      idxta (2) = i; idxta (3) = j-s1;
@@ -318,7 +315,6 @@ int surfderivcpts (octave_idx_type n, octave_idx_type  p, const RowVector& U,
 	    }
 	}
     }
-
   return (0);
 }
 
@@ -328,6 +324,7 @@ int surfderiveval (octave_idx_type n, octave_idx_type p, const RowVector &U,
 		   const Matrix &P, double u, double v, octave_idx_type d, 
 		   Matrix &skl)
 {
+
   Array<octave_idx_type> idx(4, 0);
   octave_idx_type du = d <= p ? d: p;   
   octave_idx_type dv = d <= q ? d: q;
@@ -372,4 +369,5 @@ int surfderiveval (octave_idx_type n, octave_idx_type p, const RowVector &U,
 	    }
 	}
     }
+  return (0);
 }
