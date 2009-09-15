@@ -21,7 +21,7 @@
 
 
 DEFUN_DLD(surfderiveval, args, nargout,"\
-\n usage: skl = surfderivcpts (n, p, U, m, q, V, P, u, v, d) \
+\n usage: skl = surfderiveval (n, p, U, m, q, V, P, u, v, d) \
 \n\
 \n  INPUT: \
 \n        n+1, m+1 = number of control points\
