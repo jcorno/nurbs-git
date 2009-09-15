@@ -76,7 +76,6 @@ DEFUN_DLD(nrbsurfderiveval, args, nargout,"\
 \n Adaptation of algorithm A4.4 from the NURBS book\n")
 {
   //function skl = nrbsurfderiveval (srf, uv, d) 
-  
   octave_value_list retval;
 
   Octave_map srf = args(0).map_value();
@@ -114,22 +113,26 @@ DEFUN_DLD(nrbsurfderiveval, args, nargout,"\
 	      Matrix Aders;
 	      idx (0) = idx_vector (idim);
 	      Matrix P (NDArray (coefs.index (idx).squeeze ()).matrix_value ());
-	      //std::cout << P << "\n\n\n";
 	      surfderiveval (n, p, knotsu, m, q, knotsv, P, uv(0,iu), uv(1,iu), d, Aders);;      
 	      
 	      for (octave_idx_type k(0); k<=d; k++)
 		{
 		  for (octave_idx_type l(0); l<=d-k; l++)
 		    {
+		      assert (k < Aders.rows () && l < Aders.cols ());
 		      double v = Aders(k, l);
 		      for (octave_idx_type j(1); j<=l; j++)
 			{
+			  assert (idim<idxa(0) && k<idxa(1) && l<idxa(2) && iu<idxa(3));
 			  idxta(0) = idim; idxta(1) = k; idxta(2) = l; idxta(3) = iu;
+			  assert (j < wders.cols ());
 			  v -= bincoeff(l,j) * wders(0,j) * skl(idxta);
 			}
 		      for (octave_idx_type i(1); i<=k; i++)
 			{
+			  assert (idim<idxa(0) && k-i<idxa(1) && l<idxa(2) && iu<idxa(3));
 			  idxta(0) = idim; idxta(1) = k-i; idxta(2) = l; idxta(3) = iu;
+			  assert (i < wders.cols ());
 			  v -= bincoeff(k,i) * wders(i,0) * skl(idxta);
 			  double v2 = 0.0;
 			  for (octave_idx_type j(1);j<=l;j++)
@@ -138,6 +141,7 @@ DEFUN_DLD(nrbsurfderiveval, args, nargout,"\
 			    }
 			  v -= bincoeff(k,i) * v2;
 			}
+		      assert (idim<idxa(0) && k<idxa(1) && l<idxa(2) && iu<idxa(3));
 		      idxta(0) = idim; idxta(1) = k; idxta(2) = l; idxta(3) = iu;
 		      skl(idxta) = v/wders(0,0);
 		    }
