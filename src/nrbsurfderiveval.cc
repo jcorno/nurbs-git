@@ -92,15 +92,22 @@ DEFUN_DLD(nrbsurfderiveval, args, nargout,"\
 
       for (octave_idx_type iu(0); iu<uv.cols (); iu++)
 	{
-	  octave_idx_type n = octave_idx_type ((srf.contents("number")(0).row_vector_value())(0) - 1);
-	  octave_idx_type m = octave_idx_type ((srf.contents("number")(0).row_vector_value())(1) - 1);
-	  octave_idx_type p = octave_idx_type ((srf.contents("order")(0).row_vector_value())(0) - 1);
-	  octave_idx_type q = octave_idx_type ((srf.contents("order")(0).row_vector_value())(1) - 1);
+	  octave_idx_type n = octave_idx_type 
+	    ((srf.contents("number")(0).row_vector_value())(0) - 1);
+	  octave_idx_type m = octave_idx_type 
+	    ((srf.contents("number")(0).row_vector_value())(1) - 1);
+	  octave_idx_type p = octave_idx_type 
+	    ((srf.contents("order")(0).row_vector_value())(0) - 1);
+	  octave_idx_type q = octave_idx_type 
+	    ((srf.contents("order")(0).row_vector_value())(1) - 1);
+
 	  Cell knots = srf.contents("knots")(0).cell_value();
 	  RowVector knotsu = knots.elem (0).row_vector_value ();
 	  RowVector knotsv = knots.elem (1).row_vector_value ();
+
 	  NDArray coefs  = srf.contents("coefs")(0).array_value();
-	  Array<idx_vector> idx(3, idx_vector(':'));
+	  
+	  Array<idx_vector> idx(3, idx_vector(':'));	 
 	  idx (0) = idx_vector (3);
 	  Matrix weights (NDArray (coefs.index (idx).squeeze ()).matrix_value ());
 	  
@@ -110,8 +117,7 @@ DEFUN_DLD(nrbsurfderiveval, args, nargout,"\
 	  for (octave_idx_type idim (0); idim<=2; idim++)
 	    {
 
-	      Matrix Aders;
-	      idx (0) = idx_vector (idim);
+	      Matrix Aders; idx(0) = idx_vector (idim);
 	      Matrix P (NDArray (coefs.index (idx).squeeze ()).matrix_value ());
 	      surfderiveval (n, p, knotsu, m, q, knotsv, P, uv(0,iu), uv(1,iu), d, Aders);;      
 	      
@@ -124,7 +130,7 @@ DEFUN_DLD(nrbsurfderiveval, args, nargout,"\
 		      for (octave_idx_type j(1); j<=l; j++)
 			{
 			  assert (idim<idxa(0) && k<idxa(1) && l<idxa(2) && iu<idxa(3));
-			  idxta(0) = idim; idxta(1) = k; idxta(2) = l; idxta(3) = iu;
+			  idxta(0) = idim; idxta(1) = k; idxta(2) = l-j; idxta(3) = iu;
 			  assert (j < wders.cols ());
 			  v -= bincoeff(l,j) * wders(0,j) * skl(idxta);
 			}
@@ -281,5 +287,18 @@ DEFUN_DLD(nrbsurfderiveval, args, nargout,"\
 %!test
 %! skl = nrbsurfderiveval (srf, uv, 0);
 %! assert (squeeze (skl (1:2,1,1,:)), nrbeval (srf, uv)(1:2,:), 1e3*eps)
+
+%!test
+%! srf = nrb4surf([0 0], [1 0], [0 1], [1 1]);
+%! geo = nrbdegelev (srf, [3 3]);
+%! geo.coefs (4, 2:end-1, 2:end-1) += .1 * rand (1, geo.number(1)-2, geo.number(2)-2);
+%! geo = nrbkntins (geo, {[.1:.1:.9], [.2:.2:.8]});
+%! [u, v] = meshgrid (linspace(0,1,10));
+%! uv = [u(:)';v(:)'];
+%! skl = nrbsurfderiveval (geo, uv, 2);
+%! dgeo = nrbderiv (geo);
+%! [pnts, ders] = nrbdeval (geo, dgeo, uv);
+%! assert (ders{1}, squeeze(skl(:,2,1,:)), 1e-9)
+%! assert (ders{2}, squeeze(skl(:,1,2,:)), 1e-9)
 
 */
