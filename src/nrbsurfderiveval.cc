@@ -89,27 +89,28 @@ DEFUN_DLD(nrbsurfderiveval, args, nargout,"\
       idxa(0) = 3; idxa(1) = d+1; 
       idxa(2) = d+1; idxa(3) = uv.columns (); 
       NDArray skl (idxa, 0.0);
+      
+      octave_idx_type n = octave_idx_type 
+	((srf.contents("number")(0).row_vector_value())(0) - 1);
+      octave_idx_type m = octave_idx_type 
+	((srf.contents("number")(0).row_vector_value())(1) - 1);
+      octave_idx_type p = octave_idx_type 
+	((srf.contents("order")(0).row_vector_value())(0) - 1);
+      octave_idx_type q = octave_idx_type 
+	((srf.contents("order")(0).row_vector_value())(1) - 1);
+      
+      Cell knots = srf.contents("knots")(0).cell_value();
+      RowVector knotsu = knots.elem (0).row_vector_value ();
+      RowVector knotsv = knots.elem (1).row_vector_value ();
+      
+      NDArray coefs  = srf.contents("coefs")(0).array_value();
+      
+      Array<idx_vector> idx(3, idx_vector(':'));	 
+      idx (0) = idx_vector (3);
+      Matrix weights (NDArray (coefs.index (idx).squeeze ()).matrix_value ());
 
       for (octave_idx_type iu(0); iu<uv.cols (); iu++)
 	{
-	  octave_idx_type n = octave_idx_type 
-	    ((srf.contents("number")(0).row_vector_value())(0) - 1);
-	  octave_idx_type m = octave_idx_type 
-	    ((srf.contents("number")(0).row_vector_value())(1) - 1);
-	  octave_idx_type p = octave_idx_type 
-	    ((srf.contents("order")(0).row_vector_value())(0) - 1);
-	  octave_idx_type q = octave_idx_type 
-	    ((srf.contents("order")(0).row_vector_value())(1) - 1);
-
-	  Cell knots = srf.contents("knots")(0).cell_value();
-	  RowVector knotsu = knots.elem (0).row_vector_value ();
-	  RowVector knotsv = knots.elem (1).row_vector_value ();
-
-	  NDArray coefs  = srf.contents("coefs")(0).array_value();
-	  
-	  Array<idx_vector> idx(3, idx_vector(':'));	 
-	  idx (0) = idx_vector (3);
-	  Matrix weights (NDArray (coefs.index (idx).squeeze ()).matrix_value ());
 	  
 	  Matrix wders;
 	  surfderiveval (n, p, knotsu, m, q, knotsv, weights, uv(0,iu), uv(1,iu), d, wders);      
@@ -143,7 +144,8 @@ DEFUN_DLD(nrbsurfderiveval, args, nargout,"\
 			  double v2 = 0.0;
 			  for (octave_idx_type j(1);j<=l;j++)
 			    {
-			      v2 += bincoeff(l,j) * wders(i);
+			      idxta(0) = idim; idxta(1) = k-i; idxta(2) = l-j; idxta(3) = iu;
+			      v2 += bincoeff(l,j) * wders(i,j) * skl(idxta);
 			    }
 			  v -= bincoeff(k,i) * v2;
 			}
