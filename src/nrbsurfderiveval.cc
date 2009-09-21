@@ -303,4 +303,57 @@ DEFUN_DLD(nrbsurfderiveval, args, nargout,"\
 %! assert (ders{1}, squeeze(skl(:,2,1,:)), 1e-9)
 %! assert (ders{2}, squeeze(skl(:,1,2,:)), 1e-9)
 
+%!test
+%! ku = kv = [0 0 0 1 1 1];
+%! c(1,:,:) = [1 1 1]'*[0 0 1] - 1;
+%! c(2,:,:) = (1+[1 1 1]'*[0 1/2 1]) .* ([0 1/2 1]'*[1 1 1]);
+%! c(3,:,:) = ([1 1 1]'*[0 1/2 1]) .* ([0 1/2 1]'*[1 1 1]) ;
+%! c(4,:,:) = (1+[1 1 1]'*[0 1/2 1]);
+%! c = permute (c, [1 3 2]);
+%! geo = nrbmak (c, {ku, kv});
+%!
+%! [u, v] = meshgrid (linspace(0,1,50));
+%! uv = [u(:), v(:)]';
+%! dF = nrbsurfderiveval (geo, uv, 2);
+%!
+%! assert (dF(1,1,1,:)(:), u(:)-1, 10*eps)
+%! assert (dF(2,1,1,:)(:), v(:), 10*eps)
+%! assert (dF(3,1,1,:)(:), u(:).*v(:)./(u(:)+1), 10*eps)
+%! assert (dF(1,2,1,:)(:), ones (size (u(:))), 10*eps)
+%! assert (dF(1,1,2,:)(:), zeros (size (u(:))), 10*eps)
+%! assert (dF(2,2,1,:)(:), zeros (size (u(:))), 10*eps)
+%! assert (dF(2,1,2,:)(:), ones (size (u(:))), 10*eps)
+%! assert (dF(3,1,2,:)(:), u(:)./(u(:)+1), 10*eps)
+%! assert (dF(3,2,1,:)(:), v(:)./(u(:)+1) - u(:).*v(:)./(u(:)+1).^2, 10*eps)
+%! assert (dF(1:2,3,:,:)(:), zeros (size (dF(1:2,3,:,:)(:))), 10*eps)
+%! assert (dF(1:2,:,3,:)(:), zeros (size (dF(1:2,:,3,:)(:))), 10*eps)
+%! assert (dF(3,3,1,:)(:),  -2*v(:)./(u(:)+1).^3, 10*eps)
+%! assert (dF(3,1,3,:)(:), zeros (size (dF(3,1,3,:)(:))), 10*eps)
+
+%!test
+%! ku = kv = [0 0 0 1 1 1];
+%! c(1,:,:) = [1 1 1]'*[0 0 1] - 1;
+%! c(2,:,:) = ([1 1 1]'*[0 1/2 1]) .* ([0 1/2 1]'*[1 1 1]) ;
+%! c(4,:,:) = (1+[1 1 1]'*[0 1/2 1]);
+%! c = permute (c, [1 3 2]);
+%! geo = nrbmak (c, {ku, kv});
+%!
+%! [u, v] = meshgrid (linspace(0,1,50));
+%! uv = [u(:), v(:)]';
+%! dF = nrbsurfderiveval (geo, uv, 2);
+%!
+%! assert (dF(1,1,1,:)(:), u(:)-1, 10*eps)
+%! assert (dF(3,1,1,:)(:), zeros (size (u(:))), 10*eps)
+%! assert (dF(2,1,1,:)(:), u(:).*v(:)./(u(:)+1), 10*eps)
+%! assert (dF(1,2,1,:)(:), ones (size (u(:))), 10*eps)
+%! assert (dF(1,1,2,:)(:), zeros (size (u(:))), 10*eps)
+%! assert (dF(3,2,1,:)(:), zeros (size (u(:))), 10*eps)
+%! assert (dF(3,1,2,:)(:), zeros (size (u(:))), 10*eps)
+%! assert (dF(2,1,2,:)(:), u(:)./(u(:)+1), 10*eps)
+%! assert (dF(2,2,1,:)(:), v(:)./(u(:)+1) - u(:).*v(:)./(u(:)+1).^2, 10*eps)
+%! assert (dF([1 3],3,:,:)(:), zeros (size (dF([1 3],3,:,:)(:))), 10*eps)
+%! assert (dF([1 3],:,3,:)(:), zeros (size (dF([1 3],:,3,:)(:))), 10*eps)
+%! assert (dF(2,3,1,:)(:),  -2*v(:)./(u(:)+1).^3, 10*eps)
+%! assert (dF(2,1,3,:)(:), zeros (size (dF(3,1,3,:)(:))), 10*eps)
+
 */
