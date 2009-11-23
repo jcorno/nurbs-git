@@ -25,7 +25,7 @@ NURBS basis functions
  nrbbasisfunder
  nrbnumbasisfun
  nrbbasisfungradient
- nrbsurfderivavel
+ nrbsurfderiveval
 B-Spline functions
  bspeval
  bspderiv
@@ -34,7 +34,7 @@ B-Spline functions
  basisfunder
  findspan
  curvederivcpts
- srfderivcpts
+ surfderivcpts
  tbasisfun
 Vector and Transformation Utilities 
  vecnorm

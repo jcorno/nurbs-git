@@ -6,7 +6,8 @@ Maintainer: Carlo de Falco
 Title: Nurbs.
 Description: Collection of routines for the creation, and manipulation of Non-Uniform Rational B-Splines (NURBS).
 Categories: splines
-Depends: octave (>= 3.1.55)
+Depends: octave (>= 3.2)
 Autoload: no
 License: GPL version 2 or later
 Url: http://octave.sf.net
+SVNRelease: 6471

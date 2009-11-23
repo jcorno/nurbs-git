@@ -14,13 +14,13 @@
 ## along with Octave; see the file COPYING.  If not, see
 ## <http://www.gnu.org/licenses/>.
 
+## TBASISFUN: Compute a B- or T-Spline basis function from its local knot vector
+##
 ## usage:
 ##
 ## N = tbasisfun (u, p, U)
 ## N = tbasisfun ([u; v], [p q], {U, V})
 ## 
-## Compute a B- or T-Spline basis function from its local knot vector
-##
 ## INPUT:
 ##  u or [u; v] : points in parameter space where the basis function is to be
 ##  evaluated 
