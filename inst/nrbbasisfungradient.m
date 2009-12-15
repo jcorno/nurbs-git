@@ -16,7 +16,7 @@
 
 %% -*- texinfo -*-
 %% @deftypefn {Function File} {[@var{dRdx}, @var{dRdy}]=} nrbbasisfungradient (@{@var{dzdu}, @var{dzdv}@}, @{@var{dxdu}, @var{dydu}, @var{dxdv}, @var{dydv}@})
-%% @deftypefnx {Function File} {[@var{dRdx}]=} nrbbasisfungradient (@var{dzdu}, @var{dxdu})
+%% @deftypefnx {Function File} {[@var{dRdx}]=} nrbbasisfungradient (@var{dzdu}, @var{dxdu}, @var{nrb})
 %% NRBBASISFUNGRADIENT Compute the gradient of the basis functions of a NURBS surface at the
 %% specified parametric points.
 %%
@@ -26,6 +26,7 @@
 %% to parameters @code{u} and @code{v}
 %% @item @var{dxdu}, @var{dydu}, @var{dxdv},
 %% @var{dydv}: NURBS geometry map derivatives
+%% @var{nrb}:  NURBS structure describing the surface
 %% @end itemize
 %%
 %% OUTPUT:
@@ -80,15 +81,12 @@ function [varargout]  = nrbbasisfungradient (dz, N, nrb)
 end
 
 %!test
-%! 
-%! p = 2;
-%! q = 3;
-%! mcp = 2; ncp = 3;
-%! knots = {[zeros(1,p), linspace(0,1,mcp-p+2), ones(1,p)], [zeros(1,q), linspace(0,1,ncp-q+2), ones(1,q)]};
-%! Lx  = 1; Ly  = 1;
-%! [cntl(2,:,:), cntl(1,:,:)] = meshgrid(linspace(0, Ly, ncp+1), linspace(0, Lx, mcp+1) );
-%! cntl(4,:,:) = 1:numel(cntl(1,:,:));
-%! nrb = nrbmak(cntl, knots);
+%! p = 2;   q = 3;   m = 4; n = 5;
+%! Lx  = 1; Ly  = 1; 
+%! nrb = nrb4surf   ([0 0], [Lx 0], [0 Ly], [Lx Ly]);
+%! nrb = nrbdegelev (nrb, [p-1, q-1]);
+%! nrb = nrbkntins  (nrb, {linspace(0,1,m)(2:end-1), linspace(0,1,n)(2:end-1)});
+%! nrb.coefs (4,:,:) += rand (size (nrb.coefs (4,:,:)));
 %! 
 %! [u(2,:,:), u(1,:,:)] = meshgrid(rand (1, 20), rand (1, 20));
 %! 
@@ -100,11 +98,6 @@ end
 %! nd        = nrbderiv(nrb);
 %! [ndp, dp] = nrbdeval(nrb, nd, uv);
 %! 
-%! dxdu = repmat (reshape (dp{1}(1,:,:), [], 1), 1, columns(dzdu));
-%! dydu = repmat (reshape (dp{1}(2,:,:), [], 1), 1, columns(dzdu));
-%! dxdv = repmat (reshape (dp{2}(1,:,:), [], 1), 1, columns(dzdu));
-%! dydv = repmat (reshape (dp{2}(2,:,:), [], 1), 1, columns(dzdu));
-%! 
-%! [dzdx, dzdy]= nrbbasisfungradient ({dzdu, dzdv}, {dxdu, dydu, dxdv, dydv});
+%! [dzdx, dzdy]= nrbbasisfungradient ({dzdu, dzdv}, connect, nrb);
 %! assert(norm(sum(dzdx, 2), inf), 0, 1e-10)
 %! assert(norm(sum(dzdy, 2), inf), 0, 1e-10)

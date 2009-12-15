@@ -65,9 +65,7 @@ function varargout = nrbbasisfunder (points, nrb)
 
     if (iscell(points))
       [v, u] = meshgrid(points{2}, points{1});
-      p(1,:,:) = u;
-      p(2,:,:) = v;
-      p = reshape(p, 2, []);
+      p = [u(:), v(:)]';
     else
       p = points;
     end
@@ -130,16 +128,13 @@ end
 %! assert (sum(Bu, 2), zeros(numel(u), 1), 1e-10)
 
 %!test
-%! p = 2;
-%! q = 3;
-%! mcp = 2; ncp = 3;
-%! knots = {[zeros(1,p), linspace(0,1,mcp-p+2), ones(1,p)], [zeros(1,q), linspace(0,1,ncp-q+2), ones(1,q)]};
-%! Lx  = 1; Ly  = 1;
-%! [cntl(2,:,:), cntl(1,:,:)] = meshgrid(linspace(0, Ly, ncp+1), linspace(0, Lx, mcp+1) );
-%! cntl(4,:,:) = 1:numel(cntl(1,:,:));
-%! nrb = nrbmak(cntl, knots);
-%! [u(1,:,:), u(2,:,:)] = meshgrid(rand (1, 20), rand (1, 20));
-%! tic(); [Bu, Bv, N] = nrbbasisfunder (u, nrb); toc()
+%! p = 2;   q = 3;   m = 4; n = 5;
+%! Lx  = 1; Ly  = 1; 
+%! nrb = nrb4surf   ([0 0], [1 0], [0 1], [1 1]);
+%! nrb = nrbdegelev (nrb, [p-1, q-1]);
+%! nrb = nrbkntins  (nrb, {linspace(0,1,m)(2:end-1), linspace(0,1,n)(2:end-1)});
+%! nrb.coefs (4,:,:) += rand (size (nrb.coefs (4,:,:)));
+%! tic(); [Bu, Bv, N] = nrbbasisfunder ({rand(1, 20), rand(1, 20)}, nrb); toc()
 %! #plot3(squeeze(u(1,:,:)), squeeze(u(2,:,:)), reshape(Bu(:,10), 20, 20),'o')
 %! assert (sum (Bu, 2), zeros(20^2, 1), 1e-10)
 

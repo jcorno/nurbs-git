@@ -49,13 +49,13 @@ double onebasisfun__ (double u, octave_idx_type p, RowVector U)
 
    
 DEFUN_DLD(tbasisfun, args, nargout,"\
+TBASISFUN: Compute a B- or T-Spline basis function from its local knot vector.\n\
+\n\
  usage:\n\
 \n\
  N = tbasisfun (u, p, U)\n\
  N = tbasisfun ([u; v], [p q], {U, V})\n\
  \n\
- Compute a B- or T-Spline basis function from its local knot vector\n\
-\n\
  INPUT:\n\
   u or [u; v] : points in parameter space where the basis function is to be\n\
   evaluated \n\

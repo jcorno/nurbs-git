@@ -97,17 +97,17 @@ function idx = nrb_srf_numbasisfun__ (points, nrb)
 end
 
 %!test
-%! p = 2;
-%! q = 3;
-%! mcp = 2; ncp = 3;
-%! knots = {[zeros(1,p), linspace(0,1,mcp-p+2), ones(1,p)], [zeros(1,q), linspace(0,1,ncp-q+2), ones(1,q)]};
-%! Lx  = 1; Ly  = 1;
-%! [cntl(1,:,:), cntl(2,:,:)] = meshgrid(linspace(0, Lx, ncp+1), linspace(0, Ly, mcp+1) );
-%! cntl(4,:,:) = 1:numel(cntl(1,:,:));
-%! nrb = nrbmak(cntl, knots);
+%! p = 2;   q = 3;   m = 4; n = 5;
+%! Lx  = 1; Ly  = 1; 
+%! nrb = nrb4surf   ([0 0], [1 0], [0 1], [1 1]);
+%! nrb = nrbdegelev (nrb, [p-1, q-1]);
+%! nrb = nrbkntins  (nrb, {linspace(0,1,m)(2:end-1), linspace(0,1,n)(2:end-1)});
+%! nrb.coefs (4,:,:) += rand (size (nrb.coefs (4,:,:)));
 %! u = rand (1, 30); v = rand (1, 10);
+%! u = (u-min (u))/max (u-min (u));
+%! v = (v-min (v))/max (v-min (v));
 %! N = nrbnumbasisfun ({u, v}, nrb);
-%! assert (all(all(N>0)), true)
-%! assert (all(all(N<=(ncp+1)*(mcp+1))), true)
-%! assert (max(max(N)),(ncp+1)*(mcp+1))
-%! assert (min(min(N)),1)
+%! assert (all (all (N>0)), true)
+%! assert (all (all (N <= prod (nrb.number))), true)
+%! assert (max (max (N)), prod (nrb.number))
+%! assert (min (min (N)), 1)

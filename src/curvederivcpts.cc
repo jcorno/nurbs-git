@@ -24,6 +24,8 @@
 
 
 DEFUN_DLD(curvederivcpts, args, nargout,"\
+\nCURVEDERIVCPTS: Compute control points of n-th derivatives of a NURBS curve.\n \
+\n \
 \n usage: pk = curvederivcpts (n, p, U, P, d) \
 \n \
 \n  INPUT: \

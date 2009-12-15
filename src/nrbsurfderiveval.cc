@@ -69,6 +69,8 @@ static double bincoeff(int n, int k)
    
 
 DEFUN_DLD(nrbsurfderiveval, args, nargout,"\
+\nNRBSURFDERIVEVAL: Evaluate n-th order derivatives of a NURBS surface.\n\
+\n \
 \n usage: skl = nrbsurfderiveval (srf, [u; v], d) \
 \n   OUTPUT : skl (i, j, k, l) = i-th component derived j-1,k-1 times at the\
 \n   l-th point.\

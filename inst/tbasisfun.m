@@ -14,7 +14,7 @@
 ## along with Octave; see the file COPYING.  If not, see
 ## <http://www.gnu.org/licenses/>.
 
-## TBASISFUN: Compute a B- or T-Spline basis function from its local knot vector
+## TBASISFUN: Compute a B- or T-Spline basis function from its local knot vector.
 ##
 ## usage:
 ##

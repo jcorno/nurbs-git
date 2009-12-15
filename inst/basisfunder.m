@@ -15,7 +15,7 @@
 
 function dersv = basisfunder (ii, pl, uu, u_knotl, nders)
 
-% BASISFUNDER:  B-Spline Basis function derivatives
+% BASISFUNDER:  B-Spline Basis function derivatives.
 %
 % Calling Sequence:
 % 

@@ -19,7 +19,7 @@ function sv = findspanc (uv, U)
 %
 % Calling Sequence:
 % 
-%   s = findspanc(n,p,u,U)
+%   s = findspanc(u, U)
 % 
 %  INPUT:
 % 
@@ -42,7 +42,7 @@ sv = lookup (U, uv, "lr") - 1;
 %!  U = [0 0 0 1/2 1 1 1]; 
 %!  p = 2; 
 %!  u = linspace(0, 1, 10)(2:end-1);  
-%!  s = findspanc (p, u, U); 
+%!  s = findspanc (u, U); 
 %!  assert (s, [2*ones(1, 4) 3*ones(1, 4)]);
 
 %!test
@@ -50,4 +50,4 @@ sv = lookup (U, uv, "lr") - 1;
 %!  U = [zeros(1,p)  linspace(0,1,m+1-2*p) ones(1,p)];
 %!  u = [ 0.11880   0.55118   0.93141   0.40068   0.35492 0.44392   0.88360   0.35414   0.92186   0.83085 ];
 %!  s = [2   3   4   3   3   3   4   3   4   4];
-%!  assert (findspanc (p, u, U), s, 1e-10);
+%!  assert (findspanc (u, U), s, 1e-10);

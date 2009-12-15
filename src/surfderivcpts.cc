@@ -25,6 +25,8 @@
 
 
 DEFUN_DLD(surfderivcpts, args, nargout,"\
+\nSURFDERIVCPTS: Compute control points of n-th derivatives of a NURBS surface.\n \
+\n \
 \nusage: pkl = surfderivcpts (n, p, U, m, q, V, P, d)  \
 \n \
 \n  INPUT:  \

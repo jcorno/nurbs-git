@@ -59,9 +59,7 @@ function [B, id] = nrbbasisfun (points, nrb)
 
     if (iscell(points))
       [v, u] = meshgrid(points{2}, points{1});
-      p(1,:,:) = u;
-      p(2,:,:) = v;
-      p = reshape(p, 2, []);
+      p = [u(:), v(:)]';
     else
       p = points;
     end
@@ -78,7 +76,7 @@ end
     U    = nrb.knots;
     w    = nrb.coefs(4,:);
     
-    spu  =  findspan (n, p, u, U);
+    spu  =  findspan (n, p, u, U); 
     nbfu =  numbasisfun (spu, u, p, U);
     
     N     = w(nbfu+1) .* basisfun (spu, u, p, U);
@@ -118,20 +116,17 @@ end
 %! assert(B(:,4), w(4)*nrbeval(nrb2, u)(2,:).', 1e-6)
 
 %!test
-%! p = 2;
-%! q = 3;
-%! mcp = 2; ncp = 3;
-%! knots = {[zeros(1,p), linspace(0,1,mcp-p+2), ones(1,p)], [zeros(1,q), linspace(0,1,ncp-q+2), ones(1,q)]};
-%! Lx  = 1; Ly  = 1;
-%! [cntl(2,:,:), cntl(1,:,:)] = meshgrid(linspace(0, Ly, mcp+1),linspace(0, Lx, ncp+1));
-%! cntl(4,:,:) = reshape(1:numel(cntl(1,:,:)), size(cntl(1,:,:)));
-%! nrb = nrbmak(cntl, knots);
+%! p = 2;   q = 3;   m = 4; n = 5;
+%! Lx  = 1; Ly  = 1; 
+%! nrb = nrb4surf   ([0 0], [1 0], [0 1], [1 1]);
+%! nrb = nrbdegelev (nrb, [p-1, q-1]);
+%! nrb = nrbkntins  (nrb, {linspace(0,1,m)(2:end-1), linspace(0,1,n)(2:end-1)});
 %! u = rand (1, 30); v = rand (1, 10);
 %! [B, N] = nrbbasisfun ({u, v}, nrb);
 %! assert (sum(B, 2), ones(300, 1), 1e-6)
-%! assert (all(all(B<=1)), true)
-%! assert (all(all(B>=0)), true)
-%! assert (all(all(N>0)), true)
-%! assert (all(all(N<=(ncp+1)*(mcp+1))), true)
-%! assert (max(max(N)),(ncp+1)*(mcp+1))
-%! assert (min(min(N)),1)
+%! assert (all (all (B<=1)), true)
+%! assert (all (all (B>=0)), true)
+%! assert (all (all (N>0)), true)
+%! assert (all (all (N <= prod (nrb.number))), true)
+%! assert (max (max (N)),prod (nrb.number))
+%! assert (min (min (N)),1)

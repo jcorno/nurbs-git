@@ -13,6 +13,8 @@
 %% You should have received a copy of the GNU General Public License
 %% along with this program; if not, see <http://www.gnu.org/licenses/>.
 
+%% SURFDERIVCPTS: Compute control points of n-th derivatives of a NURBS surface.
+%% 
 %% usage: pkl = surfderivcpts (n, p, U, m, q, V, P, d) 
 %%
 %%  INPUT: 

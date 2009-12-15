@@ -86,5 +86,5 @@ DEFUN_DLD(surfderiveval, args, nargout,"\
 %!                      srf.order(2)-1, 
 %!                      srf.knots{2},
 %!                      squeeze(srf.coefs(1,:,:)), .5, .5, 1) ;
-%! assert (skl, [.5 0; 1 0])
+%! assert (skl, [.5 0; 1 0], 100*eps)
 */
