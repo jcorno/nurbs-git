@@ -1,18 +1,3 @@
-%% Copyright (C) 2003 Mark Spink
-%% 
-%% This program is free software; you can redistribute it and/or modify
-%% it under the terms of the GNU General Public License as published by
-%% the Free Software Foundation; either version 2 of the License, or
-%% (at your option) any later version.
-%% 
-%% This program is distributed in the hope that it will be useful,
-%% but WITHOUT ANY WARRANTY; without even the implied warranty of
-%% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-%% GNU General Public License for more details.
-%% 
-%% You should have received a copy of the GNU General Public License
-%% along with this program; if not, see <http://www.gnu.org/licenses/>.
-
 function surf = nrbrevolve(curve,pnt,vec,theta)
 
 % 
@@ -22,7 +7,7 @@ function surf = nrbrevolve(curve,pnt,vec,theta)
 % 
 %   srf = nrbrevolve(crv,pnt,vec[,ang])
 % 
-% Parameters:
+% INPUT:
 % 
 %   crv		: NURBS curve to revolve, see nrbmak.
 % 
@@ -32,6 +17,10 @@ function surf = nrbrevolve(curve,pnt,vec,theta)
 %   vec		: Vector defining the direction of the rotation axis.
 % 
 %   ang		: Angle to revolve the curve, default 2*pi
+%
+% OUTPUT:
+%
+%   srf     : constructed surface
 % 
 % Description:
 % 
@@ -66,12 +55,28 @@ function surf = nrbrevolve(curve,pnt,vec,theta)
 %     6) rotate and vectrans the surface back into position
 %        by reversing 1 and 2.
 %
+%
+%    Copyright (C) 2000 Mark Spink
+%
+%    This program is free software: you can redistribute it and/or modify
+%    it under the terms of the GNU General Public License as published by
+%    the Free Software Foundation, either version 2 of the License, or
+%    (at your option) any later version.
 
-%  D.M. Spink
-%  Copyright (c) 2000.
+%    This program is distributed in the hope that it will be useful,
+%    but WITHOUT ANY WARRANTY; without even the implied warranty of
+%    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+%    GNU General Public License for more details.
+%
+%    You should have received a copy of the GNU General Public License
+%    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 if nargin < 3
   error('Not enough arguments to construct revolved surface');
+end
+
+if size(curve.knots,2) == 3
+   error('The function nrbrevolve is not yet ready for volumes') 
 end
 
 if nargin < 4
@@ -116,6 +121,36 @@ RX = vecrotx(-angy);
 RY = vecroty(angx);
 surf = nrbtform(surf,T*RY*RX);  
 
+end
 
+%!demo
+%! sphere = nrbrevolve(nrbcirc(1,[],0.0,pi),[0.0 0.0 0.0],[1.0 0.0 0.0]);
+%! nrbplot(sphere,[40 40],'light','on');
+%! title('Ball and tori - surface construction by revolution');
+%! hold on;
+%! torus = nrbrevolve(nrbcirc(0.2,[0.9 1.0]),[0.0 0.0 0.0],[1.0 0.0 0.0]);
+%! nrbplot(torus,[40 40],'light','on');
+%! nrbplot(nrbtform(torus,vectrans([-1.8])),[20 10],'light','on');
+%! hold off;
 
+%!demo
+%! pnts = [3.0 5.5 5.5 1.5 1.5 4.0 4.5;
+%!         0.0 0.0 0.0 0.0 0.0 0.0 0.0;
+%!         0.5 1.5 4.5 3.0 7.5 6.0 8.5];
+%! crv = nrbmak(pnts,[0 0 0 1/4 1/2 3/4 3/4 1 1 1]);
+%! 
+%! xx = vecrotz(deg2rad(25))*vecroty(deg2rad(15))*vecrotx(deg2rad(20));
+%! nrb = nrbtform(crv,vectrans([5 5])*xx);
+%!
+%! pnt = [5 5 0]';
+%! vec = xx*[0 0 1 1]';
+%! srf = nrbrevolve(nrb,pnt,vec(1:3));
+%!
+%! p = nrbeval(srf,{linspace(0.0,1.0,100) linspace(0.0,1.0,100)});
+%! surfl(squeeze(p(1,:,:)),squeeze(p(2,:,:)),squeeze(p(3,:,:)));
+%! title('Construct of a 3D surface by revolution of a curve.');
+%! shading interp;
+%! colormap(copper);
+%! axis equal;
+%! hold off
 

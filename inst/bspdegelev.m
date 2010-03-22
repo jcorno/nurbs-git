@@ -1,18 +1,3 @@
-%% Copyright (C) 2003 Mark Spink, 2007 Daniel Claxton
-%% 
-%% This program is free software; you can redistribute it and/or modify
-%% it under the terms of the GNU General Public License as published by
-%% the Free Software Foundation; either version 2 of the License, or
-%% (at your option) any later version.
-%% 
-%% This program is distributed in the hope that it will be useful,
-%% but WITHOUT ANY WARRANTY; without even the implied warranty of
-%% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-%% GNU General Public License for more details.
-%% 
-%% You should have received a copy of the GNU General Public License
-%% along with this program; if not, see <http://www.gnu.org/licenses/>.
-
 function [ic,ik] = bspdegelev(d,c,k,t)
 
 % BSPDEGELEV:  Degree elevate a univariate B-Spline. 
@@ -21,16 +6,32 @@ function [ic,ik] = bspdegelev(d,c,k,t)
 % 
 %   [ic,ik] = bspdegelev(d,c,k,t)
 % 
-% Parameters:
+%   INPUT:
 % 
 %   d - Degree of the B-Spline.
 %   c - Control points, matrix of size (dim,nc).
 %   k - Knot sequence, row vector of size nk.
 %   t - Raise the B-Spline degree t times.
 % 
+%   OUTPUT:
+%
 %   ic - Control points of the new B-Spline. 
 %   ik - Knot vector of the new B-Spline.
 % 
+%    Copyright (C) 2000 Mark Spink, 2007 Daniel Claxton
+%
+%    This program is free software: you can redistribute it and/or modify
+%    it under the terms of the GNU General Public License as published by
+%    the Free Software Foundation, either version 2 of the License, or
+%    (at your option) any later version.
+
+%    This program is distributed in the hope that it will be useful,
+%    but WITHOUT ANY WARRANTY; without even the implied warranty of
+%    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+%    GNU General Public License for more details.
+%
+%    You should have received a copy of the GNU General Public License
+%    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 [mc,nc] = size(c);
                                                           %
@@ -269,7 +270,7 @@ end                                                       %   }
                                                           %   mxFree(alfs);
                                                           %
                                                           %   return(ierr);
-                                                          % }
+end                                                       % }
 
                                                           
 function b = bincoeff(n,k)
@@ -286,9 +287,10 @@ function b = bincoeff(n,k)
                                                           % double bincoeff(int n, int k)
                                                           % {
 b = floor(0.5+exp(factln(n)-factln(k)-factln(n-k)));      %   return floor(0.5+exp(factln(n)-factln(k)-factln(n-k)));
-                                                          % }
+end                                                       % }
 
 function f = factln(n)
 % computes ln(n!)
 if n <= 1, f = 0; return, end
 f = gammaln(n+1); %log(factorial(n));
+end

@@ -1,18 +1,3 @@
-%% Copyright (C) 2003 Mark Spink, 2007 Daniel Claxton, 2009 Carlo de Falco
-%% 
-%% This program is free software; you can redistribute it and/or modify
-%% it under the terms of the GNU General Public License as published by
-%% the Free Software Foundation; either version 2 of the License, or
-%% (at your option) any later version.
-%% 
-%% This program is distributed in the hope that it will be useful,
-%% but WITHOUT ANY WARRANTY; without even the implied warranty of
-%% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-%% GNU General Public License for more details.
-%% 
-%% You should have received a copy of the GNU General Public License
-%% along with this program; if not, see <http://www.gnu.org/licenses/>.
-
 function B = basisfun (iv, uv, p, U)
 
 % BASISFUN:  Basis function for B-Spline
@@ -23,20 +8,35 @@ function B = basisfun (iv, uv, p, U)
 %
 % Calling Sequence:
 % 
-%   N = basisfun(i,u,p,U)
+%   N = basisfun(iv,uv,p,U)
 %   
 %    INPUT:
 %   
-%      i - knot span  ( from FindSpan() )
-%      u - parametric point
-%      p - spline degree
-%      U - knot sequence
+%      iv - knot span  ( from FindSpan() )
+%      uv - parametric points
+%      p  - spline degree
+%      U  - knot sequence
 %   
 %    OUTPUT:
 %   
 %      N - Basis functions vector(numel(u)x(p+1))
 %   
-%    Algorithm A2.2 from 'The NURBS BOOK' pg70.
+%    Adapted from Algorithm A2.2 from 'The NURBS BOOK' pg70.
+%
+%    Copyright (C) 2000 Mark Spink, 2007 Daniel Claxton, 2009 Carlo de Falco
+%
+%    This program is free software: you can redistribute it and/or modify
+%    it under the terms of the GNU General Public License as published by
+%    the Free Software Foundation, either version 2 of the License, or
+%    (at your option) any later version.
+
+%    This program is distributed in the hope that it will be useful,
+%    but WITHOUT ANY WARRANTY; without even the implied warranty of
+%    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+%    GNU General Public License for more details.
+%
+%    You should have received a copy of the GNU General Public License
+%    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 B = zeros(numel(uv), p+1);
                                                
@@ -67,6 +67,7 @@ for jj = 1:numel(uv)
 
 end
 
+end
 
 %!test
 %!  n = 3; 

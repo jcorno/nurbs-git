@@ -4,12 +4,12 @@ function curve = nrbcirc(radius,center,sang,eang)
 % 
 % Calling Sequence:
 % 
-%   crv = nrbarc()
-%   crv = nrbarc(radius)
-%   crv = nrbarc(radius,center)
-%   crv = nrbarc(radius,center,sang,eang)
+%   crv = nrbcirc()
+%   crv = nrbcirc(radius)
+%   crv = nrbcirc(radius,center)
+%   crv = nrbcirc(radius,center,sang,eang)
 % 
-% Parameters:
+% INPUT:
 % 
 %   radius	: Radius of the circle, default 1.0
 % 
@@ -19,6 +19,8 @@ function curve = nrbcirc(radius,center,sang,eang)
 % 
 %   eang	: End angle 360 degrees
 % 
+% OUTPUT:
+%
 %   crv		: NURBS curve for a circular arc.
 % 
 % Description:
@@ -28,9 +30,21 @@ function curve = nrbcirc(radius,center,sang,eang)
 %   constructed. 
 % 
 %   Angles are defined as positive in the anti-clockwise direction.
+%
+%    Copyright (C) 2000 Mark Spink
+%
+%    This program is free software: you can redistribute it and/or modify
+%    it under the terms of the GNU General Public License as published by
+%    the Free Software Foundation, either version 2 of the License, or
+%    (at your option) any later version.
 
-%  D.M. Spink
-%  Copyright (c) 2000.
+%    This program is distributed in the hope that it will be useful,
+%    but WITHOUT ANY WARRANTY; without even the implied warranty of
+%    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+%    GNU General Public License for more details.
+%
+%    You should have received a copy of the GNU General Public License
+%    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 if nargin < 1
   radius = 1;
@@ -95,3 +109,15 @@ if ~isempty(center)
 end
 
 curve = nrbmak(coefs,knots);
+
+end
+
+%!demo
+%! for r = 1:9
+%! crv = nrbcirc(r,[],deg2rad(45),deg2rad(315));
+%!   nrbplot(crv,50);
+%!   hold on;
+%! end
+%! hold off;
+%! axis equal;
+%! title('NURBS construction of several 2D arcs.');

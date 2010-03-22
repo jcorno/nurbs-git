@@ -1,31 +1,16 @@
-%% Copyright (C) 2009 Rafael Vazquez
-%% 
-%% This program is free software; you can redistribute it and/or modify
-%% it under the terms of the GNU General Public License as published by
-%% the Free Software Foundation; either version 2 of the License, or
-%% (at your option) any later version.
-%% 
-%% This program is distributed in the hope that it will be useful,
-%% but WITHOUT ANY WARRANTY; without even the implied warranty of
-%% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-%% GNU General Public License for more details.
-%% 
-%% You should have received a copy of the GNU General Public License
-%% along with this program; if not, see <http://www.gnu.org/licenses/>.
-
 function dersv = basisfunder (ii, pl, uu, u_knotl, nders)
 
 % BASISFUNDER:  B-Spline Basis function derivatives.
 %
 % Calling Sequence:
 % 
-%   ders = basisfunder (i, pl, u, k, nd)
+%   ders = basisfunder (ii, pl, uu, k, nd)
 %
 %    INPUT:
 %   
-%      i   - knot span
+%      ii  - knot span
 %      pl  - degree of curve
-%      u   - parametric points
+%      uu  - parametric points
 %      k   - knot vector
 %      nd  - number of derivatives to compute
 %
@@ -33,6 +18,22 @@ function dersv = basisfunder (ii, pl, uu, u_knotl, nders)
 %   
 %      ders - ders(n, i, :) (i-1)-th derivative at n-th point
 %   
+%    Adapted from Algorithm A2.3 from 'The NURBS BOOK' pg72.
+%
+%    Copyright (C) 2009 Rafael Vazquez
+%
+%    This program is free software: you can redistribute it and/or modify
+%    it under the terms of the GNU General Public License as published by
+%    the Free Software Foundation, either version 2 of the License, or
+%    (at your option) any later version.
+
+%    This program is distributed in the hope that it will be useful,
+%    but WITHOUT ANY WARRANTY; without even the implied warranty of
+%    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+%    GNU General Public License for more details.
+%
+%    You should have received a copy of the GNU General Public License
+%    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
   for jj = 1:numel(uu)
 
@@ -108,6 +109,8 @@ function dersv = basisfunder (ii, pl, uu, u_knotl, nders)
     
   end
 
+end
+
 %!test
 %! k    = [0 0 0 0 1 1 1 1];
 %! p    = 3;
@@ -138,7 +141,7 @@ function dersv = basisfunder (ii, pl, uu, u_knotl, nders)
 %!   sumders = sum (squeeze(ders(ii,:,:)), 2);
 %!   assert (sumders(1), 1, 1e-15);
 %!   assert (sumders(2:end), zeros(rows(squeeze(ders(ii,:,:)))-1, 1), 1e-13);
-%! endfor
+%! end
 %! assert (ders(:, (p+2):end, :), zeros(numel(u), 8-p-1, p+1), 1e-13)
 %! assert (all(all(ders(:, 1, :) <= 1)), true)
 

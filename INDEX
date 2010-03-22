@@ -1,41 +1,46 @@
 nurbs >> Nurbs
-NURBS curves and surfaces
+Basic operations for NURBS curves, surfaces and volumes
  nrbmak
- nrbtform
  nrbkntins
  nrbdegelev
  nrbderiv
  nrbdeval
- nrbkntmult
+ nrbeval
+Operations for constructing NURBS curves and surfaces
+ nrbtform
  nrbreverse
  nrbtransp
  nrbline
  nrbcirc
  nrbrect
  nrb4surf
- nrbeval
+ nrbcylind
  nrbextrude
  nrbrevolve
  nrbruled
  nrbcoons
  nrbplot
- nrbsrfgradient
-NURBS basis functions
- nrbbasisfun
- nrbbasisfunder
- nrbnumbasisfun
- nrbbasisfungradient
- nrbsurfderiveval
+ nrbtestcrv
+ nrbtestsrf
 B-Spline functions
  bspeval
  bspderiv
  bspkntins
  bspdegelev
+ basisfun
  basisfunder
  findspan
+ numbasisfun
+ tbasisfun
+B-splines geometric entities
  curvederivcpts
  surfderivcpts
- tbasisfun
+ surfderiveval
+NURBS geometric entities and functions
+ nrbbasisfun
+ nrbbasisfunder
+ nrbnumbasisfun
+ nrbsurfderiveval
 Vector and Transformation Utilities 
  vecnorm
  vecmag
