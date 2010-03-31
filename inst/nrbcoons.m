@@ -8,7 +8,7 @@ function srf = nrbcoons(u1, u2, v1, v2)
 % 
 % INPUT:
 % 
-%  ucrv1	: NURBS curve defining the bottom U direction boundary of
+%   ucrv1	: NURBS curve defining the bottom U direction boundary of
 % 		the constructed NURBS surface.
 % 
 %   ucrv2	: NURBS curve defining the top U direction boundary of

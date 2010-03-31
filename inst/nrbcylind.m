@@ -18,7 +18,7 @@ function surf = nrbcylind(height,radius,center,sang,eang)
 % 
 %   center	: Center of the cylinder, default (0,0,0)
 % 
-%   sang    : Start angle relative to the origin, default 0.
+%   sang	: Start angle relative to the origin, default 0.
 % 
 %   eang	: End angle relative to the origin, default 2*pi.
 %

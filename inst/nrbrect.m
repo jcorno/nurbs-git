@@ -10,9 +10,9 @@ function curve = nrbrect(w,h)
 % 
 % INPUT:
 % 
-%   size		: Size of the square (width = height).
+%   size	: Size of the square (width = height).
 % 
-%   width		: Width of the rectangle (along x-axis).
+%   width	: Width of the rectangle (along x-axis).
 % 
 %   height	: Height of the rectangle (along y-axis).
 %

@@ -12,7 +12,7 @@ function rnrb = nrbreverse(nrb)
 %
 % OUTPUT:
 % 
-%   rnrb		: Reversed NURBS.
+%   rnrb	: Reversed NURBS.
 % 
 % Description:
 % 

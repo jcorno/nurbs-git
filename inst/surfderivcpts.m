@@ -5,12 +5,15 @@ function pkl = surfderivcpts (n, p, U, m, q, V, P, d, r1, r2, s1, s2)
 % usage: pkl = surfderivcpts (n, p, U, m, q, V, P, d) 
 %
 %  INPUT: 
+%
 %        n+1, m+1 = number of control points
 %        p, q     = spline order
 %        U, V     = knots
 %        P        = control points
 %        d        = derivative order
+%
 %  OUTPUT:
+%
 %        pkl (k+1, l+1, i+1, j+1) = i,jth control point
 %                                   of the surface differentiated k
 %                                   times in the u direction and l

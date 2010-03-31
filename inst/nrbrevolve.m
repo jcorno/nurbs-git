@@ -20,7 +20,7 @@ function surf = nrbrevolve(curve,pnt,vec,theta)
 %
 % OUTPUT:
 %
-%   srf     : constructed surface
+%   srf		: constructed surface
 % 
 % Description:
 % 

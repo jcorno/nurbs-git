@@ -26,9 +26,9 @@ function inurbs = nrbdegelev(nurbs, ntimes)
 %
 %   ecrv	: new NURBS structure for a curve with degree elevated.
 % 
-%   esrf    : new NURBS structure for a surface with degree elevated.
+%   esrf	: new NURBS structure for a surface with degree elevated.
 % 
-%   evol    : new NURBS structure for a volume with degree elevated.
+%   evol	: new NURBS structure for a volume with degree elevated.
 % 
 % 
 % Description:

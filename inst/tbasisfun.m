@@ -9,14 +9,16 @@ function N = tbasisfun (u, p, U)
 % N = tbasisfun ([u; v; w], [p q r], {U, V, W})
 % 
 % INPUT:
+%
 %  u or [u; v] : points in parameter space where the basis function is to be
 %  evaluated 
 %  
 %  U or {U, V} : local knot vector
 %
-% p or [p q] : polynomial order of the bais function
+% p or [p q] : polynomial order of the basis function
 %
 % OUTPUT:
+%
 %  N : basis function evaluated at the given parametric points 
 %
 %    Copyright (C) 2009 Carlo de Falco

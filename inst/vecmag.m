@@ -14,7 +14,7 @@ function mag = vecmag(vec)
 %
 % OUTPUT:
 %
-%   mvec		: Magnitude of the vectors, vector of size (1,nv).
+%   mvec	: Magnitude of the vectors, vector of size (1,nv).
 % 
 % Description:
 % 

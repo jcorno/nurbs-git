@@ -8,9 +8,9 @@ function srf = nrbruled(crv1, crv2)
 % 
 % INPUT:
 % 
-%   crv1		: First NURBS curve, see nrbmak.
+%   crv1	: First NURBS curve, see nrbmak.
 % 
-%   crv2		: Second NURBS curve, see nrbmak.
+%   crv2	: Second NURBS curve, see nrbmak.
 %
 % OUTPUT:
 % 

@@ -19,7 +19,7 @@ function B = basisfun (iv, uv, p, U)
 %   
 %    OUTPUT:
 %   
-%      N - Basis functions vector(numel(u)x(p+1))
+%      N - Basis functions vector(numel(uv)*(p+1))
 %   
 %    Adapted from Algorithm A2.2 from 'The NURBS BOOK' pg70.
 %

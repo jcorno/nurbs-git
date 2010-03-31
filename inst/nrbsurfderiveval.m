@@ -1,7 +1,7 @@
 function skl = nrbsurfderiveval (srf, uv, d) 
 
 %
-% SURFDERIVEVAL: Compute the derivatives of a NURBS surface
+% NRBSURFDERIVEVAL: Evaluate n-th order derivatives of a NURBS surface
 %
 % usage: skl = nrbsurfderiveval (srf, [u; v], d) 
 %

@@ -15,10 +15,10 @@ function nurbs = nrbmak(coefs,knots)
 % 		For a curve the control points are represented by a
 % 		matrix of size (dim,nu), for a surface a multidimensional
 % 		array of size (dim,nu,nv), for a volume a multidimensional array
-%       of size (dim,nu,nv,nw). Where nu is number of points along
+% 		of size (dim,nu,nv,nw). Where nu is number of points along
 % 		the parametric U direction, nv the number of points along
-%       the V direction and nw the number of points along the W direction. 
-%       dim is the dimension. Valid options
+% 		the V direction and nw the number of points along the W direction. 
+% 		dim is the dimension. Valid options
 % 		are
 % 		2 .... (x,y)        2D Cartesian coordinates
 % 		3 .... (x,y,z)      3D Cartesian coordinates

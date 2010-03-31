@@ -5,13 +5,16 @@ function skl = surfderiveval (n, p, U, m, q, V, P, u, v, d)
 % usage: pkl = surfderiveval (n, p, U, m, q, V, P, d) 
 %
 %  INPUT: 
+%
 %        n+1, m+1 = number of control points
 %        p, q     = spline order
 %        U, V     = knots
 %        P        = control points
 %        u,v      = evaluation points
 %        d        = derivative order
+%
 %  OUTPUT:
+%
 %        skl (k+1, l+1) =  surface differentiated k
 %                          times in the u direction and l
 %                          times in the v direction

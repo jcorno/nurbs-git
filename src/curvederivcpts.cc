@@ -1,22 +1,17 @@
-/*
-## Copyright (C) 2009 Carlo de Falco
-## 
-## This program is free software; you can redistribute it and/or modify
-## it under the terms of the GNU General Public License as published by
-## the Free Software Foundation; either version 2 of the License, or
-## (at your option) any later version.
-## 
-## This program is distributed in the hope that it will be useful,
-## but WITHOUT ANY WARRANTY; without even the implied warranty of
-## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-## GNU General Public License for more details.
-## 
-## You should have received a copy of the GNU General Public License
-## along with Octave; see the file COPYING.  If not, see
-## <http://www.gnu.org/licenses/>.
+/* Copyright (C) 2009 Carlo de Falco
 
-## Author: Carlo de Falco <cdf _AT_ users.sourceforge.net>
-## Created: 2009-09-09
+   This program is free software: you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation, either version 2 of the License, or
+   (at your option) any later version.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include <octave/oct.h>
@@ -34,6 +29,7 @@ DEFUN_DLD(curvederivcpts, args, nargout,"\
 \n         d   = maximum derivative order (d<=p) \
 \n         U   = knots \
 \n         P   = control points \
+\n\
 \n  OUTPUT: \
 \n         pk(k,i) = i-th control point (k-1)-th derivative \
 \n \

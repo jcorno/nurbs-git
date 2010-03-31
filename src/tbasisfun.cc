@@ -1,23 +1,17 @@
-/*
-## Copyright (C) 2009 Carlo de Falco
-## 
-## This program is free software; you can redistribute it and/or modify
-## it under the terms of the GNU General Public License as published by
-## the Free Software Foundation; either version 2 of the License, or
-## (at your option) any later version.
-## 
-## This program is distributed in the hope that it will be useful,
-## but WITHOUT ANY WARRANTY; without even the implied warranty of
-## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-## GNU General Public License for more details.
-## 
-## You should have received a copy of the GNU General Public License
-## along with Octave; see the file COPYING.  If not, see
-## <http://www.gnu.org/licenses/>.
+/* Copyright (C) 2009 Carlo de Falco
 
-## Author: Carlo de Falco <cdf _AT_ users.sourceforge.net>
-## Created: 2009-06-25
+   This program is free software: you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation, either version 2 of the License, or
+   (at your option) any later version.
 
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include <octave/oct.h>
@@ -62,7 +56,7 @@ TBASISFUN: Compute a B- or T-Spline basis function from its local knot vector.\n
   \n\
   U or {U, V} : local knot vector\n\
 \n\
- p or [p q] : polynomial order of the bais function\n\
+ p or [p q] : polynomial order of the basis function\n\
 \n\
  OUTPUT:\n\
   N : basis function evaluated at the given parametric points\n")

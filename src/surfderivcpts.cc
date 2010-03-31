@@ -1,22 +1,17 @@
-/*
-## Copyright (C) 2009 Carlo de Falco
-## 
-## This program is free software; you can redistribute it and/or modify
-## it under the terms of the GNU General Public License as published by
-## the Free Software Foundation; either version 2 of the License, or
-## (at your option) any later version.
-## 
-## This program is distributed in the hope that it will be useful,
-## but WITHOUT ANY WARRANTY; without even the implied warranty of
-## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-## GNU General Public License for more details.
-## 
-## You should have received a copy of the GNU General Public License
-## along with Octave; see the file COPYING.  If not, see
-## <http://www.gnu.org/licenses/>.
+/* Copyright (C) 2009 Carlo de Falco
 
-## Author: Carlo de Falco <cdf _AT_ users.sourceforge.net>
-## Created: 2009-09-09
+   This program is free software: you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation, either version 2 of the License, or
+   (at your option) any later version.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include <octave/oct.h>
@@ -30,12 +25,15 @@ DEFUN_DLD(surfderivcpts, args, nargout,"\
 \nusage: pkl = surfderivcpts (n, p, U, m, q, V, P, d)  \
 \n \
 \n  INPUT:  \
+\n\
 \n        n+1, m+1 = number of control points \
 \n        p, q     = spline order \
 \n        U, V     = knots \
 \n        P        = control points \
 \n        d        = derivative order \
+\n\
 \n  OUTPUT: \
+\n\
 \n        pkl (k+1, l+1, i+1, j+1) = i,jth control point \
 \n                                   of the surface differentiated k \
 \n                                   times in the u direction and l \
