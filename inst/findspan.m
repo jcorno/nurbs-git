@@ -36,7 +36,7 @@ function s = findspan(n,p,u,U)
 %    You should have received a copy of the GNU General Public License
 %    along with this program.  If not, see <http://www.gnu.org/licenses/>.                                                
 
-if max(u) > U(end) || min(u) < U(1)
+if (any (max(u)>U(end) | min(u)<U(1)))
   error('Some value is outside the knot span')
 end
 
