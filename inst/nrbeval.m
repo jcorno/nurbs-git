@@ -1,12 +1,13 @@
-function [p,w] = nrbeval2(nurbs,tt)
+function [p,w] = nrbeval(nurbs,tt)
 % 
 % NRBEVAL: Evaluate a NURBS at parameteric points.
 % 
-% Calling Sequence:
+% Calling Sequences:
 % 
 %   [p,w] = nrbeval(crv,ut)
 %   [p,w] = nrbeval(srf,{ut,vt})
-%   [p,w] = nrbeval(srf,{ut,vt,wt})
+%   [p,w] = nrbeval(vol,{ut,vt,wt})
+%   [p,w] = nrbeval(srf,pts)
 % 
 % INPUT:
 % 
@@ -21,6 +22,8 @@ function [p,w] = nrbeval2(nurbs,tt)
 %   vt		: Parametric evaluation points along V direction.
 % 
 %   wt		: Parametric evaluation points along W direction.
+%
+%   pts     : Array of scattered points in parametric domain
 % 
 % OUTPUT:
 %
