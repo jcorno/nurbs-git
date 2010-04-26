@@ -1,4 +1,4 @@
-function [p,w] = nrbeval(nurbs,tt)
+function [p,w] = nrbeval2(nurbs,tt)
 % 
 % NRBEVAL: Evaluate a NURBS at parameteric points.
 % 
@@ -84,7 +84,7 @@ if ~strcmp(nurbs.form,'B-NURBS')
 end
 
 if iscell(nurbs.knots)
-  if size(nurbs.knots,2) ==3
+  if size(nurbs.knots,2) == 3
     %% NURBS structure represents a volume
 
     num1 = nurbs.number(1);
@@ -93,8 +93,9 @@ if iscell(nurbs.knots)
     degree = nurbs.order-1;
 
     if iscell(tt)
-      tt = meshgrid(tt{3},tt{2},tt{1});
-      tt = reshape(tt,3,[]);
+      [tty, ttx, ttz] = meshgrid (tt{2}, tt{1}, tt{3});
+      tt = [ttx(:)'; tty(:)'; ttz(:)'];
+      scattered = 0;
     end
 
     %% Evaluate at scattered points
@@ -123,13 +124,21 @@ if iscell(nurbs.knots)
       pnts(:,v) = bspeval(degree(1),coefs,nurbs.knots{1},tt(1,v));
     end
 
-    w = pnts(4,:);
-    p = pnts(1:3,:);
-    if foption
-      p = p./repmat(w,[3, 1]);
+    if (~scattered)
+      p = reshape (pnts(1:3,:), [3 size(ttx)]);
+      w = reshape (pnts(4,:), [1 size(ttx)]);
+      if foption
+        p = p./repmat(w,[3 1 1 1]);
+      end
+    else
+      w = pnts(4,:);
+      p = pnts(1:3,:);
+      if foption
+        p = p./repmat(w,[3, 1]);
+      end
     end
 
-  elseif size(nurbs.knots,2) ==2
+  elseif size(nurbs.knots,2) == 2
     %% NURBS structure represents a surface
   
     num1 = nurbs.number(1);
