@@ -54,7 +54,9 @@ function [p,w] = nrbeval(nurbs,tt)
 %  
 %     bspeval
 %
-%    Copyright (C) 2000 Mark Spink, 2010 Rafael Vazquez
+% Copyright (C) 2000 Mark Spink 
+% Copyright (C) 2010 Rafael Vazquez
+% Copyright (C) 2010 Carlo de Falco
 %
 %    This program is free software: you can redistribute it and/or modify
 %    it under the terms of the GNU General Public License as published by

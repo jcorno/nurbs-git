@@ -2,10 +2,6 @@ function B = basisfun (iv, uv, p, U)
 
 % BASISFUN:  Basis function for B-Spline
 %
-% -------------------------------------------------------------------------
-% ADAPTATION of BASISFUN from C Routine
-% -------------------------------------------------------------------------
-%
 % Calling Sequence:
 % 
 %   N = basisfun(iv,uv,p,U)
@@ -23,7 +19,9 @@ function B = basisfun (iv, uv, p, U)
 %   
 %    Adapted from Algorithm A2.2 from 'The NURBS BOOK' pg70.
 %
-%    Copyright (C) 2000 Mark Spink, 2007 Daniel Claxton, 2009 Carlo de Falco
+% Copyright (C) 2000 Mark Spink
+% Copyright (C) 2007 Daniel Claxton
+% Copyright (C) 2009 Carlo de Falco
 %
 %    This program is free software: you can redistribute it and/or modify
 %    it under the terms of the GNU General Public License as published by
