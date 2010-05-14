@@ -97,10 +97,11 @@ if iscell(nurbs.knots)
     num3 = nurbs.number(3);
     degree = nurbs.order-1;
 
+    scattered = true;
     if iscell(tt)
       [tty, ttx, ttz] = meshgrid (tt{2}, tt{1}, tt{3});
       tt = [ttx(:)'; tty(:)'; ttz(:)'];
-      scattered = 0;
+      scattered = false;
     end
 
     %% Evaluate at scattered points
