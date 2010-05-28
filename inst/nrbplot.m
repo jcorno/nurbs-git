@@ -274,5 +274,5 @@ end
 %!     2.0000    4.0000    9.4508    7.1213    2.0000         0
 %!     1.0000    1.0000    1.0000    0.7071    1.0000    1.0000];
 %! coefs = reshape (coefs, 4, 4, 3, 9);
-%! horsehoe = nrbmak (coefs, knots);
+%! horseshoe = nrbmak (coefs, knots);
 %! nrbplot (horseshoe, [6, 6, 50], 'light', 'on');
