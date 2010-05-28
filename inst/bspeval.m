@@ -17,7 +17,7 @@ function p = bspeval(d,c,k,u)
 %
 %       p - Evaluated points, matrix of size (dim,nu)
 % 
-%    Copyright (C) 2000 Mark Spink, 2007 Daniel Claxton
+%    Copyright (C) 2000 Mark Spink, 2007 Daniel Claxton, 2010 C. de Falco
 %
 %    This program is free software: you can redistribute it and/or modify
 %    it under the terms of the GNU General Public License as published by
@@ -46,23 +46,23 @@ nu = numel(u);
 p = zeros(mc,nu);                               %   double **pnt = vec2mat(p,mc,nu);
                                                 %
                                                 %   // space for the basis functions
-N = zeros(d+1,1);                               %   double *N = (double*) mxMalloc((d+1)*sizeof(double));
+%N = zeros(d+1,1);                               %   double *N = (double*) mxMalloc((d+1)*sizeof(double));
                                                 %
                                                 %   // for each parametric point i
-for col=1:nu                                    %   for (col = 0; col < nu; col++) {
+%for col=1:nu                                    %   for (col = 0; col < nu; col++) {
                                                 %     // find the span of u[col]
-    s = findspan(nc-1, d, u(col), k);           %     s = findspan(nc-1, d, u[col], k);
-    N = basisfun(s,u(col),d,k);                 %     basisfun(s, u[col], d, k, N);
+    s = findspan(nc-1, d, u(:), k);           %     s = findspan(nc-1, d, u[col], k);
+    N = basisfun(s,u(:),d,k);                 %     basisfun(s, u[col], d, k, N);
                                                 %
     tmp1 = s - d + 1;                           %     tmp1 = s - d;
-    for row=1:mc                                %     for (row = 0; row < mc; row++)  {
-        tmp2 = 0;                               %       tmp2 = 0.0;
+    %for row=1:mc                                %     for (row = 0; row < mc; row++)  {
+        p = zeros (mc, nu);                               %       tmp2 = 0.0;
         for i=0:d                               %       for (i = 0; i <= d; i++)
-           tmp2 = tmp2 + N(i+1)*c(row,tmp1+i);  % 	tmp2 += N[i] * ctrl[tmp1+i][row];
+           p = p + repmat (N(:,i+1)', mc, 1).*c(:,tmp1+i);  % 	tmp2 += N[i] * ctrl[tmp1+i][row];
         end                                     %
-        p(row,col) = tmp2;                      %       pnt[col][row] = tmp2;
-    end                                         %     }
-end                                             %   }
+        %p(row,:) = tmp2;                      %       pnt[col][row] = tmp2;
+    %end                                         %     }
+%end                                             %   }
                                                 %
                                                 %   mxFree(N);
                                                 %   freevec2mat(pnt);
