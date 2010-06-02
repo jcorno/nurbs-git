@@ -58,8 +58,8 @@ end
 
 coefs = [zeros(3,2,2); ones(1,2,2)];
 coefs(1:length(p11),1,1) = p11(:);    
-coefs(1:length(p12),1,2) = p12(:);
-coefs(1:length(p21),2,1) = p21(:);
+coefs(1:length(p12),2,1) = p12(:);
+coefs(1:length(p21),1,2) = p21(:);
 coefs(1:length(p22),2,2) = p22(:);
              
 knots  = {[0 0 1 1] [0 0 1 1]}; 
