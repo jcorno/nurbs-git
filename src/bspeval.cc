@@ -39,77 +39,78 @@ DEFUN_DLD(bspeval, args, nargout,"\
        p - Evaluated points, matrix of size (dim,nu)\n\
 ")
 {
-  
-  
-
-  int       d = args(0).int_value();
-  const Matrix    c = args(1).matrix_value();
-  const RowVector k = args(2).row_vector_value();
-  const NDArray   u = args(3).array_value();
-  
-  octave_idx_type nu = u.length();
-  octave_idx_type mc = c.rows(),
-    nc = c.cols();
-
-  Matrix p(mc, nu, 0.0);
-  RowVector N(d+1,0.0);
 
   octave_value_list retval;
-  if (!error_state)
-    {
-      if (nc + d == k.length() - 1) 
-	{	 
-	  int s, tmp1;
-	  double tmp2;
-	  
-	  for (octave_idx_type col(0); col<nu; col++)
-	    {	
-	      s = findspan(nc-1, d, u(col), k);
-	      basisfun(s, u(col), d, k, N);    
-	      tmp1 = s - d;                
-	      for (octave_idx_type row(0); row<mc; row++)
-		{
-		  double tmp2 = 0.0;
-		  for ( octave_idx_type i(0); i<=d; i++)                   
-		    tmp2 +=  N(i)*c(row,tmp1+i);	  
-		  p(row,col) = tmp2;
-		}             
-	    }   
-	} 
-      else 
-	{
-	  error("inconsistent bspline data, d + columns(c) != length(k) - 1.");
-	}
-    }
-  retval(0) = octave_value(p);
+  if (!bspeval_bad_arguments (args))
+    {      
+      int       d = args(0).int_value();
+      const Matrix    c = args(1).matrix_value();
+      const RowVector k = args(2).row_vector_value();
+      const NDArray   u = args(3).array_value();
+      
+      octave_idx_type nu = u.length();
+      octave_idx_type mc = c.rows(),
+        nc = c.cols();
+      
+      Matrix p(mc, nu, 0.0);
+      RowVector N(d+1,0.0);
+      
+      if (!error_state)
+        {
+          if (nc + d == k.length() - 1) 
+            {	 
+              int s, tmp1;
+              double tmp2;
+              
+              for (octave_idx_type col(0); col<nu; col++)
+                {	
+                  s = findspan(nc-1, d, u(col), k);
+                  basisfun(s, u(col), d, k, N);    
+                  tmp1 = s - d;                
+                  for (octave_idx_type row(0); row<mc; row++)
+                    {
+                      tmp2 = 0.0;
+                      for ( octave_idx_type i(0); i<=d; i++)                   
+                        tmp2 +=  N(i)*c(row,tmp1+i);	  
+                      p(row,col) = tmp2;
+                    }             
+                }   
+            } 
+          else 
+            {
+              error("inconsistent bspline data, d + columns(c) != length(k) - 1.");
+            }
+          retval(0) = octave_value(p);
+        }
+    }      
   return retval;
 } 
 
-static bool bspeval_bad_arguments(const octave_value_list& args) 
+static bool bspeval_bad_arguments (const octave_value_list& args) 
 { 
   if (args.length() != 4)
     {
-      error("wrong number of input arguments.");
+      error("bspeval: wrong number of input arguments.");
       return true;
     }
   if (!args(0).is_real_scalar()) 
     { 
-      error("degree should be a scalar."); 
+      error("bspeval: degree should be a scalar."); 
       return true; 
     } 
   if (!args(1).is_real_matrix()) 
     { 
-      error("the control net should be a matrix of doubles."); 
+      error("bspeval: the control net should be a matrix of doubles."); 
       return true; 
     } 
   if (!args(2).is_real_matrix()) 
     { 
-      error("the knot vector should be a real vector."); 
+      error("bspeval: the knot vector should be a real vector."); 
       return true; 
     } 
   if (!args(3).is_real_type()) 
     { 
-      error("the set of parametric points should be an array of doubles."); 
+      error("bspeval: the set of parametric points should be an array of doubles."); 
       return true; 
     } 
   return false; 
