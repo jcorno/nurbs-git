@@ -79,8 +79,8 @@ DEFUN_DLD(surfderivcpts, args, nargout,"\
       surfderivcpts (n, p, U, m, q, V, P, d, r1, r2, s1, s2,  pkl);
 
       retval(0) = octave_value (pkl);
-      return retval;
     }
+  return retval;
 }
 
 

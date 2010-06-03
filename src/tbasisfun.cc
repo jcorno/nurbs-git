@@ -63,6 +63,7 @@ TBASISFUN: Compute a B- or T-Spline basis function from its local knot vector.\n
 
 {
   
+  octave_value_list retval;
   Matrix u = args(0).matrix_value ();
 
   if (! args(2).is_cell ())
@@ -91,8 +92,9 @@ TBASISFUN: Compute a B- or T-Spline basis function from its local knot vector.\n
 	  onebasisfun__ (u(1, ii), octave_idx_type(p(1)), V);
 	//std::cout << "N=" << N(ii) << "\n\n\n";
       }
-    return octave_value (N);
+    retval(0) = octave_value (N);
   }
+  return retval;
 }
 
 
