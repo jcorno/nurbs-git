@@ -53,21 +53,19 @@ DEFUN_DLD(surfderivcpts, args, nargout,"\
   RowVector V = args(5).row_vector_value (false, true);
   Matrix P = args(6).matrix_value ();
   octave_idx_type d = args(7).idx_type_value ();
-
   
-  if (args.length () <= 8)
+  octave_idx_type r1(0), r2 (n),
+    s1 (0), s2 (m);
+  
+  
+  if (args.length () == 12)
     {
-      octave_idx_type r1(0), r2 (n),
-        s1 (0), s2 (m);
-    }
-  else if (args.length () == 12)
-    {
-      octave_idx_type r1 = args (8).idx_type_value ();
-      octave_idx_type r2 = args (9).idx_type_value ();
-      octave_idx_type s1 = args (10).idx_type_value ();
-      octave_idx_type s2 = args (11).idx_type_value ();      
+      r1 = args (8).idx_type_value ();
+      r2 = args (9).idx_type_value ();
+      s1 = args (10).idx_type_value ();
+      s2 = args (11).idx_type_value ();      
     } 
-  else
+  else if  (args.length () > 8) 
     print_usage ();
 
   if (! error_state)
