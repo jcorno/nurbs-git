@@ -5,8 +5,8 @@ function inurbs = nrbdegelev(nurbs, ntimes)
 % Calling Sequence:
 % 
 %   ecrv = nrbdegelev(crv,utimes);
-%   esrf = nrbdegelev(srf,{utimes,vtimes});
-%   evol = nrbdegelev(vol,{utimes,vtimes,wtimes});
+%   esrf = nrbdegelev(srf,[utimes,vtimes]);
+%   evol = nrbdegelev(vol,[utimes,vtimes,wtimes]);
 % 
 % INPUT:
 % 
