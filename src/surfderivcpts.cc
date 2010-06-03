@@ -54,8 +54,7 @@ DEFUN_DLD(surfderivcpts, args, nargout,"\
   Matrix P = args(6).matrix_value ();
   octave_idx_type d = args(7).idx_type_value ();
   
-  octave_idx_type r1(0), r2 (n),
-    s1 (0), s2 (m);
+  octave_idx_type r1(0), r2 (n), s1 (0), s2 (m);
   
   
   if (args.length () == 12)
