@@ -45,15 +45,13 @@ DEFUN_DLD(curvederivcpts, args, nargout,"\
   NDArray P = args(3).array_value ();
   octave_idx_type d = args(4).idx_type_value ();
 
-  octave_idx_type r1, r2;
-  if (args.length () <= 5)
-    { r1 = 0; r2 = n; }
-  else if (args.length () == 7)
+  octave_idx_type r1(0), r2(n);
+  if (args.length () == 7)
     {
       r1 = args (5).idx_type_value ();
       r2 = args (6).idx_type_value ();
     }
-  else
+  else  if (args.length () > 5)
     print_usage ();
 
   if (! error_state)  
