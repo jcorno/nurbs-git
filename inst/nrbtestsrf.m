@@ -52,3 +52,10 @@ knots{2} = [0 0 0 1/3 2/3 1 1 1]; % knots along v
 srf = nrbmak(pnts,knots);
 
 end
+
+%!demo
+%! srf = nrbtestsrf;
+%! nrbplot(srf,[20 30])
+%! title('Test surface')
+%! hold off
+

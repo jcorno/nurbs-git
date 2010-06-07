@@ -22,3 +22,10 @@ pnts = [0.5 1.5 4.5 3.0 7.5 6.0 8.5;
 crv = nrbmak(pnts,[0 0 0 1/4 1/2 3/4 3/4 1 1 1]);
 
 end
+
+%!demo
+%! crv = nrbtestcrv;
+%! nrbplot(crv,100)
+%! title('Test curve')
+%! hold off
+
