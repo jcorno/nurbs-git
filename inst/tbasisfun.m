@@ -47,9 +47,9 @@ function N = tbasisfun (u, p, U)
 
   elseif size(U,2) == 2
     U{1} = sort(U{1}); U{2} = sort(U{2});
-    assert (numel(U{1}) == p(1) && numel(U{2}) == p(2))
+    assert (numel(U{1}) == p(1)+2 && numel(U{2}) == p(2)+2)
     
-    Nu = zeros(1,numel(u)); Nv = zeros(1,numel(u));
+    Nu = zeros(1,numel(u(1,:))); Nv = zeros(1,numel(u(1,:)));
     for ii=1:numel(u(1,:))
       Nu(ii) = onebasisfun__ (u(1,ii), p(1), U{1});
     end
@@ -62,9 +62,9 @@ function N = tbasisfun (u, p, U)
 
   elseif size(U,2) == 3
     U{1} = sort(U{1}); U{2} = sort(U{2}); U{3} = sort(U{3});
-    assert (numel(U{1}) == p(1) && numel(U{2}) == p(2) && numel(U{3}) == p(3))
+    assert (numel(U{1}) == p(1)+2 && numel(U{2}) == p(2)+2 && numel(U{3}) == p(3)+2)
     
-    Nu = zeros(1,numel(u)); Nv = zeros(1,numel(u)); Nw = zeros(1,numel(u));
+    Nu = zeros(1,numel(u(1,:))); Nv = zeros(1,numel(u(1,:))); Nw = zeros(1,numel(u(1,:)));
     for ii=1:numel(u(1,:))
       Nu(ii) = onebasisfun__ (u(1,ii), p(1), U{1});
     end
