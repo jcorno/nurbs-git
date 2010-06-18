@@ -8,7 +8,7 @@ function N = onebasisfun__ (u, p, U)
 %   to distribute it under the conditions laid out in COPYING.
 
   N = 0;
-  if (~ any (U <= u)) || (~ any (U >= u))
+  if (~ any (U <= u)) || (~ any (U > u))
     return;
   elseif (p == 0)
       N = 1;
