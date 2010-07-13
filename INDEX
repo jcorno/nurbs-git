@@ -41,6 +41,9 @@ NURBS geometric entities and functions
  nrbbasisfunder
  nrbnumbasisfun
  nrbsurfderiveval
+Knots construction and refinement
+ kntuniform
+ kntrefine
 Vector and Transformation Utilities 
  vecnorm
  vecmag
