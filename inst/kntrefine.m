@@ -1,8 +1,9 @@
-% KNTREFINE: Refine a given knot vector by dividing each interval uniformly.
-%                      The regularity is kept at the maximum value
-%                      that ensures good convergence rates.
+% KNTREFINE: Refine a given knot vector by dividing each interval uniformly,
+%             maintaining the continuity in previously existing knots.
 %
-%   [rknots, zeta] = kntrefine (knots, n_sub, degree, regularity)
+%   [rknots]                  = kntrefine (knots, n_sub, degree, regularity)
+%   [rknots, zeta]            = kntrefine (knots, n_sub, degree, regularity)
+%   [rknots, zeta, new_knots] = kntrefine (knots, n_sub, degree, regularity)
 %
 % INPUT:
 %
@@ -13,8 +14,14 @@
 %
 % OUTPUT:
 %
-%     rknots: refined knot vector
-%     zeta:   refined knot vector without repetitions
+%     rknots:    refined knot vector
+%     zeta:      refined knot vector without repetitions
+%     new_knots: new knots, to apply the knot insertion
+%
+% The regularity at the new inserted knots is the one given by the user.
+% At previously existing knots, the regularity is the minimum
+%  between the previous regularity, and the one given by the user.
+%  This ensures optimal convergence rates in the context of IGA.
 %
 % Copyright (C) 2010 Carlo de Falco, Rafael Vazquez
 %
@@ -31,7 +38,7 @@
 %    You should have received a copy of the GNU General Public License
 %    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-function [rknots, zeta] = kntrefine (knots, n_sub, degree, regularity)
+function varargout = kntrefine (knots, n_sub, degree, regularity)
 
   if (iscell(knots))
     if (numel(n_sub)~=numel(degree) || numel(n_sub)~=numel(regularity) || ...
@@ -47,27 +54,64 @@ function [rknots, zeta] = kntrefine (knots, n_sub, degree, regularity)
     aux_knots = {knots};
   end
 
-  for idim = 1:numel(n_sub)
-    min_mult     = degree(idim) - regularity(idim);
-    z            = unique (aux_knots{idim});
-    nz           = numel (z);
-    deg          = sum (aux_knots{idim} == z(1)) - 1;
-    rknots{idim} = z(ones(1, degree(idim)+1));
- 
-    for ik = 2:nz
-      insk = linspace (z(ik-1), z(ik), n_sub(idim) + 2);
-      insk = vec (repmat (insk(2:end-1), min_mult, 1))';
-      mult = max (min_mult, degree(idim) - deg + sum (aux_knots{idim} == z(ik)));
-      rknots{idim} = [rknots{idim}, insk, z(ik*ones (1, mult))];
+  if (nargout == 3)
+    for idim = 1:numel(n_sub)
+      if (degree(idim)+1 ~= sum (aux_knots{idim}==aux_knots{idim}(1)))
+        error ('kntrefine: new_knots is only computed when the degree is maintained');
+      end
     end
-    zeta{idim} = unique (rknots{idim});
+    for idim = 1:numel(n_sub)
+      min_mult     = degree(idim) - regularity(idim);
+      z            = unique (aux_knots{idim});
+      nz           = numel (z);
+      deg          = sum (aux_knots{idim} == z(1)) - 1;
+      rknots{idim} = z(ones(1, degree(idim)+1));
+      new_knots{idim} = [];
+ 
+      for ik = 2:nz
+        insk = linspace (z(ik-1), z(ik), n_sub(idim) + 2);
+        insk = vec (repmat (insk(2:end-1), min_mult, 1))';
+        old_mult = sum (aux_knots{idim} == z(ik));
+        mult = max (min_mult, degree(idim) - deg + old_mult);
+        rknots{idim} = [rknots{idim}, insk, z(ik*ones(1, mult))];
+        new_knots{idim} = [new_knots{idim}, insk, z(ik*ones(1, mult-old_mult))];
+      end
+      zeta{idim} = unique (rknots{idim});
+    end
+    if (~iscell(knots))
+      rknots = rknots{1};
+      zeta = zeta{1};
+      new_knots = new_knots{1};
+    end
+    varargout{1} = rknots;
+    varargout{2} = zeta;
+    varargout{3} = new_knots;
+  else
+    for idim = 1:numel(n_sub)
+      min_mult     = degree(idim) - regularity(idim);
+      z            = unique (aux_knots{idim});
+      nz           = numel (z);
+      deg          = sum (aux_knots{idim} == z(1)) - 1;
+      rknots{idim} = z(ones(1, degree(idim)+1));
+ 
+      for ik = 2:nz
+        insk = linspace (z(ik-1), z(ik), n_sub(idim) + 2);
+        insk = vec (repmat (insk(2:end-1), min_mult, 1))';
+        old_mult = sum (aux_knots{idim} == z(ik));
+        mult = max (min_mult, degree(idim) - deg + old_mult);
+        rknots{idim} = [rknots{idim}, insk, z(ik*ones(1, mult))];
+      end
+      zeta{idim} = unique (rknots{idim});
+    end
+    if (~iscell(knots))
+      rknots = rknots{1};
+      zeta = zeta{1};
+    end
+    varargout{1} = rknots;
+    if (nargout == 2)
+      varargout{2} = zeta;
+    end
   end
-
-  if (~iscell(knots))
-    rknots = rknots{1};
-    zeta = zeta{1};
-  end
-
 end
 
 function v = vec (in)
