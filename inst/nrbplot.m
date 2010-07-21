@@ -1,6 +1,6 @@
 function nrbplot(nurbs,subd,varargin)
 % 
-% NRBPLOT: Plot a NURBS curve or surface, or the boundary of a NURBS volume
+% NRBPLOT: Plot a NURBS curve or surface, or the boundary of a NURBS volume.
 % 
 % Calling Sequence:
 % 
@@ -20,7 +20,7 @@ function nrbplot(nurbs,subd,varargin)
 %
 %               Property        Value/{Default}
 %               -----------------------------------
-%               light           {off} | true  
+%               light           {off} | on
 %               colormap        {'copper'}
 %
 % Example:
@@ -28,7 +28,7 @@ function nrbplot(nurbs,subd,varargin)
 %   Plot the test surface with 20 points along the U direction
 %   and 30 along the V direction
 %
-%   plot(nrbtestsrf, [20 30])
+%   nrbplot(nrbtestsrf, [20 30])
 %
 %    Copyright (C) 2000 Mark Spink
 %    Copyright (C) 2010 Carlo de Falco, Rafael Vazquez
