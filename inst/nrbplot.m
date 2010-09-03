@@ -55,7 +55,7 @@ end
 
 % Default values
 light='off';
-cmap='copper';
+cmap='summer';
 
 % Recover Param/Value pairs from argument list
 for i=1:2:nargs-2
