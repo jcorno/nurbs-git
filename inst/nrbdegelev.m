@@ -1,6 +1,6 @@
 function inurbs = nrbdegelev(nurbs, ntimes)
 % 
-% NRBDEGELEV: Elevate the degree of the NURBS curve or surface.
+% NRBDEGELEV: Elevate the degree of the NURBS curve, surface or volume.
 % 
 % Calling Sequence:
 % 
