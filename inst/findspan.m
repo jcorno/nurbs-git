@@ -14,7 +14,7 @@ function s = findspan(n,p,u,U)
 % 
 %  OUTPUT:
 % 
-%    s - knot span
+%    s - span index
 %
 %  Modification of Algorithm A2.1 from 'The NURBS BOOK' pg68
 %

@@ -8,7 +8,7 @@ function dersv = basisfunder (ii, pl, uu, u_knotl, nders)
 %
 %    INPUT:
 %   
-%      ii  - knot span
+%      ii  - span index (see findspan)
 %      pl  - degree of curve
 %      uu  - parametric points
 %      k   - knot vector
