@@ -44,6 +44,8 @@ NURBS geometric entities and functions
 Knots construction and refinement
  kntuniform
  kntrefine
+ kntbrkdegreg
+ kntbrkdegmult
 Vector and Transformation Utilities 
  vecnorm
  vecmag
