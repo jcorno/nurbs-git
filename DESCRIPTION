@@ -10,5 +10,5 @@ Depends: octave (>= 3.2)
 Autoload: no
 License: GPL version 2 or later
 Url: http://octave.sf.net
-SVNRelease: 7747
+SVNRelease: 7750
 

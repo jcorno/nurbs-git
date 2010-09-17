@@ -35,6 +35,25 @@
 
 function knots = kntbrkdegreg (breaks, degree, reg)
 
+if (iscell (breaks))
+
+  if (~iscell (degree))
+    degree = num2cell (degree);
+  end
+
+  if (~iscell (reg))
+    reg = num2cell (reg);
+  end
+
+  knots = cellfun (@do_kntbrkdegreg, breaks, degree, reg, 'uniformoutput', false);
+else
+  knots = do_kntbrkdegreg (breaks, degree, reg);
+end
+
+end
+
+function knots = do_kntbrkdegreg (breaks, degree, reg)
+
 if (nargin == 2)
   reg = degree-1;
 end
