@@ -18,7 +18,7 @@
 %   knots, a different multiplicity will be assigned to each knot. If
 %   MULT is not present, it will be taken equal to 1.
 %
-% Copyright (C) 2010 Rafael Vazquez
+% Copyright (C) 2010 Carlo de Falco, Rafael Vazquez
 %
 %    This program is free software: you can redistribute it and/or modify
 %    it under the terms of the GNU General Public License as published by
@@ -35,9 +35,35 @@
 
 function knots = kntbrkdegmult (breaks, degree, mult)
 
-if (nargin == 2)
-  mult = 1;
+  if (iscell (breaks))
+    if (nargin == 2)
+      mult = 1;
+    end
+  
+    if (numel(breaks)~=numel(degree) || numel(breaks)~=numel(mult))
+      error('kntbrkdegmult: degree and multiplicity must have the same length as the number of knot vectors')
+    end
+
+    degree = num2cell (degree);
+
+    if (~iscell (mult))
+      mult = num2cell (mult);
+    end
+
+    knots = cellfun (@do_kntbrkdegmult, breaks, degree, mult, 'uniformoutput', false);
+
+  else
+
+    if (nargin == 2)
+      mult = 1;
+    end
+
+    knots = do_kntbrkdegmult (breaks, degree, mult);
+  end
 end
+
+  
+function knots = do_kntbrkdegmult (breaks, degree, mult)  
 
 if (numel (breaks) < 2)
   error ('kntbrkdegmult: the knots sequence should contain at least two points')
@@ -67,3 +93,30 @@ mm (cumsum ([1 reshape(mults (1:end-1), 1, lm-1)])) = ones (1,lm);
 knots = breaks (cumsum (mm));
 
 end
+
+%!test
+%! breaks = [0 1 2 3 4];
+%! degree = 3;
+%! knots = kntbrkdegmult (breaks, degree);
+%! assert (knots, [0 0 0 0 1 2 3 4 4 4 4])
+
+%!test
+%! breaks = [0 1 2 3 4];
+%! degree = 3;
+%! mult   = 2;
+%! knots = kntbrkdegmult (breaks, degree, mult);
+%! assert (knots, [0 0 0 0 1 1 2 2 3 3 4 4 4 4])
+
+%!test
+%! breaks = [0 1 2 3 4];
+%! degree = 3;
+%! mult   = [1 2 3];
+%! knots = kntbrkdegmult (breaks, degree, mult);
+%! assert (knots, [0 0 0 0 1 2 2 3 3 3 4 4 4 4])
+
+%!test
+%! breaks = {[0 1 2 3 4] [0 1 2 3]};
+%! degree = [3 2];
+%! mult   = {[1 2 3] 2};
+%! knots = kntbrkdegmult (breaks, degree, mult);
+%! assert (knots, {[0 0 0 0 1 2 2 3 3 3 4 4 4 4] [0 0 0 1 1 2 2 3 3 3]})
