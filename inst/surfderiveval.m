@@ -35,20 +35,10 @@ function skl = surfderiveval (n, p, U, m, q, V, P, u, v, d)
 %
 %    You should have received a copy of the GNU General Public License
 %    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-  
-  du = min (d, p);   
-  for k=p+1:d
-    for l=0:d-k
-      skl(k+1,l+1)=0;
-    end
-  end
 
+  skl = zeros (d+1, d+1);
+  du = min (d, p);   
   dv = min (d, q);   
-  for l=q+1:d
-    for k=0:d-l
-      skl(k+1,l+1)=0;
-    end
-  end
 
   uspan = findspan (n, p, u, U);
   for ip=0:p
