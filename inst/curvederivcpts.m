@@ -1,6 +1,10 @@
 function pk = curvederivcpts (n, p, U, P, d, r1, r2) 
-%
+% Compute control points of n-th derivatives of a B-spline curve.
+% 
 % usage: pk = curvederivcpts (n, p, U, P, d) 
+%        pk = curvederivcpts (n, p, U, P, d, r1, r2) 
+%
+% If r1, r2 are not given, all the control points are computed.
 %
 %  INPUT:
 %         n+1 = number of control points
@@ -8,8 +12,10 @@ function pk = curvederivcpts (n, p, U, P, d, r1, r2)
 %         d   = maximum derivative order (d<=p)
 %         U   = knots
 %         P   = control points
+%         r1  = first control point to compute
+%         r2  = auxiliary index for the last control point to compute
 %  OUTPUT:
-%         pk(k,i) = i-th control point (k-1)-th derivative
+%         pk(k,i) = i-th control point of (k-1)-th derivative, r1 <= i <= r2-k
 %
 % Adaptation of algorithm A3.3 from the NURBS book, pg98.
 %

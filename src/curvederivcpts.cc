@@ -19,9 +19,12 @@
 
 
 DEFUN_DLD(curvederivcpts, args, nargout,"\
-\nCURVEDERIVCPTS: Compute control points of n-th derivatives of a NURBS curve.\n \
+\nCURVEDERIVCPTS: Compute control points of n-th derivatives of a B-spline curve.\n \
 \n \
 \n usage: pk = curvederivcpts (n, p, U, P, d) \
+\n        pk = curvederivcpts (n, p, U, P, d, r1 r2) \
+\n \
+\n If r1, r2 are not given, all the control points are computed. \
 \n \
 \n  INPUT: \
 \n         n+1 = number of control points \
@@ -29,9 +32,11 @@ DEFUN_DLD(curvederivcpts, args, nargout,"\
 \n         d   = maximum derivative order (d<=p) \
 \n         U   = knots \
 \n         P   = control points \
+\n         r1  = first control point to compute
+\n         r2  = auxiliary index for the last control point to compute
 \n\
 \n  OUTPUT: \
-\n         pk(k,i) = i-th control point (k-1)-th derivative \
+\n         pk(k,i) = i-th control point (k-1)-th derivative, r1 <= i <= r2-k \
 \n \
 \n Adaptation of algorithm A3.3 from the NURBS book\n")
 

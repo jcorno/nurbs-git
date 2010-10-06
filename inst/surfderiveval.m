@@ -2,7 +2,7 @@ function skl = surfderiveval (n, p, U, m, q, V, P, u, v, d)
 %
 % SURFDERIVEVAL: Compute the derivatives of a B-spline surface
 % 
-% usage: pkl = surfderiveval (n, p, U, m, q, V, P, d) 
+% usage: skl = surfderiveval (n, p, U, m, q, V, P, u, v, d) 
 %
 %  INPUT: 
 %
