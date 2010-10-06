@@ -34,12 +34,14 @@ B-Spline functions
  tbasisfun
 B-splines geometric entities
  curvederivcpts
+ curvederiveval
  surfderivcpts
  surfderiveval
 NURBS geometric entities and functions
  nrbbasisfun
  nrbbasisfunder
  nrbnumbasisfun
+ nrbcrvderiveval
  nrbsurfderiveval
 Knots construction and refinement
  kntuniform
