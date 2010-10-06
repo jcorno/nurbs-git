@@ -369,4 +369,74 @@ DEFUN_DLD(nrbsurfderiveval, args, nargout,"\
 %! assert (dF(2,3,1,:)(:),  -2*v(:)./(u(:)+1).^3, 10*eps)
 %! assert (dF(2,1,3,:)(:), zeros (size (dF(3,1,3,:)(:))), 10*eps)
 
+%!test
+%! crv = nrbline ([1 0], [2 0]);
+%! srf = nrbrevolve (crv, [0 0 0], [0 0 1], pi/2);
+%! srf = nrbtransp (srf);
+%! [v, u] = meshgrid (linspace (0, 1, 11));
+%! uv = [u(:)'; v(:)'];
+%! skl = nrbsurfderiveval (srf, uv, 2);
+%! c = sqrt(2);
+%! w      = @(x, y) (2 - c)*y.^2 + (c-2)*y + 1;
+%! dwdy   = @(x, y) 2*(2-c)*y + c - 2;
+%! d2wdy2 = @(x, y) 2*(2-c);
+%! F1 = @(x, y) (x+1) .* ((1-y).^2 + c*y.*(1-y)) ./ w(x,y);
+%! F2 = @(x, y) (x+1) .* (y.^2 + c*y.*(1-y)) ./ w(x,y);
+%! dF1dx = @(x, y) ((1-y).^2 + c*y.*(1-y)) ./ w(x,y);
+%! dF2dx = @(x, y) (y.^2 + c*y.*(1-y)) ./ w(x,y);
+%! dF1dy = @(x, y) (x+1) .* ((2 - 2*c)*y + c - 2) ./ w(x,y) - (x+1) .* ((1-y).^2 + c*y.*(1-y)) .* dwdy(x,y) ./ w(x,y).^2;
+%! dF2dy = @(x, y) (x+1) .* ((2 - 2*c)*y + c) ./ w(x,y) - (x+1) .* (y.^2 + c*y.*(1-y)) .* dwdy(x,y) ./ w(x,y).^2;
+%! d2F1dx2 = @(x, y) zeros (size (x));
+%! d2F2dx2 = @(x, y) zeros (size (x));
+%! d2F1dxdy = @(x, y) ((2 - 2*c)*y + c - 2) ./ w(x,y) - ((1-y).^2 + c*y.*(1-y)) .* dwdy(x,y) ./ w(x,y).^2;
+%! d2F2dxdy = @(x, y) ((2 - 2*c)*y + c) ./ w(x,y) - (y.^2 + c*y.*(1-y)) .* dwdy(x,y) ./ w(x,y).^2;
+%! d2F1dy2  = @(x, y) (x+1)*(2 - 2*c) ./ w(x,y) - 2*(x+1) .* ((2 - 2*c)*y + c - 2) .* dwdy(x,y) ./ w(x,y).^2 - ...
+%!                    (x+1) .* ((1-y).^2 + c*y.*(1-y)) * d2wdy2(x,y) ./ w(x,y).^2 + ...
+%!                    2 * (x+1) .* ((1-y).^2 + c*y.*(1-y)) .* w(x,y) .*dwdy(x,y).^2 ./ w(x,y).^4;
+%! d2F2dy2  = @(x, y) (x+1)*(2 - 2*c) ./ w(x,y) - 2*(x+1) .* ((2 - 2*c)*y + c) .* dwdy(x,y) ./ w(x,y).^2 - ...
+%!                    (x+1) .* (y.^2 + c*y.*(1-y)) * d2wdy2(x,y) ./ w(x,y).^2 + ...
+%!                    2 * (x+1) .* (y.^2 + c*y.*(1-y)) .* w(x,y) .*dwdy(x,y).^2 ./ w(x,y).^4;
+%! assert ([F1(u(:),v(:)), F2(u(:),v(:))], squeeze(skl(1:2,1,1,:))', 1e2*eps);
+%! assert ([dF1dx(u(:),v(:)), dF2dx(u(:),v(:))], squeeze(skl(1:2,2,1,:))', 1e2*eps);
+%! assert ([dF1dy(u(:),v(:)), dF2dy(u(:),v(:))], squeeze(skl(1:2,1,2,:))', 1e2*eps);
+%! assert ([d2F1dx2(u(:),v(:)), d2F2dx2(u(:),v(:))], squeeze(skl(1:2,3,1,:))', 1e2*eps);
+%! assert ([d2F1dxdy(u(:),v(:)), d2F2dxdy(u(:),v(:))], squeeze(skl(1:2,2,2,:))', 1e2*eps);
+%! assert ([d2F1dy2(u(:),v(:)), d2F2dy2(u(:),v(:))], squeeze(skl(1:2,1,3,:))', 1e2*eps);
+
+%!test
+%! knots = {[0 0 1 1] [0 0 1 1]};
+%! coefs(:,1,1) = [0;0;0;1];
+%! coefs(:,2,1) = [1;0;0;1];
+%! coefs(:,1,2) = [0;1;0;1];
+%! coefs(:,2,2) = [1;1;1;2];
+%! srf = nrbmak (coefs, knots);
+%! [v, u] = meshgrid (linspace (0, 1, 3));
+%! uv = [u(:)'; v(:)'];
+%! skl = nrbsurfderiveval (srf, uv, 2);
+%! w = @(x, y) x.*y + 1;
+%! F1 = @(x, y) x ./ w(x,y);
+%! F2 = @(x, y) y ./ w(x,y);
+%! F3 = @(x, y) x .* y ./ w(x,y);
+%! dF1dx = @(x, y) 1./w(x,y) - x.*y./w(x,y).^2;
+%! dF1dy = @(x, y)  - x.^2./w(x,y).^2;
+%! dF2dx = @(x, y)  - y.^2./w(x,y).^2;
+%! dF2dy = @(x, y) 1./w(x,y) - x.*y./w(x,y).^2;
+%! dF3dx = @(x, y) y./w(x,y) - x.*(y./w(x,y)).^2;
+%! dF3dy = @(x, y) x./w(x,y) - y.*(x./w(x,y)).^2;
+%! d2F1dx2  = @(x, y) -2*y./w(x,y).^2 + 2*x.*y.^2./w(x,y).^3;
+%! d2F1dy2  = @(x, y) 2*x.^3./w(x,y).^3;
+%! d2F1dxdy = @(x, y) -x./w(x,y).^2 - x./w(x,y).^2 + 2*x.^2.*y./w(x,y).^3;
+%! d2F2dx2  = @(x, y) 2*y.^3./w(x,y).^3;
+%! d2F2dy2  = @(x, y) -2*x./w(x,y).^2 + 2*y.*x.^2./w(x,y).^3;
+%! d2F2dxdy = @(x, y) -y./w(x,y).^2 - y./w(x,y).^2 + 2*y.^2.*x./w(x,y).^3;
+%! d2F3dx2  = @(x, y) -2*y.^2./w(x,y).^2 + 2*x.*y.^3./w(x,y).^3;
+%! d2F3dy2  = @(x, y) -2*x.^2./w(x,y).^2 + 2*y.*x.^3./w(x,y).^3;
+%! d2F3dxdy = @(x, y) 1./w(x,y) - 3*x.*y./w(x,y).^2 + 2*(x.*y).^2./w(x,y).^3;
+%! assert ([F1(u(:),v(:)), F2(u(:),v(:)), F3(u(:),v(:))], squeeze(skl(1:3,1,1,:))', 1e2*eps);
+%! assert ([dF1dx(u(:),v(:)), dF2dx(u(:),v(:)), dF3dx(u(:),v(:))], squeeze(skl(1:3,2,1,:))', 1e2*eps);
+%! assert ([dF1dy(u(:),v(:)), dF2dy(u(:),v(:)), dF3dy(u(:),v(:))], squeeze(skl(1:3,1,2,:))', 1e2*eps);
+%! assert ([d2F1dx2(u(:),v(:)), d2F2dx2(u(:),v(:)), d2F3dx2(u(:),v(:))], squeeze(skl(1:3,3,1,:))', 1e2*eps);
+%! assert ([d2F1dy2(u(:),v(:)), d2F2dy2(u(:),v(:)), d2F3dy2(u(:),v(:))], squeeze(skl(1:3,1,3,:))', 1e2*eps);
+%! assert ([d2F1dxdy(u(:),v(:)), d2F2dxdy(u(:),v(:)), d2F3dxdy(u(:),v(:))], squeeze(skl(1:3,2,2,:))', 1e2*eps);
+
 */
