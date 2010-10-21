@@ -15,9 +15,9 @@ function curve = nrbcirc(radius,center,sang,eang)
 % 
 %   center	: Center of the circle, default (0,0,0)
 % 
-%   sang	: Start angle, default 0 degrees
+%   sang	: Start angle, default 0 radians (0 degrees)
 % 
-%   eang	: End angle 360 degrees
+%   eang	: End angle, default 2*pi radians (360 degrees)
 % 
 % OUTPUT:
 %
