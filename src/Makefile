@@ -12,3 +12,4 @@ low_level_functions.o: low_level_functions.cc
 
 clean:
 	-rm -f *.o core octave-core *.oct *~
+# DO NOT DELETE

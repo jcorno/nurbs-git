@@ -32,8 +32,8 @@ DEFUN_DLD(curvederivcpts, args, nargout,"\
 \n         d   = maximum derivative order (d<=p) \
 \n         U   = knots \
 \n         P   = control points \
-\n         r1  = first control point to compute
-\n         r2  = auxiliary index for the last control point to compute
+\n         r1  = first control point to compute \
+\n         r2  = auxiliary index for the last control point to compute \
 \n\
 \n  OUTPUT: \
 \n         pk(k,i) = i-th control point (k-1)-th derivative, r1 <= i <= r2-k \
