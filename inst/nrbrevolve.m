@@ -1,7 +1,8 @@
 function surf = nrbrevolve(curve,pnt,vec,theta)
 
 % 
-% NRBREVOLVE: Construct a NURBS surface by revolving a NURBS curve.
+% NRBREVOLVE: Construct a NURBS surface by revolving a NURBS curve, or
+%  construct a NURBS volume by revolving a NURBS surface.
 % 
 % Calling Sequence:
 % 
@@ -9,9 +10,9 @@ function surf = nrbrevolve(curve,pnt,vec,theta)
 % 
 % INPUT:
 % 
-%   crv		: NURBS curve to revolve, see nrbmak.
+%   crv		: NURBS curve or surface to revolve, see nrbmak.
 % 
-%   pnt		: Coordinate of the point used to define the axis
+%   pnt		: Coordinates of the point used to define the axis
 %               of rotation.
 % 
 %   vec		: Vector defining the direction of the rotation axis.
@@ -20,7 +21,7 @@ function surf = nrbrevolve(curve,pnt,vec,theta)
 %
 % OUTPUT:
 %
-%   srf		: constructed surface
+%   srf		: constructed surface or volume
 % 
 % Description:
 % 
@@ -57,6 +58,7 @@ function surf = nrbrevolve(curve,pnt,vec,theta)
 %
 %
 %    Copyright (C) 2000 Mark Spink
+%    Copyright (C) 2010 Rafael Vazquez
 %
 %    This program is free software: you can redistribute it and/or modify
 %    it under the terms of the GNU General Public License as published by
@@ -71,16 +73,16 @@ function surf = nrbrevolve(curve,pnt,vec,theta)
 %    You should have received a copy of the GNU General Public License
 %    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-if nargin < 3
+if (nargin < 3)
   error('Not enough arguments to construct revolved surface');
 end
 
-if size(curve.knots,2) == 3
-   error('The function nrbrevolve is not yet ready for volumes') 
+if (nargin < 4)
+  theta = 2.0*pi;
 end
 
-if nargin < 4
-  theta = 2.0*pi;
+if (iscell (curve.knots) && numel(curve.knots) == 3)
+  error('The function nrbrevolve is not yet ready to create volumes') 
 end
 
 % Translate curve the center point to the origin
@@ -92,7 +94,7 @@ if length(pnt) ~= 3
   error('All point and vector coordinates must be 3D');
 end
 
-% Translate and rotate the curve into alignment with the z-axis
+% Translate and rotate the original curve or surface into alignment with the z-axis
 T  = vectrans(-pnt);
 angx = vecangle(vec(1),vec(3));
 RY = vecroty(-angx);
@@ -104,16 +106,31 @@ curve = nrbtform(curve,RX*RY*T);
 % Construct an arc 
 arc = nrbcirc(1.0,[],0.0,theta);
 
-% Construct the surface
-coefs = zeros(4,arc.number,curve.number);
-angle = vecangle(curve.coefs(2,:),curve.coefs(1,:));
-radius = vecmag(curve.coefs(1:2,:));
-for i = 1:curve.number  
-  coefs(:,:,i) = vecrotz(angle(i))*vectrans([0.0 0.0 curve.coefs(3,i)])*...
+if (iscell (curve.knots))
+% Construct the revolved volume
+  coefs = zeros([4 arc.number curve.number]);
+  angle = squeeze (vecangle(curve.coefs(2,:,:),curve.coefs(1,:,:)));
+  radius = squeeze (vecmag(curve.coefs(1:2,:,:)));
+  for i = 1:curve.number(1)  
+    for j = 1:curve.number(2)  
+      coefs(:,:,i,j) = vecrotz(angle(i,j))*vectrans([0.0 0.0 curve.coefs(3,i,j)])*...
+          vecscale([radius(i,j) radius(i,j)])*arc.coefs;
+      coefs(4,:,i,j) = coefs(4,:,i,j)*curve.coefs(4,i,j);
+	end
+  end
+  surf = nrbmak(coefs,{arc.knots, curve.knots{:}});
+else
+% Construct the revolved surface
+  coefs = zeros(4, arc.number, curve.number);
+  angle = vecangle(curve.coefs(2,:),curve.coefs(1,:));
+  radius = vecmag(curve.coefs(1:2,:));
+  for i = 1:curve.number  
+    coefs(:,:,i) = vecrotz(angle(i))*vectrans([0.0 0.0 curve.coefs(3,i)])*...
           vecscale([radius(i) radius(i)])*arc.coefs;
-  coefs(4,:,i) = coefs(4,:,i)*curve.coefs(4,i);
+    coefs(4,:,i) = coefs(4,:,i)*curve.coefs(4,i);
+  end
+  surf = nrbmak(coefs,{arc.knots, curve.knots});
 end
-surf = nrbmak(coefs,{arc.knots, curve.knots});
 
 % Rotate and vectrans the surface back into position
 T = vectrans(pnt);

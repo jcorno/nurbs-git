@@ -1,6 +1,6 @@
 function nurbs = nrbtform(nurbs,tmat)
 % 
-% NRBTFOR: Apply transformation matrix to the NURBS.
+% NRBTFORM: Apply transformation matrix to the NURBS.
 % 
 % Calling Sequence:
 % 
@@ -37,6 +37,7 @@ function nurbs = nrbtform(nurbs,tmat)
 %   vecscale, vectrans, vecrotx, vecroty, vecrotz
 %
 %    Copyright (C) 2000 Mark Spink
+%    Copyright (C) 2010 Rafael Vazquez
 %
 %    This program is free software: you can redistribute it and/or modify
 %    it under the terms of the GNU General Public License as published by
@@ -62,7 +63,8 @@ if iscell(nurbs.knots)
   nurbs.coefs = reshape(tmat*reshape(nurbs.coefs,dim,nu*nv),[dim nu nv]);
  elseif size(nurbs.knots,2) == 3
   % NURBS is a volume
-  error('The function nrbtform is not yet ready for volumes')  
+  [dim,nu,nv,nw] = size(nurbs.coefs);
+  nurbs.coefs = reshape(tmat*reshape(nurbs.coefs,dim,nu*nv*nw),[dim nu nv nw]);
  end
 else
   % NURBS is a curve
