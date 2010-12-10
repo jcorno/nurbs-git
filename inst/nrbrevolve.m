@@ -171,3 +171,10 @@ end
 %! axis equal;
 %! hold off
 
+%!demo
+%! crv1 = nrbcirc(1,[0 0],0, pi/2);
+%! crv2 = nrbcirc(2,[0 0],0, pi/2);
+%! srf = nrbruled (crv1, crv2);
+%! srf = nrbtform (srf, [1 0 0 0; 0 1 0 1; 0 0 1 0; 0 0 0 1]);
+%! vol = nrbrevolve (srf, [0 0 0], [1 0 0], pi/2);
+%! nrbplot(vol, [30 30 30], 'light', 'on')
