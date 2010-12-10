@@ -1,7 +1,8 @@
 function srf = nrbextrude(curve,vector)
 
 %
-% NRBEXTRUDE: Construct a NURBS surface by extruding a NURBS curve.
+% NRBEXTRUDE: Construct a NURBS surface by extruding a NURBS curve, or 
+%  construct a NURBS volume by extruding a NURBS surface.
 % 
 % Calling Sequence:
 % 
@@ -9,21 +10,23 @@ function srf = nrbextrude(curve,vector)
 % 
 % INPUT:
 % 
-%   crv		: NURBS curve to extrude, see nrbmak.
+%   crv		: NURBS curve or surface to extrude, see nrbmak.
 % 
-%   vec		: Vector along which the curve is extruded.
+%   vec		: Vector along which the entity is extruded.
 %
 % OUTPUT: 
 % 
-%   srf		: NURBS surface constructed.
+%   srf		: NURBS surface or volume constructed.
 % 
 % Description:
 % 
-%   Constructs a NURBS surface by extruding a NURBS curve along a defined 
-%   vector. The NURBS curve forms the U direction of the surface edge, and
-%   extruded along the vector in the V direction. Note NURBS surfaces cannot
-%   be extruded.
-% 
+%   Constructs either a NURBS surface by extruding a NURBS curve along a  
+%   defined vector, or a NURBS volume by extruding a NURBS surface. In the 
+%   first case, the NURBS curve forms the U direction of the surface edge, and
+%   is extruded along the vector in the V direction. In the second case, the 
+%   original surface forms the U and V direction of the volume, and is extruded
+%   along the W direction.
+%
 % Examples:
 % 
 %   Form a hollow cylinder by extruding a circle along the z-axis.
@@ -31,6 +34,7 @@ function srf = nrbextrude(curve,vector)
 %   srf = nrbextrude(nrbcirc, [0,0,1]);
 %
 %    Copyright (C) 2000 Mark Spink
+%    Copyright (C) 2010 Rafael Vazquez
 %
 %    This program is free software: you can redistribute it and/or modify
 %    it under the terms of the GNU General Public License as published by
@@ -45,20 +49,23 @@ function srf = nrbextrude(curve,vector)
 %    You should have received a copy of the GNU General Public License
 %    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-if iscell(curve.knots)
-  error('Nurb surfaces cannot be extruded!');
-end
-
-if nargin < 2
+if (nargin < 2)
   error('Error too few input arguments!');
 end
 
-if nargin == 3
-  dz = 0.0;
+if (iscell (curve.knots))
+  if (numel (curve.knots) == 3)
+    error('Nurbs volumes cannot be extruded!');
+  end
+  for ii = 1:size(curve.coefs,3)
+    coefs(:,:,ii) = vectrans(vector) * squeeze (curve.coefs(:,:,ii));
+  end
+  coefs = cat(4,curve.coefs,coefs);
+  srf = nrbmak(coefs,{curve.knots{:}, [0 0 1 1]});
+else
+  coefs = cat(3,curve.coefs,vectrans(vector)*curve.coefs);
+  srf = nrbmak(coefs,{curve.knots, [0 0 1 1]});
 end
-
-coefs = cat(3,curve.coefs,vectrans(vector)*curve.coefs);
-srf = nrbmak(coefs,{curve.knots, [0 0 1 1]});
 
 end
 
@@ -67,4 +74,19 @@ end
 %! srf = nrbextrude(crv,[0 0 5]);
 %! nrbplot(srf,[40 10]);
 %! title('Extrusion of a test curve along the z-axis');
+%! hold off
+%
+%!demo
+%! crv1 = nrbcirc (1, [0 0], 0, pi/2);
+%! crv2 = nrbcirc (2, [0 0], 0, pi/2);
+%! srf  = nrbruled (crv1, crv2);
+%! vol  = nrbextrude (srf, [0 0 1]);
+%! nrbplot (vol, [30 10 10])
+%! title ('Extrusion of the quarter of a ring')
+%
+%!demo
+%! srf = nrbtestsrf;
+%! vol = nrbextrude(srf, [0 0 10]);
+%! nrbplot(vol,[20 20 20]);
+%! title('Extrusion of a test surface along the z-axis');
 %! hold off
