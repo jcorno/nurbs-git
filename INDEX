@@ -15,6 +15,7 @@ Operations for constructing NURBS curves and surfaces
  nrbrect
  nrb4surf
  nrbcylind
+ nrbextract
  nrbextrude
  nrbrevolve
  nrbruled
