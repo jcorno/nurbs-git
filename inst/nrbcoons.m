@@ -70,7 +70,7 @@ function srf = nrbcoons(u1, u2, v1, v2)
 %   srf = nrbcoons(crv1, crv2, crv3, crv4);
 %   nrbplot(srf,[20 20],220,45);
 %
-%    Copyright (C) 2000 Mark Spink, 2010 Rafael Vazquez
+%    Copyright (C) 2000 Mark Spink
 %
 %    This program is free software: you can redistribute it and/or modify
 %    it under the terms of the GNU General Public License as published by
@@ -91,7 +91,7 @@ end
 
 r1 = nrbruled(u1, u2);
 r2 = nrbtransp(nrbruled(v1, v2));
-t  = nrb4surf(u1.coefs(:,1), u2.coefs(:,1), u1.coefs(:,end), u2.coefs(:,end));
+t  = nrb4surf(u1.coefs(:,1), u1.coefs(:,end), u2.coefs(:,1), u2.coefs(:,end));
 
 % raise all surfaces to a common degree
 du = max([r1.order(1), r2.order(1), t.order(1)]);
