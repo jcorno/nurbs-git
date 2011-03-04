@@ -32,7 +32,7 @@ function nrbkntplot(nurbs)
 %    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 if nargin < 1
-  error('Need a NURBS to plot!');
+  error ('nrbkntplot: Need a NURBS to plot!');
 end
 
 % Default values
@@ -43,8 +43,8 @@ colormap (cmap);
 
 hold_flag = ishold;
 
-if (iscell(nurbs.knots))
- if (size(nurbs.knots,2) == 2) % plot a NURBS surface
+if (iscell (nurbs.knots))
+ if (size (nurbs.knots,2) == 2) % plot a NURBS surface
    nsub = 100;
    nrbplot (nurbs, [nsub nsub], 'light', light, 'colormap', cmap);
    hold on
@@ -52,30 +52,30 @@ if (iscell(nurbs.knots))
    % And plot the knots
    knt1 = unique (nurbs.knots{1});
    knt2 = unique (nurbs.knots{2});
-   p1 = nrbeval(nurbs, {knt1, linspace(0.0,1.0,nsub)});
-   p2 = nrbeval(nurbs, {linspace(0.0,1.0,nsub), knt2});
+   p1 = nrbeval (nurbs, {knt1, linspace(0.0,1.0,nsub)});
+   p2 = nrbeval (nurbs, {linspace(0.0,1.0,nsub), knt2});
 
-  if any(nurbs.coefs(3,:))
+  if (any (nurbs.coefs(3,:)))
     % surface in a 3D space
     for ii = 1:numel(knt1)
-      plot3(squeeze(p1(1,ii,:)), squeeze(p1(2,ii,:)), squeeze(p1(3,ii,:)));
+      plot3 (squeeze(p1(1,ii,:)), squeeze(p1(2,ii,:)), squeeze(p1(3,ii,:)));
     end
     for ii = 1:numel(knt2)
-      plot3(squeeze(p2(1,:,ii)), squeeze(p2(2,:,ii)), squeeze(p2(3,:,ii))); 
+      plot3 (squeeze(p2(1,:,ii)), squeeze(p2(2,:,ii)), squeeze(p2(3,:,ii))); 
     end
   else
     % plain surface
     for ii = 1:numel(knt1)
-      plot(squeeze(p1(1,ii,:)), squeeze (p1(2,ii,:))); 
+      plot (squeeze(p1(1,ii,:)), squeeze (p1(2,ii,:))); 
     end
     for ii = 1:numel(knt2)
-      plot(p2(1,:,ii),p2(2,:,ii));
+      plot (p2(1,:,ii),p2(2,:,ii));
     end
   end
 
 
 
- elseif (size(nurbs.knots,2) == 3) % plot a NURBS volume
+ elseif (size (nurbs.knots,2) == 3) % plot a NURBS volume
    nsub = 30;
    nrbplot (nurbs, [nsub nsub nsub], 'light', light, 'colormap', cmap);
    hold on
@@ -84,48 +84,48 @@ if (iscell(nurbs.knots))
    knt1 = unique (nurbs.knots{1});
    knt2 = unique (nurbs.knots{2});
    knt3 = unique (nurbs.knots{3});
-   kv_face1 = nrbeval(nurbs, {0, knt2, linspace(0.0,1.0,nsub)});
-   kw_face1 = nrbeval(nurbs, {0, linspace(0.0,1.0,nsub), knt3});
-   kv_face2 = nrbeval(nurbs, {1, knt2, linspace(0.0,1.0,nsub)});
-   kw_face2 = nrbeval(nurbs, {1, linspace(0.0,1.0,nsub), knt3});
-   ku_face3 = nrbeval(nurbs, {knt1, 0, linspace(0.0,1.0,nsub)});
-   kw_face3 = nrbeval(nurbs, {linspace(0.0,1.0,nsub), 1, knt3});
-   ku_face4 = nrbeval(nurbs, {knt1, 1, linspace(0.0,1.0,nsub)});
-   kw_face4 = nrbeval(nurbs, {linspace(0.0,1.0,nsub), 1, knt3});
-   ku_face5 = nrbeval(nurbs, {knt1, linspace(0.0,1.0,nsub), 0});
-   kv_face5 = nrbeval(nurbs, {linspace(0.0,1.0,nsub), knt2, 0});
-   ku_face6 = nrbeval(nurbs, {knt1, linspace(0.0,1.0,nsub), 1});
-   kv_face6 = nrbeval(nurbs, {linspace(0.0,1.0,nsub), knt2, 1});
+   kv_face1 = nrbeval (nurbs, {0, knt2, linspace(0.0,1.0,nsub)});
+   kw_face1 = nrbeval (nurbs, {0, linspace(0.0,1.0,nsub), knt3});
+   kv_face2 = nrbeval (nurbs, {1, knt2, linspace(0.0,1.0,nsub)});
+   kw_face2 = nrbeval (nurbs, {1, linspace(0.0,1.0,nsub), knt3});
+   ku_face3 = nrbeval (nurbs, {knt1, 0, linspace(0.0,1.0,nsub)});
+   kw_face3 = nrbeval (nurbs, {linspace(0.0,1.0,nsub), 1, knt3});
+   ku_face4 = nrbeval (nurbs, {knt1, 1, linspace(0.0,1.0,nsub)});
+   kw_face4 = nrbeval (nurbs, {linspace(0.0,1.0,nsub), 1, knt3});
+   ku_face5 = nrbeval (nurbs, {knt1, linspace(0.0,1.0,nsub), 0});
+   kv_face5 = nrbeval (nurbs, {linspace(0.0,1.0,nsub), knt2, 0});
+   ku_face6 = nrbeval (nurbs, {knt1, linspace(0.0,1.0,nsub), 1});
+   kv_face6 = nrbeval (nurbs, {linspace(0.0,1.0,nsub), knt2, 1});
 
    for ii = 1:numel(knt1)
-     plot3(squeeze(ku_face3(1,ii,:,:)), squeeze(ku_face3(2,ii,:,:)), ...
-           squeeze(ku_face3(3,ii,:,:))); 
-     plot3(squeeze(ku_face4(1,ii,:,:)), squeeze(ku_face4(2,ii,:,:)), ...
-           squeeze(ku_face4(3,ii,:,:))); 
-     plot3(squeeze(ku_face5(1,ii,:,:)), squeeze(ku_face5(2,ii,:,:)), ...
-           squeeze(ku_face5(3,ii,:,:))); 
-     plot3(squeeze(ku_face6(1,ii,:,:)), squeeze(ku_face6(2,ii,:,:)), ...
-           squeeze(ku_face6(3,ii,:,:))); 
+     plot3 (squeeze(ku_face3(1,ii,:,:)), squeeze(ku_face3(2,ii,:,:)), ...
+            squeeze(ku_face3(3,ii,:,:))); 
+     plot3 (squeeze(ku_face4(1,ii,:,:)), squeeze(ku_face4(2,ii,:,:)), ...
+            squeeze(ku_face4(3,ii,:,:))); 
+     plot3 (squeeze(ku_face5(1,ii,:,:)), squeeze(ku_face5(2,ii,:,:)), ...
+            squeeze(ku_face5(3,ii,:,:))); 
+     plot3 (squeeze(ku_face6(1,ii,:,:)), squeeze(ku_face6(2,ii,:,:)), ...
+            squeeze(ku_face6(3,ii,:,:))); 
    end
    for ii = 1:numel(knt2)
-     plot3(squeeze(kv_face1(1,:,ii,:)), squeeze(kv_face1(2,:,ii,:)), ...
-           squeeze(kv_face1(3,:,ii,:))); 
-     plot3(squeeze(kv_face2(1,:,ii,:)), squeeze(kv_face2(2,:,ii,:)), ...
-           squeeze(kv_face2(3,:,ii,:))); 
-     plot3(squeeze(kv_face5(1,:,ii,:)), squeeze(kv_face5(2,:,ii,:)), ...
-           squeeze(kv_face5(3,:,ii,:))); 
-     plot3(squeeze(kv_face6(1,:,ii,:)), squeeze(kv_face6(2,:,ii,:)), ...
-           squeeze(kv_face6(3,:,ii,:))); 
+     plot3 (squeeze(kv_face1(1,:,ii,:)), squeeze(kv_face1(2,:,ii,:)), ...
+            squeeze(kv_face1(3,:,ii,:))); 
+     plot3 (squeeze(kv_face2(1,:,ii,:)), squeeze(kv_face2(2,:,ii,:)), ...
+            squeeze(kv_face2(3,:,ii,:))); 
+     plot3 (squeeze(kv_face5(1,:,ii,:)), squeeze(kv_face5(2,:,ii,:)), ...
+            squeeze(kv_face5(3,:,ii,:))); 
+     plot3 (squeeze(kv_face6(1,:,ii,:)), squeeze(kv_face6(2,:,ii,:)), ...
+            squeeze(kv_face6(3,:,ii,:))); 
    end
    for ii = 1:numel(knt3)
-     plot3(squeeze(kw_face1(1,:,:,ii)), squeeze(kw_face1(2,:,:,ii)), ...
-           squeeze(kw_face1(3,:,:,ii))); 
-     plot3(squeeze(kw_face2(1,:,:,ii)), squeeze(kw_face2(2,:,:,ii)), ...
-           squeeze(kw_face2(3,:,:,ii))); 
-     plot3(squeeze(kw_face3(1,:,:,ii)), squeeze(kw_face3(2,:,:,ii)), ...
-           squeeze(kw_face3(3,:,:,ii))); 
-     plot3(squeeze(kw_face4(1,:,:,ii)), squeeze(kw_face4(2,:,:,ii)), ...
-           squeeze(kw_face4(3,:,:,ii))); 
+     plot3 (squeeze(kw_face1(1,:,:,ii)), squeeze(kw_face1(2,:,:,ii)), ...
+            squeeze(kw_face1(3,:,:,ii))); 
+     plot3 (squeeze(kw_face2(1,:,:,ii)), squeeze(kw_face2(2,:,:,ii)), ...
+            squeeze(kw_face2(3,:,:,ii))); 
+     plot3 (squeeze(kw_face3(1,:,:,ii)), squeeze(kw_face3(2,:,:,ii)), ...
+            squeeze(kw_face3(3,:,:,ii))); 
+     plot3 (squeeze(kw_face4(1,:,:,ii)), squeeze(kw_face4(2,:,:,ii)), ...
+            squeeze(kw_face4(3,:,:,ii))); 
    end
  end
 
@@ -137,7 +137,7 @@ else % plot a NURBS curve
   % And plot the knots
    p = nrbeval (nurbs, unique (nurbs.knots));
 
-   if any(nurbs.coefs(3,:)) % plot a 3D curve
+   if (any (nurbs.coefs(3,:))) % plot a 3D curve
      plot3 (p(1,:), p(2,:), p(3,:), 'x'); 
    else                     % plot a 2D curve
      plot (p(1,:), p(2,:), 'x'); 
