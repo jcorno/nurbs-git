@@ -1,11 +1,11 @@
-function nrbplot(nurbs,subd,varargin)
+function nrbplot (nurbs, subd, varargin)
 % 
 % NRBPLOT: Plot a NURBS curve or surface, or the boundary of a NURBS volume.
 % 
 % Calling Sequence:
 % 
-%   nrbplot(nrb,subd)
-%   nrbplot(nrb,subd,p,v)
+%   nrbplot (nrb, subd)
+%   nrbplot (nrb, subd, p, v)
 % 
 % INPUT:
 % 
@@ -48,9 +48,9 @@ function nrbplot(nurbs,subd,varargin)
 
 nargs = nargin;
 if nargs < 2
-  error('Need a NURBS to plot and the number of subdivisions!');
+  error ('Need a NURBS to plot and the number of subdivisions!');
 elseif rem(nargs+2,2)
-  error('Param value pairs expected')
+  error ('Param value pairs expected')
 end
 
 % Default values
@@ -61,71 +61,71 @@ cmap='summer';
 for i=1:2:nargs-2
   Param = varargin{i};
   Value = varargin{i+1};
-  if ~ischar(Param)
-    error('Parameter must be a string')
+  if (~ischar (Param))
+    error ('Parameter must be a string')
   elseif size(Param,1)~=1
-    error('Parameter must be a non-empty single row string.')
+    error ('Parameter must be a non-empty single row string.')
   end
-  switch lower(Param)
+  switch lower (Param)
   case 'light'
-    light = lower(Value);
-    if ~ischar(light)
-      error('light must be a string.')
+    light = lower (Value);
+    if (~ischar (light))
+      error ('light must be a string.')
     elseif ~(strcmp(light,'off') | strcmp(light,'on'))
-      error('light must be off | on')
+      error ('light must be off | on')
     end
   case 'colormap'
-    if ischar(Value)
+    if ischar (Value)
       cmap = lower(Value);
-    elseif size(Value,2) ~= 3
-      error('colormap must be a string or have exactly three columns.')
+    elseif size (Value, 2) ~= 3
+      error ('colormap must be a string or have exactly three columns.')
     else
       cmap=Value;
     end
   otherwise
-    error(['Unknown parameter: ' Param])
+    error ('Unknown parameter: %s', Param)
   end
 end
 
-colormap(cmap);
+colormap (cmap);
 
 % convert the number of subdivisions in number of points
 subd = subd+1;
 
 % plot the curve or surface
-if iscell(nurbs.knots)
- if size(nurbs.knots,2) == 2 % plot a NURBS surface
-  p = nrbeval(nurbs,{linspace(0.0,1.0,subd(1)) linspace(0.0,1.0,subd(2))});
-  if strcmp(light,'on') 
+if (iscell (nurbs.knots))
+ if (size (nurbs.knots,2) == 2) % plot a NURBS surface
+  p = nrbeval (nurbs, {linspace(0.0,1.0,subd(1)) linspace(0.0,1.0,subd(2))});
+  if (strcmp (light,'on'))
     % light surface
-    surfl(squeeze(p(1,:,:)),squeeze(p(2,:,:)),squeeze(p(3,:,:)));
+    surfl (squeeze(p(1,:,:)), squeeze(p(2,:,:)), squeeze(p(3,:,:)));
     shading interp;
   else 
-    surf(squeeze(p(1,:,:)),squeeze(p(2,:,:)),squeeze(p(3,:,:)));
+    surf (squeeze (p(1,:,:)), squeeze (p(2,:,:)), squeeze (p(3,:,:)));
     shading faceted;
   end
- elseif size(nurbs.knots,2) == 3 % plot the boundaries of a NURBS volume
+ elseif (size (nurbs.knots,2) == 3) % plot the boundaries of a NURBS volume
   hold_flag = ishold;
-  px = nrbeval(nurbs,{[0 1] linspace(0.0,1.0,subd(2)) linspace(0.0,1.0,subd(3))});
-  py = nrbeval(nurbs,{linspace(0.0,1.0,subd(1)) [0 1] linspace(0.0,1.0,subd(3))});
-  pz = nrbeval(nurbs,{linspace(0.0,1.0,subd(1)) linspace(0.0,1.0,subd(2)) [0 1]});
-  if strcmp(light,'on') 
-    surfl(squeeze(pz(1,:,:,1)),squeeze(pz(2,:,:,1)),squeeze(pz(3,:,:,1)));
+  px = nrbeval (nurbs, {[0 1] linspace(0.0,1.0,subd(2)) linspace(0.0,1.0,subd(3))});
+  py = nrbeval (nurbs, {linspace(0.0,1.0,subd(1)) [0 1] linspace(0.0,1.0,subd(3))});
+  pz = nrbeval (nurbs, {linspace(0.0,1.0,subd(1)) linspace(0.0,1.0,subd(2)) [0 1]});
+  if (strcmp (light, 'on'))
+    surfl (squeeze (pz(1,:,:,1)), squeeze (pz(2,:,:,1)), squeeze (pz(3,:,:,1)));
     hold on
-    surfl(squeeze(pz(1,:,:,2)),squeeze(pz(2,:,:,2)),squeeze(pz(3,:,:,2)));
-    surfl(squeeze(py(1,:,1,:)),squeeze(py(2,:,1,:)),squeeze(py(3,:,1,:)));
-    surfl(squeeze(py(1,:,2,:)),squeeze(py(2,:,2,:)),squeeze(py(3,:,2,:)));
-    surfl(squeeze(px(1,1,:,:)),squeeze(px(2,1,:,:)),squeeze(px(3,1,:,:)));
-    surfl(squeeze(px(1,2,:,:)),squeeze(px(2,2,:,:)),squeeze(px(3,2,:,:)));
+    surfl (squeeze (pz(1,:,:,2)), squeeze (pz(2,:,:,2)), squeeze (pz(3,:,:,2)));
+    surfl (squeeze (py(1,:,1,:)), squeeze (py(2,:,1,:)), squeeze (py(3,:,1,:)));
+    surfl (squeeze (py(1,:,2,:)), squeeze (py(2,:,2,:)), squeeze (py(3,:,2,:)));
+    surfl (squeeze (px(1,1,:,:)), squeeze (px(2,1,:,:)), squeeze (px(3,1,:,:)));
+    surfl (squeeze (px(1,2,:,:)), squeeze (px(2,2,:,:)), squeeze (px(3,2,:,:)));
     shading interp;
   else
-    surf(squeeze(pz(1,:,:,1)),squeeze(pz(2,:,:,1)),squeeze(pz(3,:,:,1)));
+    surf (squeeze (pz(1,:,:,1)), squeeze (pz(2,:,:,1)), squeeze (pz(3,:,:,1)));
     hold on
-    surf(squeeze(pz(1,:,:,2)),squeeze(pz(2,:,:,2)),squeeze(pz(3,:,:,2)));
-    surf(squeeze(py(1,:,1,:)),squeeze(py(2,:,1,:)),squeeze(py(3,:,1,:)));
-    surf(squeeze(py(1,:,2,:)),squeeze(py(2,:,2,:)),squeeze(py(3,:,2,:)));
-    surf(squeeze(px(1,1,:,:)),squeeze(px(2,1,:,:)),squeeze(px(3,1,:,:)));
-    surf(squeeze(px(1,2,:,:)),squeeze(px(2,2,:,:)),squeeze(px(3,2,:,:)));
+    surf (squeeze (pz(1,:,:,2)), squeeze (pz(2,:,:,2)), squeeze (pz(3,:,:,2)));
+    surf (squeeze (py(1,:,1,:)), squeeze (py(2,:,1,:)), squeeze (py(3,:,1,:)));
+    surf (squeeze (py(1,:,2,:)), squeeze (py(2,:,2,:)), squeeze (py(3,:,2,:)));
+    surf (squeeze (px(1,1,:,:)), squeeze (px(2,1,:,:)), squeeze (px(3,1,:,:)));
+    surf (squeeze (px(1,2,:,:)), squeeze (px(2,2,:,:)), squeeze (px(3,2,:,:)));
     shading faceted;
   end
   
@@ -134,19 +134,19 @@ if iscell(nurbs.knots)
   end
  
  else
-  error('nrbplot: some argument is not correct')
+  error ('nrbplot: some argument is not correct')
  end
 else
   % plot a NURBS curve
-  p = nrbeval(nurbs,linspace(0.0,1.0,subd));
+  p = nrbeval (nurbs, linspace (0.0, 1.0, subd));
 
-  if any(nurbs.coefs(3,:))
+  if (any (nurbs.coefs(3,:)))
     % 3D curve
-    plot3(p(1,:),p(2,:),p(3,:)); 
+    plot3 (p(1,:), p(2,:), p(3,:)); 
     grid on;
   else
     % 2D curve
-    plot(p(1,:),p(2,:));
+    plot (p(1,:), p(2,:));
   end
 end
 axis equal;

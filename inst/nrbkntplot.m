@@ -1,5 +1,5 @@
-function nrbkntplot(nurbs)
-% 
+function nrbkntplot (nurbs)
+
 % NRBKNTPLOT: Plot a NURBS entity with the knots subdivision.
 % 
 % Calling Sequence:
@@ -98,34 +98,22 @@ if (iscell (nurbs.knots))
    kv_face6 = nrbeval (nurbs, {linspace(0.0,1.0,nsub), knt2, 1});
 
    for ii = 1:numel(knt1)
-     plot3 (squeeze(ku_face3(1,ii,:,:)), squeeze(ku_face3(2,ii,:,:)), ...
-            squeeze(ku_face3(3,ii,:,:))); 
-     plot3 (squeeze(ku_face4(1,ii,:,:)), squeeze(ku_face4(2,ii,:,:)), ...
-            squeeze(ku_face4(3,ii,:,:))); 
-     plot3 (squeeze(ku_face5(1,ii,:,:)), squeeze(ku_face5(2,ii,:,:)), ...
-            squeeze(ku_face5(3,ii,:,:))); 
-     plot3 (squeeze(ku_face6(1,ii,:,:)), squeeze(ku_face6(2,ii,:,:)), ...
-            squeeze(ku_face6(3,ii,:,:))); 
+     plot3 (squeeze (ku_face3(1,ii,:,:)), squeeze (ku_face3(2,ii,:,:)), squeeze (ku_face3(3,ii,:,:))); 
+     plot3 (squeeze (ku_face4(1,ii,:,:)), squeeze (ku_face4(2,ii,:,:)), squeeze (ku_face4(3,ii,:,:))); 
+     plot3 (squeeze (ku_face5(1,ii,:,:)), squeeze (ku_face5(2,ii,:,:)), squeeze (ku_face5(3,ii,:,:))); 
+     plot3 (squeeze (ku_face6(1,ii,:,:)), squeeze (ku_face6(2,ii,:,:)), squeeze (ku_face6(3,ii,:,:))); 
    end
    for ii = 1:numel(knt2)
-     plot3 (squeeze(kv_face1(1,:,ii,:)), squeeze(kv_face1(2,:,ii,:)), ...
-            squeeze(kv_face1(3,:,ii,:))); 
-     plot3 (squeeze(kv_face2(1,:,ii,:)), squeeze(kv_face2(2,:,ii,:)), ...
-            squeeze(kv_face2(3,:,ii,:))); 
-     plot3 (squeeze(kv_face5(1,:,ii,:)), squeeze(kv_face5(2,:,ii,:)), ...
-            squeeze(kv_face5(3,:,ii,:))); 
-     plot3 (squeeze(kv_face6(1,:,ii,:)), squeeze(kv_face6(2,:,ii,:)), ...
-            squeeze(kv_face6(3,:,ii,:))); 
+     plot3 (squeeze (kv_face1(1,:,ii,:)), squeeze (kv_face1(2,:,ii,:)), squeeze (kv_face1(3,:,ii,:))); 
+     plot3 (squeeze (kv_face2(1,:,ii,:)), squeeze (kv_face2(2,:,ii,:)), squeeze (kv_face2(3,:,ii,:))); 
+     plot3 (squeeze (kv_face5(1,:,ii,:)), squeeze (kv_face5(2,:,ii,:)), squeeze (kv_face5(3,:,ii,:))); 
+     plot3 (squeeze (kv_face6(1,:,ii,:)), squeeze (kv_face6(2,:,ii,:)), squeeze (kv_face6(3,:,ii,:))); 
    end
    for ii = 1:numel(knt3)
-     plot3 (squeeze(kw_face1(1,:,:,ii)), squeeze(kw_face1(2,:,:,ii)), ...
-            squeeze(kw_face1(3,:,:,ii))); 
-     plot3 (squeeze(kw_face2(1,:,:,ii)), squeeze(kw_face2(2,:,:,ii)), ...
-            squeeze(kw_face2(3,:,:,ii))); 
-     plot3 (squeeze(kw_face3(1,:,:,ii)), squeeze(kw_face3(2,:,:,ii)), ...
-            squeeze(kw_face3(3,:,:,ii))); 
-     plot3 (squeeze(kw_face4(1,:,:,ii)), squeeze(kw_face4(2,:,:,ii)), ...
-            squeeze(kw_face4(3,:,:,ii))); 
+     plot3 (squeeze (kw_face1(1,:,:,ii)), squeeze(kw_face1(2,:,:,ii)), squeeze (kw_face1(3,:,:,ii))); 
+     plot3 (squeeze (kw_face2(1,:,:,ii)), squeeze(kw_face2(2,:,:,ii)), squeeze (kw_face2(3,:,:,ii))); 
+     plot3 (squeeze (kw_face3(1,:,:,ii)), squeeze(kw_face3(2,:,:,ii)), squeeze (kw_face3(3,:,:,ii))); 
+     plot3 (squeeze (kw_face4(1,:,:,ii)), squeeze(kw_face4(2,:,:,ii)), squeeze (kw_face4(3,:,:,ii))); 
    end
  end
 
