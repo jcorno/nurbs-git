@@ -56,7 +56,7 @@ if nargin ~= 4
   error('Four corner points must be defined'); 
 end
 
-coefs = cat (1, zeros(3,2,2); ones(1,2,2));
+coefs = cat (1, zeros (3,2,2), ones (1,2,2));
 coefs(1:length(p11),1,1) = p11(:);    
 coefs(1:length(p12),2,1) = p12(:);
 coefs(1:length(p21),1,2) = p21(:);
