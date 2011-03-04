@@ -16,6 +16,7 @@
 
 #include <octave/oct.h>
 #include "low_level_functions.h"
+#include <omp.h>
 
 static bool bspeval_bad_arguments(const octave_value_list& args);
 
@@ -43,7 +44,7 @@ DEFUN_DLD(bspeval, args, nargout,"\
   octave_value_list retval;
   if (!bspeval_bad_arguments (args))
     {      
-      int       d = args(0).int_value();
+      int             d = args(0).int_value();
       const Matrix    c = args(1).matrix_value();
       const RowVector k = args(2).row_vector_value();
       const NDArray   u = args(3).array_value();
@@ -53,29 +54,33 @@ DEFUN_DLD(bspeval, args, nargout,"\
         nc = c.cols();
       
       Matrix p(mc, nu, 0.0);
-      RowVector N(d+1,0.0);
       
       if (!error_state)
         {
           if (nc + d == k.length() - 1) 
             {	 
-              int s, tmp1;
-              double tmp2;
-              
-              for (octave_idx_type col(0); col<nu; col++)
-                {	
-                  s = findspan(nc-1, d, u(col), k);
-                  basisfun(s, u(col), d, k, N);    
-                  tmp1 = s - d;                
-                  for (octave_idx_type row(0); row<mc; row++)
-                    {
-                      tmp2 = 0.0;
-                      for ( octave_idx_type i(0); i<=d; i++)                   
-                        tmp2 +=  N(i)*c(row,tmp1+i);	  
-                      p(row,col) = tmp2;
-                    }             
-                }   
-            } 
+#pragma omp parallel default (none) shared (d, c, k, u, nu, mc, nc, p)
+              {
+                RowVector N(d+1,0.0);
+                int s, tmp1;
+                double tmp2;
+#pragma omp for 
+                for (octave_idx_type col=0; col<nu; col++)
+                  {	
+                    //printf ("thread %d, col %d\n", omp_get_thread_num (), col);
+                    s = findspan (nc-1, d, u(col), k);
+                    basisfun (s, u(col), d, k, N);    
+                    tmp1 = s - d;                
+                    for (octave_idx_type row(0); row<mc; row++)
+                      {
+                        tmp2 = 0.0;
+                        for ( octave_idx_type i(0); i<=d; i++)                   
+                          tmp2 +=  N(i)*c(row,tmp1+i);	  
+                        p(row,col) = tmp2;
+                      }             
+                  }   
+              }// end omp 
+            }
           else 
             {
               error("inconsistent bspline data, d + columns(c) != length(k) - 1.");
