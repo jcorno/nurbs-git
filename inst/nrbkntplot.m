@@ -89,7 +89,7 @@ if (iscell (nurbs.knots))
    kv_face2 = nrbeval (nurbs, {1, knt2, linspace(0.0,1.0,nsub)});
    kw_face2 = nrbeval (nurbs, {1, linspace(0.0,1.0,nsub), knt3});
    ku_face3 = nrbeval (nurbs, {knt1, 0, linspace(0.0,1.0,nsub)});
-   kw_face3 = nrbeval (nurbs, {linspace(0.0,1.0,nsub), 1, knt3});
+   kw_face3 = nrbeval (nurbs, {linspace(0.0,1.0,nsub), 0, knt3});
    ku_face4 = nrbeval (nurbs, {knt1, 1, linspace(0.0,1.0,nsub)});
    kw_face4 = nrbeval (nurbs, {linspace(0.0,1.0,nsub), 1, knt3});
    ku_face5 = nrbeval (nurbs, {knt1, linspace(0.0,1.0,nsub), 0});
