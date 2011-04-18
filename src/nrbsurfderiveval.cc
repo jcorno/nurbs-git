@@ -97,7 +97,7 @@ DEFUN_DLD(nrbsurfderiveval, args, nargout,"\
 
   if (! error_state)
     {
-      Array<octave_idx_type> idxta (4, 0);
+      Array<octave_idx_type> idxta (dim_vector (4, 1), 0);
       dim_vector idxa; idxa.resize (4);
       idxa(0) = 3; idxa(1) = d+1; 
       idxa(2) = d+1; idxa(3) = uv.columns (); 
@@ -118,7 +118,7 @@ DEFUN_DLD(nrbsurfderiveval, args, nargout,"\
       
       NDArray coefs  = srf.contents("coefs")(0).array_value();
       
-      Array<idx_vector> idx(3, idx_vector(':'));	 
+      Array<idx_vector> idx(dim_vector (3, 1), idx_vector(':'));	 
       idx (0) = idx_vector (3);
       Matrix weights (NDArray (coefs.index (idx).squeeze ()).matrix_value ());
 

@@ -261,9 +261,13 @@ int surfderivcpts (octave_idx_type n, octave_idx_type  p, const RowVector& U,
   
   octave_idx_type du = d <= p ? d : p;   
   octave_idx_type dv = d <= q ? d : q; 
-  Array<octave_idx_type> idxta (4, 0);
-  Array<idx_vector> idxva (4, idx_vector (':'));
-  dim_vector idxa; idxa.resize (4);
+  
+  dim_vector idxa (4, 1);
+
+  Array<octave_idx_type> idxta (idxa, 0);
+  Array<idx_vector> idxva (idxa, idx_vector (':'));
+  
+  idxa.resize (4);
   idxa(0) = (du+1); idxa(1) = (dv+1); 
   idxa(2) = (r+1);  idxa(3) = (s+1); 
   
@@ -324,7 +328,8 @@ int surfderiveval (octave_idx_type n, octave_idx_type p, const RowVector &U,
 		   Matrix &skl)
 {
 
-  Array<octave_idx_type> idx(4, 0);
+  
+  Array<octave_idx_type> idx(dim_vector (4, 1), 0);
   octave_idx_type du = d <= p ? d: p;   
   octave_idx_type dv = d <= q ? d: q;
   

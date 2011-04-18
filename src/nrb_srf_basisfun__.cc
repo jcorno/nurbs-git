@@ -39,7 +39,7 @@ DEFUN_DLD(nrb_srf_basisfun__, args, nargout,"\
       octave_idx_type p = (nrb.contents("order")(0).vector_value())(0) - 1;    // p    = nrb.order(1) -1;
       octave_idx_type q = (nrb.contents("order")(0).vector_value())(1) - 1;    // q    = nrb.order(2) -1;
 
-      Array<idx_vector> idx(2, idx_vector(':')); 
+      Array<idx_vector> idx(dim_vector (2, 1), idx_vector(':')); 
       idx(0) = 0;
       const NDArray u(points.index (idx).squeeze ()); // u = points(1,:);
 
@@ -56,7 +56,7 @@ DEFUN_DLD(nrb_srf_basisfun__, args, nargout,"\
 
       const RowVector V(knots(1).row_vector_value ()); // V = nrb.knots{2};
       
-      Array<idx_vector> idx2(3, idx_vector(':')); idx2(0) = 3;
+      Array<idx_vector> idx2(dim_vector (3, 1), idx_vector(':')); idx2(0) = 3;
       NDArray w (coefs.index (idx2).squeeze ()); // w = squeeze(nrb.coefs(4,:,:));
       
       RowVector spu(u);
