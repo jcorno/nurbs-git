@@ -82,7 +82,7 @@ DEFUN_DLD(surfderivcpts, args, nargout,"\
 
 /*
 %!test
-%! plane = nrbdegelev(nrb4surf([0 0], [1 0], [0 1], [1 1]), [1, 1]);
+%! plane = nrbdegelev(nrb4surf([0 0], [0 1], [1 0], [1 1]), [1, 1]);
 %! 
 %! pkl = surfderivcpts (plane.number(1)-1, plane.order(1)-1,
 %!                       plane.knots{1}, plane.number(2)-1,
