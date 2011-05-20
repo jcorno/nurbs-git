@@ -1,6 +1,6 @@
 function [p,w] = nrbeval(nurbs,tt)
 % 
-% NRBEVAL: Evaluate a NURBS at parameteric points.
+% NRBEVAL: Evaluate a NURBS at parametric points.
 % 
 % Calling Sequences:
 % 
@@ -126,7 +126,7 @@ if iscell(nurbs.knots)
     %% evaluate along the u direction
     pnts = zeros(4,nt);
     for v = 1:nt
-      coefs = squeeze(val2(:,:,v));
+      coefs = reshape (val2(:,:,v), [4 num1]);
       pnts(:,v) = bspeval(degree(1),coefs,nurbs.knots{1},tt(1,v));
     end
 
@@ -193,7 +193,7 @@ if iscell(nurbs.knots)
       %% evaluate along the u direction
       pnts = zeros(4,nt);
       for v = 1:nt
-	coefs = squeeze(val(:,:,v));
+	coefs = reshape (val(:,:,v), [4 num1]);
 	pnts(:,v) = bspeval(degree(1),coefs,nurbs.knots{1},tt(1,v));
       end
 
