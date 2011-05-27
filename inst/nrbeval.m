@@ -55,8 +55,8 @@ function [p,w] = nrbeval(nurbs,tt)
 %     bspeval
 %
 % Copyright (C) 2000 Mark Spink 
-% Copyright (C) 2010 Rafael Vazquez
 % Copyright (C) 2010 Carlo de Falco
+% Copyright (C) 2010, 2011 Rafael Vazquez
 %
 %    This program is free software: you can redistribute it and/or modify
 %    it under the terms of the GNU General Public License as published by
@@ -71,25 +71,25 @@ function [p,w] = nrbeval(nurbs,tt)
 %    You should have received a copy of the GNU General Public License
 %    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-if nargin < 2
+if (nargin < 2)
   error('Not enough input arguments');
 end
 
 foption = 1;    % output format 3D cartesian coordinates
-if nargout == 2
+if (nargout == 2)
   foption = 0;  % output format 4D homogenous coordinates 
 end
    
-if ~isstruct(nurbs)
+if (~isstruct(nurbs))
   error('NURBS representation is not structure!');
 end
 
-if ~strcmp(nurbs.form,'B-NURBS')
+if (~strcmp(nurbs.form,'B-NURBS'))
   error('Not a recognised NURBS representation');
 end
 
-if iscell(nurbs.knots)
-  if size(nurbs.knots,2) == 3
+if (iscell(nurbs.knots))
+  if (size(nurbs.knots,2) == 3)
     %% NURBS structure represents a volume
 
     num1 = nurbs.number(1);
@@ -97,61 +97,80 @@ if iscell(nurbs.knots)
     num3 = nurbs.number(3);
     degree = nurbs.order-1;
 
-    scattered = true;
-    if iscell(tt)
-      [tty, ttx, ttz] = meshgrid (tt{2}, tt{1}, tt{3});
-      tt = [ttx(:)'; tty(:)'; ttz(:)'];
-      scattered = false;
-    end
+    if (iscell(tt))
+      nt1 = numel (tt{1});
+      nt2 = numel (tt{2});
+      nt3 = numel (tt{3});
 
-    %% Evaluate at scattered points
-    %% tt(1,:) represents the u direction
-    %% tt(2,:) represents the v direction
-    %% tt(3,:) represents the w direction
+      %% evaluate along the w direction
+      val = reshape (nurbs.coefs, 4*num1*num2, num3);
+      val = bspeval (degree(3), val, nurbs.knots{3}, tt{3});
+      val = reshape (val, [4 num1 num2 nt3]);
 
-    %% evaluate along the w direction
-    nt = size(tt,2);
-    val = reshape(nurbs.coefs,4*num1*num2,num3);
-    val = bspeval(degree(3),val,nurbs.knots{3},tt(3,:));
-    val = reshape(val,[4 num1 num2 nt]);
+      %% Evaluate along the v direction
+      val = permute (val, [1 2 4 3]);
+      val = reshape (val, 4*num1*nt3, num2);
+      val = bspeval (degree(2), val, nurbs.knots{2}, tt{2});
+      val = reshape (val, [4 num1 nt3 nt2]);
+      val = permute (val, [1 2 4 3]);
 
-    %% evaluate along the v direction
-    val2 = zeros(4*num1,nt);
-    for v = 1:nt
-      coefs = reshape(val(:,:,:,v),4*num1,num2);
-      val2(:,v) = bspeval(degree(2),coefs,nurbs.knots{2},tt(2,v));
-    end
-    val2 = reshape(val2,[4 num1 nt]);
+      %% Evaluate along the u direction
+      val = permute (val, [1 3 4 2]);
+      val = reshape (val, 4*nt2*nt3, num1);
+      val = bspeval (degree(1), val, nurbs.knots{1}, tt{1});
+      val = reshape (val, [4 nt2 nt3 nt1]);
+      val = permute (val, [1 4 2 3]);
+      pnts = val;
 
-    %% evaluate along the u direction
-    pnts = zeros(4,nt);
-    for v = 1:nt
-      coefs = reshape (val2(:,:,v), [4 num1]);
-      pnts(:,v) = bspeval(degree(1),coefs,nurbs.knots{1},tt(1,v));
-    end
-
-    if (~scattered)
-      p = reshape (pnts(1:3,:), [3 size(ttx)]);
-      w = reshape (pnts(4,:), [1 size(ttx)]);
-      if foption
+      p = pnts(1:3,:,:,:);
+      w = pnts(4,:,:,:);
+      if (foption)
         p = p./repmat(w,[3 1 1 1]);
       end
+
     else
+
+      %% Evaluate at scattered points
+      %% tt(1,:) represents the u direction
+      %% tt(2,:) represents the v direction
+      %% tt(3,:) represents the w direction
+
+      %% evaluate along the w direction
+      nt = size(tt,2);
+      val = reshape(nurbs.coefs,4*num1*num2,num3);
+      val = bspeval(degree(3),val,nurbs.knots{3},tt(3,:));
+      val = reshape(val,[4 num1 num2 nt]);
+
+      %% evaluate along the v direction
+      val2 = zeros(4*num1,nt);
+      for v = 1:nt
+        coefs = reshape(val(:,:,:,v),4*num1,num2);
+        val2(:,v) = bspeval(degree(2),coefs,nurbs.knots{2},tt(2,v));
+      end
+      val2 = reshape(val2,[4 num1 nt]);
+
+      %% evaluate along the u direction
+      pnts = zeros(4,nt);
+      for v = 1:nt
+        coefs = reshape (val2(:,:,v), [4 num1]);
+        pnts(:,v) = bspeval(degree(1),coefs,nurbs.knots{1},tt(1,v));
+      end
+
       w = pnts(4,:);
       p = pnts(1:3,:);
-      if foption
+      if (foption)
         p = p./repmat(w,[3, 1]);
       end
     end
 
-  elseif size(nurbs.knots,2) == 2
+  elseif (size(nurbs.knots,2) == 2)
     %% NURBS structure represents a surface
   
     num1 = nurbs.number(1);
     num2 = nurbs.number(2);
     degree = nurbs.order-1;
 
-    if iscell(tt)
+    if (iscell(tt))
       %% Evaluate over a [u,v] grid
       %% tt{1} represents the u direction
       %% tt{2} represents the v direction
@@ -173,7 +192,7 @@ if iscell(nurbs.knots)
 
       w = val(4,:,:);
       p = val(1:3,:,:);
-      if foption
+      if (foption)
 	p = p./repmat(w,[3 1 1]);
       end
 
@@ -199,7 +218,7 @@ if iscell(nurbs.knots)
 
       w = pnts(4,:);
       p = pnts(1:3,:);
-      if foption
+      if (foption)
 	p = p./repmat(w,[3, 1]);
       end
         
