@@ -16,6 +16,10 @@ function nrbkntplot (nurbs)
 %
 %   nrbkntplot(nrbtestsrf)
 %
+% See also:
+% 
+%   nrbctrlplot
+%
 %    Copyright (C) 2011 Rafael Vazquez
 %
 %    This program is free software: you can redistribute it and/or modify
@@ -31,7 +35,7 @@ function nrbkntplot (nurbs)
 %    You should have received a copy of the GNU General Public License
 %    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-if nargin < 1
+if (nargin < 1)
   error ('nrbkntplot: Need a NURBS to plot!');
 end
 
