@@ -21,6 +21,7 @@ Operations for constructing NURBS curves and surfaces
  nrbruled
  nrbcoons
  nrbplot
+ nrbctrlplot
  nrbkntplot
  nrbexport
  nrbtestcrv
