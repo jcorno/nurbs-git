@@ -1,25 +1,21 @@
-function [pnt,jac] = nrbdeval(nurbs, dnurbs, tt)
+function varargout = nrbdeval (nurbs, dnurbs, varargin)
 
-% NRBDEVAL: Evaluation of the derivative NURBS curve, surface or volume.
+% NRBDEVAL: Evaluation of the derivative and second derivatives of NURBS curve, surface or volume.
 %
-%     [pnt, jac] = nrbdeval(crv, dcrv, tt)
-%     [pnt, jac] = nrbdeval(srf, dsrf, {tu tv})
-%     [pnt, jac] = nrbdeval(vol, dvol, {tu tv tw})
+%     [pnt, jac] = nrbdeval (crv, dcrv, tt)
+%     [pnt, jac] = nrbdeval (srf, dsrf, {tu tv})
+%     [pnt, jac] = nrbdeval (vol, dvol, {tu tv tw})
+%     [pnt, jac, hess] = nrbdeval (crv, dcrv, dcrv2, tt)
+%     [pnt, jac, hess] = nrbdeval (srf, dsrf, dsrf2, {tu tv})
+%     [pnt, jac, hess] = nrbdeval (vol, dvol, {tu tv tw})
 %
 % INPUTS:
 %
-%   crv    - original NURBS curve.
-%
-%   srf    - original NUBRS surface
-%
-%   vol    - original NUBRS volume
-%
-%   dcrv   - NURBS derivative representation of crv
-%
-%   dsrf   - NURBS derivative representation of surface
-%
-%   dvol   - NURBS derivative representation of volume
-%
+%   crv,   srf,   vol   - original NURBS curve, surface or volume.
+%   dcrv,  dsrf,  dvol  - NURBS derivative representation of crv, srf 
+%                          or vol (see nrbderiv2)
+%   dcrv2, dsrf2, dvol2 - NURBS second derivative representation of crv,
+%                          srf or vol (see nrbderiv2)
 %   tt     - parametric evaluation points
 %            If the nurbs is a surface or a volume then tt is a cell
 %            {tu, tv} or {tu, tv, tw} are the parametric coordinates
@@ -28,18 +24,11 @@ function [pnt,jac] = nrbdeval(nurbs, dnurbs, tt)
 %
 %   pnt  - evaluated points.
 %   jac  - evaluated first derivatives (Jacobian).
-%
-% Examples:
-% 
-%   // Determine the first derivatives a NURBS curve at 9 points for 0.0 to
-%   // 1.0
-%   tt = linspace(0.0, 1.0, 9);
-%   dcrv = nrbderiv(crv);
-%   [pnts,jac] = nrbdeval(crv, dcrv, tt);
+%   hess - evaluated second derivatives (Hessian).
 %
 % Copyright (C) 2000 Mark Spink 
-% Copyright (C) 2010 Rafael Vazquez
 % Copyright (C) 2010 Carlo de Falco
+% Copyright (C) 2010, 2011 Rafael Vazquez
 %
 %    This program is free software: you can redistribute it and/or modify
 %    it under the terms of the GNU General Public License as published by
@@ -54,6 +43,15 @@ function [pnt,jac] = nrbdeval(nurbs, dnurbs, tt)
 %    You should have received a copy of the GNU General Public License
 %    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+if (nargin == 3)
+  tt = varargin{1};
+elseif (nargin == 4)
+  dnurbs2 = varargin{1};
+  tt = varargin{2};
+else 
+  error ('nrbrdeval: wrong number of input parameters')
+end
+
 if (~isstruct(nurbs))
   error('NURBS representation is not structure!');
 end
@@ -62,7 +60,7 @@ if (~strcmp(nurbs.form,'B-NURBS'))
   error('Not a recognised NURBS representation');
 end
 
-[cp,cw] = nrbeval (nurbs, tt);
+[cp,cw] = nrbeval(nurbs, tt);
 
 if (iscell(nurbs.knots))
   if (size(nurbs.knots,2) == 3)
@@ -82,6 +80,11 @@ if (iscell(nurbs.knots))
     tempw = cww(ones(3,1),:,:,:);
     jac{3} = (cwp-tempw.*pnt)./temp;
 
+    if (nargout == 3)
+      warning ('nrbdeval: the second derivative is not ready for volumes');
+      hess = [];
+    end
+
   elseif (size(nurbs.knots,2) == 2)
   % NURBS structure represents a surface
     temp = cw(ones(3,1),:,:);
@@ -95,6 +98,22 @@ if (iscell(nurbs.knots))
     tempv = cvw(ones(3,1),:,:);
     jac{2} = (cvp-tempv.*pnt)./temp;
 
+% second derivatives
+    if (nargout == 3 && exist ('dnurbs2'))
+      [cuup, cuuw] = nrbeval (dnurbs2{1,1}, tt);
+      tempuu = cuuw(ones(3,1),:,:);
+      hess{1,1} = (cuup - (2*cup.*tempu + cp.*tempuu)./temp + 2*cp.*tempu.^2./temp.^2)./temp;
+
+      [cvvp, cvvw] = nrbeval (dnurbs2{2,2}, tt);
+      tempvv = cvvw(ones(3,1),:,:);
+      hess{2,2} = (cvvp - (2*cvp.*tempv + cp.*tempvv)./temp + 2*cp.*tempv.^2./temp.^2)./temp;
+
+      [cuvp, cuvw] = nrbeval (dnurbs2{1,2}, tt);
+      tempuv = cuvw(ones(3,1),:,:);
+      hess{1,2} = (cuvp - (cup.*tempv + cvp.*tempu + cp.*tempuv)./temp + 2*cp.*tempu.*tempv./temp.^2)./temp;
+      hess{2,1} = hess{1,2};
+    end
+
   end
 else
 
@@ -107,6 +126,19 @@ else
   temp1 = cuw(ones(3,1),:);
   jac = (cup-temp1.*pnt)./temp;
 
+  % second derivative
+  if (nargout == 3 && exist ('dnurbs2'))
+    [cuup,cuuw] = nrbeval (dnurbs2, tt);
+    temp2 = cuuw(ones(3,1),:);
+    hess = (cuup - (2*cup.*temp1 + cp.*temp2)./temp + 2*cp.*temp1.^2./temp.^2)./temp;
+  end
+
+end
+
+varargout{1} = pnt;
+varargout{2} = jac;
+if (nargout == 3)
+  varargout{3} = hess;
 end
 
 end
