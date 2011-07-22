@@ -18,7 +18,7 @@ function crvs = nrbextract(srf)
 % Description:
 % 
 %  Constructs either an array of four NURBS curves, by extracting the boundaries
-%  of a NURBS surface, or an array of siz surfaces, by extracting the boundaries
+%  of a NURBS surface, or an array of six surfaces, by extracting the boundaries
 %  of a NURBS volume. The new entities are ordered in the following way
 %
 %    1: U = 0

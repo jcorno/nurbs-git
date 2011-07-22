@@ -4,7 +4,7 @@ function [pnt,jac] = nrbdeval(nurbs, dnurbs, tt)
 %
 %     [pnt, jac] = nrbdeval(crv, dcrv, tt)
 %     [pnt, jac] = nrbdeval(srf, dsrf, {tu tv})
-%     [pnt, vol] = nrbdeval(vol, dvol, {tu tv tw})
+%     [pnt, jac] = nrbdeval(vol, dvol, {tu tv tw})
 %
 % INPUTS:
 %
@@ -54,44 +54,44 @@ function [pnt,jac] = nrbdeval(nurbs, dnurbs, tt)
 %    You should have received a copy of the GNU General Public License
 %    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-if ~isstruct(nurbs)
+if (~isstruct(nurbs))
   error('NURBS representation is not structure!');
 end
 
-if ~strcmp(nurbs.form,'B-NURBS')
+if (~strcmp(nurbs.form,'B-NURBS'))
   error('Not a recognised NURBS representation');
 end
 
-[cp,cw] = nrbeval(nurbs, tt);
+[cp,cw] = nrbeval (nurbs, tt);
 
-if iscell(nurbs.knots)
-  if size(nurbs.knots,2) == 3
+if (iscell(nurbs.knots))
+  if (size(nurbs.knots,2) == 3)
   % NURBS structure represents a volume
     temp = cw(ones(3,1),:,:,:);
     pnt = cp./temp;
   
-    [cup,cuw] = nrbeval(dnurbs{1}, tt);
+    [cup,cuw] = nrbeval (dnurbs{1}, tt);
     tempu = cuw(ones(3,1),:,:,:);
     jac{1} = (cup-tempu.*pnt)./temp;
   
-    [cvp,cvw] = nrbeval(dnurbs{2}, tt);
+    [cvp,cvw] = nrbeval (dnurbs{2}, tt);
     tempv = cvw(ones(3,1),:,:,:);
     jac{2} = (cvp-tempv.*pnt)./temp;
 
-    [cwp,cww] = nrbeval(dnurbs{3}, tt);
+    [cwp,cww] = nrbeval (dnurbs{3}, tt);
     tempw = cww(ones(3,1),:,:,:);
     jac{3} = (cwp-tempw.*pnt)./temp;
 
-  elseif size(nurbs.knots,2) == 2
+  elseif (size(nurbs.knots,2) == 2)
   % NURBS structure represents a surface
     temp = cw(ones(3,1),:,:);
     pnt = cp./temp;
   
-    [cup,cuw] = nrbeval(dnurbs{1}, tt);
+    [cup,cuw] = nrbeval (dnurbs{1}, tt);
     tempu = cuw(ones(3,1),:,:);
     jac{1} = (cup-tempu.*pnt)./temp;
   
-    [cvp,cvw] = nrbeval(dnurbs{2}, tt);
+    [cvp,cvw] = nrbeval (dnurbs{2}, tt);
     tempv = cvw(ones(3,1),:,:);
     jac{2} = (cvp-tempv.*pnt)./temp;
 
@@ -103,7 +103,7 @@ else
   pnt = cp./temp;
   
   % first derivative
-  [cup,cuw] = nrbeval(dnurbs,tt);
+  [cup,cuw] = nrbeval (dnurbs,tt);
   temp1 = cuw(ones(3,1),:);
   jac = (cup-temp1.*pnt)./temp;
 
