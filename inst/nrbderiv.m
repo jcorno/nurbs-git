@@ -58,101 +58,104 @@ if (~strcmp(nurbs.form,'B-NURBS'))
   error('Not a recognised NURBS representation');
 end
 
+if (iscell (nurbs.knots))
+  ndim = size(nurbs.knots, 2);
+else
+  ndim = 1;
+end
+
 % We raise the degree to avoid errors in the computation of the second derivative
 if (nargout == 2)
-  degelev  = max ([2 2] - (nurbs.order-1), 0);
+  degelev  = max (2*ones(1, ndim) - (nurbs.order-1), 0);
   nurbs    = nrbdegelev (nurbs, degelev);
 end
 
 degree = nurbs.order - 1;
 
-if (iscell(nurbs.knots))
-  if (size(nurbs.knots,2) == 3)
-  % NURBS structure represents a volume
-    num1 = nurbs.number(1);
-    num2 = nurbs.number(2);
-    num3 = nurbs.number(3);
+if (ndim == 3)
+% NURBS structure represents a volume
+  num1 = nurbs.number(1);
+  num2 = nurbs.number(2);
+  num3 = nurbs.number(3);
 
-  % taking derivatives along the u direction
-    dknots = nurbs.knots;
-    dcoefs = permute (nurbs.coefs,[1 3 4 2]);
-    dcoefs = reshape (dcoefs,4*num2*num3,num1);
-    [dcoefs,dknots{1}] = bspderiv (degree(1),dcoefs,nurbs.knots{1});
-    dcoefs = permute (reshape (dcoefs,[4 num2 num3 size(dcoefs,2)]),[1 4 2 3]);
-    dnurbs{1} = nrbmak (dcoefs, dknots);
+% taking derivatives along the u direction
+  dknots = nurbs.knots;
+  dcoefs = permute (nurbs.coefs,[1 3 4 2]);
+  dcoefs = reshape (dcoefs,4*num2*num3,num1);
+  [dcoefs,dknots{1}] = bspderiv (degree(1),dcoefs,nurbs.knots{1});
+  dcoefs = permute (reshape (dcoefs,[4 num2 num3 size(dcoefs,2)]),[1 4 2 3]);
+  dnurbs{1} = nrbmak (dcoefs, dknots);
 
-  % taking derivatives along the v direction
-    dknots = nurbs.knots;
-    dcoefs = permute (nurbs.coefs,[1 2 4 3]);
-    dcoefs = reshape (dcoefs,4*num1*num3,num2);
-    [dcoefs,dknots{2}] = bspderiv (degree(2),dcoefs,nurbs.knots{2});
-    dcoefs = permute (reshape (dcoefs,[4 num1 num3 size(dcoefs,2)]),[1 2 4 3]);
-    dnurbs{2} = nrbmak (dcoefs, dknots);
+% taking derivatives along the v direction
+  dknots = nurbs.knots;
+  dcoefs = permute (nurbs.coefs,[1 2 4 3]);
+  dcoefs = reshape (dcoefs,4*num1*num3,num2);
+  [dcoefs,dknots{2}] = bspderiv (degree(2),dcoefs,nurbs.knots{2});
+  dcoefs = permute (reshape (dcoefs,[4 num1 num3 size(dcoefs,2)]),[1 2 4 3]);
+  dnurbs{2} = nrbmak (dcoefs, dknots);
 
-  % taking derivatives along the w direction
-    dknots = nurbs.knots;
-    dcoefs = reshape (nurbs.coefs,4*num1*num2,num3);
-    [dcoefs,dknots{3}] = bspderiv (degree(3),dcoefs,nurbs.knots{3});
-    dcoefs = reshape (dcoefs,[4 num1 num2 size(dcoefs,2)]);
-    dnurbs{3} = nrbmak (dcoefs, dknots);
+% taking derivatives along the w direction
+  dknots = nurbs.knots;
+  dcoefs = reshape (nurbs.coefs,4*num1*num2,num3);
+  [dcoefs,dknots{3}] = bspderiv (degree(3),dcoefs,nurbs.knots{3});
+  dcoefs = reshape (dcoefs,[4 num1 num2 size(dcoefs,2)]);
+  dnurbs{3} = nrbmak (dcoefs, dknots);
 
-    if (nargout == 2)
-      warning ('nrbderiv: the second derivative is not ready for volumes');
-      dnurbs2 = [];
-    end
+  if (nargout == 2)
+    warning ('nrbderiv: the second derivative is not ready for volumes');
+    dnurbs2 = [];
+  end
 
-  elseif (size(nurbs.knots,2) == 2)
+elseif (ndim == 2)
 % NURBS structure represents a surface
 
-    num1 = nurbs.number(1);
-    num2 = nurbs.number(2);
+  num1 = nurbs.number(1);
+  num2 = nurbs.number(2);
 
 % taking first derivative along the u direction
-    dknots = nurbs.knots;
-    dcoefs = permute (nurbs.coefs,[1 3 2]);
-    dcoefs = reshape (dcoefs,4*num2,num1);
-    [dcoefs,dknots{1}] = bspderiv (degree(1),dcoefs,nurbs.knots{1});
-    dcoefs = permute (reshape (dcoefs,[4 num2 size(dcoefs,2)]),[1 3 2]);
-    dnurbs{1} = nrbmak (dcoefs, dknots);
+  dknots = nurbs.knots;
+  dcoefs = permute (nurbs.coefs,[1 3 2]);
+  dcoefs = reshape (dcoefs,4*num2,num1);
+  [dcoefs,dknots{1}] = bspderiv (degree(1),dcoefs,nurbs.knots{1});
+  dcoefs = permute (reshape (dcoefs,[4 num2 size(dcoefs,2)]),[1 3 2]);
+  dnurbs{1} = nrbmak (dcoefs, dknots);
 
-    if (nargout == 2)
+  if (nargout == 2)
 % taking second derivative along the u direction (duu)
-      dknots2 = dknots;
-      dcoefs2 = permute (dcoefs, [1 3 2]);
-      dcoefs2 = reshape (dcoefs2, 4*num2, []);
-      [dcoefs2, dknots2{1}] = bspderiv (degree(1)-1, dcoefs2, dknots{1});
-      dcoefs2 = permute (reshape (dcoefs2, 4, num2, []), [1 3 2]);
-      dnurbs2{1,1} = nrbmak (dcoefs2, dknots2); 
+    dknots2 = dknots;
+    dcoefs2 = permute (dcoefs, [1 3 2]);
+    dcoefs2 = reshape (dcoefs2, 4*num2, []);
+    [dcoefs2, dknots2{1}] = bspderiv (degree(1)-1, dcoefs2, dknots{1});
+    dcoefs2 = permute (reshape (dcoefs2, 4, num2, []), [1 3 2]);
+    dnurbs2{1,1} = nrbmak (dcoefs2, dknots2); 
 
 % taking second derivative along the v direction (duv and dvu)
-      dknots2 = dknots;
-      dcoefs2 = reshape (dcoefs, 4*(num1-1), num2);
-      [dcoefs2, dknots2{2}] = bspderiv (degree(2), dcoefs2, dknots{2});
-      dcoefs2 = reshape (dcoefs2, 4, num1-1, []);
-      dnurbs2{1,2} = nrbmak (dcoefs2, dknots2);
-      dnurbs2{2,1} = dnurbs2{1,2};
-    end
+    dknots2 = dknots;
+    dcoefs2 = reshape (dcoefs, 4*(num1-1), num2);
+    [dcoefs2, dknots2{2}] = bspderiv (degree(2), dcoefs2, dknots{2});
+    dcoefs2 = reshape (dcoefs2, 4, num1-1, []);
+    dnurbs2{1,2} = nrbmak (dcoefs2, dknots2);
+    dnurbs2{2,1} = dnurbs2{1,2};
+  end
 
 % taking first derivative along the v direction
-    dknots = nurbs.knots;
-    dcoefs = reshape (nurbs.coefs,4*num1,num2);
-    [dcoefs,dknots{2}] = bspderiv (degree(2),dcoefs,nurbs.knots{2});
-    dcoefs = reshape (dcoefs,[4 num1 size(dcoefs,2)]);
-    dnurbs{2} = nrbmak (dcoefs, dknots);
+  dknots = nurbs.knots;
+  dcoefs = reshape (nurbs.coefs,4*num1,num2);
+  [dcoefs,dknots{2}] = bspderiv (degree(2),dcoefs,nurbs.knots{2});
+  dcoefs = reshape (dcoefs,[4 num1 size(dcoefs,2)]);
+  dnurbs{2} = nrbmak (dcoefs, dknots);
 
-    if (nargout == 2)
+  if (nargout == 2)
 % taking second derivative along the v direction (dvv)
-      dknots2 = dknots;
-      dcoefs2 = reshape (dcoefs, 4*num1, num2-1);
-      [dcoefs2, dknots2{2}] = bspderiv (degree(2)-1, dcoefs2, dknots{2});
-      dcoefs2 = reshape (dcoefs2, 4, num1, []);
-      dnurbs2{2,2} = nrbmak (dcoefs2, dknots2);
-    end
-
+    dknots2 = dknots;
+    dcoefs2 = reshape (dcoefs, 4*num1, num2-1);
+    [dcoefs2, dknots2{2}] = bspderiv (degree(2)-1, dcoefs2, dknots{2});
+    dcoefs2 = reshape (dcoefs2, 4, num1, []);
+    dnurbs2{2,2} = nrbmak (dcoefs2, dknots2);
   end
-else
-  % NURBS structure represents a curve
 
+else
+% NURBS structure represents a curve
   [dcoefs,dknots] = bspderiv (degree, nurbs.coefs, nurbs.knots);
   dnurbs = nrbmak (dcoefs, dknots);
   if (nargout == 2)
