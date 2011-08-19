@@ -80,9 +80,45 @@ if (iscell(nurbs.knots))
     tempw = cww(ones(3,1),:,:,:);
     jac{3} = (cwp-tempw.*pnt)./temp;
 
+% second derivatives
     if (nargout == 3)
-      warning ('nrbdeval: the second derivative is not ready for volumes');
-      hess = [];
+      if (exist ('dnurbs2'))
+        [cuup, cuuw] = nrbeval (dnurbs2{1,1}, tt);
+        tempuu = cuuw(ones(3,1),:,:,:);
+        hess{1,1} = (cuup - (2*cup.*tempu + cp.*tempuu)./temp + 2*cp.*tempu.^2./temp.^2)./temp;
+        clear cuup cuuw tempuu
+
+        [cvvp, cvvw] = nrbeval (dnurbs2{2,2}, tt);
+        tempvv = cvvw(ones(3,1),:,:,:);
+        hess{2,2} = (cvvp - (2*cvp.*tempv + cp.*tempvv)./temp + 2*cp.*tempv.^2./temp.^2)./temp;
+        clear cvvp cvvw tempvv
+
+        [cwwp, cwww] = nrbeval (dnurbs2{3,3}, tt);
+        tempww = cwww(ones(3,1),:,:,:);
+        hess{3,3} = (cwwp - (2*cwp.*tempw + cp.*tempww)./temp + 2*cp.*tempw.^2./temp.^2)./temp;
+        clear cwwp cwww tempww
+
+        [cuvp, cuvw] = nrbeval (dnurbs2{1,2}, tt);
+        tempuv = cuvw(ones(3,1),:,:,:);
+        hess{1,2} = (cuvp - (cup.*tempv + cvp.*tempu + cp.*tempuv)./temp + 2*cp.*tempu.*tempv./temp.^2)./temp;
+        hess{2,1} = hess{1,2};
+        clear cuvp cuvw tempuv
+
+        [cuwp, cuww] = nrbeval (dnurbs2{1,3}, tt);
+        tempuw = cuww(ones(3,1),:,:,:);
+        hess{1,3} = (cuwp - (cup.*tempw + cwp.*tempu + cp.*tempuw)./temp + 2*cp.*tempu.*tempw./temp.^2)./temp;
+        hess{3,1} = hess{1,3};
+        clear cuwp cuww tempuw
+
+        [cvwp, cvww] = nrbeval (dnurbs2{2,3}, tt);
+        tempvw = cvww(ones(3,1),:,:,:);
+        hess{2,3} = (cvwp - (cvp.*tempw + cwp.*tempv + cp.*tempvw)./temp + 2*cp.*tempv.*tempw./temp.^2)./temp;
+        hess{3,2} = hess{2,3};
+        clear cvwp cvww tempvw
+      else
+        warning ('nrbdeval: dnurbs2 missing. The second derivative is not computed');
+        hess = [];
+      end
     end
 
   elseif (size(nurbs.knots,2) == 2)
@@ -99,19 +135,24 @@ if (iscell(nurbs.knots))
     jac{2} = (cvp-tempv.*pnt)./temp;
 
 % second derivatives
-    if (nargout == 3 && exist ('dnurbs2'))
-      [cuup, cuuw] = nrbeval (dnurbs2{1,1}, tt);
-      tempuu = cuuw(ones(3,1),:,:);
-      hess{1,1} = (cuup - (2*cup.*tempu + cp.*tempuu)./temp + 2*cp.*tempu.^2./temp.^2)./temp;
+    if (nargout == 3) 
+      if (exist ('dnurbs2'))
+        [cuup, cuuw] = nrbeval (dnurbs2{1,1}, tt);
+        tempuu = cuuw(ones(3,1),:,:);
+        hess{1,1} = (cuup - (2*cup.*tempu + cp.*tempuu)./temp + 2*cp.*tempu.^2./temp.^2)./temp;
 
-      [cvvp, cvvw] = nrbeval (dnurbs2{2,2}, tt);
-      tempvv = cvvw(ones(3,1),:,:);
-      hess{2,2} = (cvvp - (2*cvp.*tempv + cp.*tempvv)./temp + 2*cp.*tempv.^2./temp.^2)./temp;
+        [cvvp, cvvw] = nrbeval (dnurbs2{2,2}, tt);
+        tempvv = cvvw(ones(3,1),:,:);
+        hess{2,2} = (cvvp - (2*cvp.*tempv + cp.*tempvv)./temp + 2*cp.*tempv.^2./temp.^2)./temp;
 
-      [cuvp, cuvw] = nrbeval (dnurbs2{1,2}, tt);
-      tempuv = cuvw(ones(3,1),:,:);
-      hess{1,2} = (cuvp - (cup.*tempv + cvp.*tempu + cp.*tempuv)./temp + 2*cp.*tempu.*tempv./temp.^2)./temp;
-      hess{2,1} = hess{1,2};
+        [cuvp, cuvw] = nrbeval (dnurbs2{1,2}, tt);
+        tempuv = cuvw(ones(3,1),:,:);
+        hess{1,2} = (cuvp - (cup.*tempv + cvp.*tempu + cp.*tempuv)./temp + 2*cp.*tempu.*tempv./temp.^2)./temp;
+        hess{2,1} = hess{1,2};
+      else
+        warning ('nrbdeval: dnurbs2 missing. The second derivative is not computed');
+        hess = [];
+      end
     end
 
   end
