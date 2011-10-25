@@ -14,6 +14,7 @@
 %     zeta: breaks = knots without repetitions
 % 
 % Copyright (C) 2009, 2010 Carlo de Falco
+% Copyright (C) 2011 Rafael Vazquez
 %
 %    This program is free software: you can redistribute it and/or modify
 %    it under the terms of the GNU General Public License as published by
@@ -42,6 +43,10 @@ function [csi, zeta] = kntuniform (num, degree, regularity)
       else
         error ('kntuniform: regularity requested is too high')
       end
+    end
+    if (numel(num) == 1)
+      csi = csi{1};
+      zeta = zeta{1};
     end
   end
 end
