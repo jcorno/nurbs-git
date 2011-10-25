@@ -20,7 +20,7 @@ function dersv = basisfunder (ii, pl, uu, u_knotl, nders)
 %   
 %    Adapted from Algorithm A2.3 from 'The NURBS BOOK' pg72.
 %
-%    Copyright (C) 2009 Rafael Vazquez
+%    Copyright (C) 2009,2011 Rafael Vazquez
 %
 %    This program is free software: you can redistribute it and/or modify
 %    it under the terms of the GNU General Public License as published by
@@ -34,6 +34,8 @@ function dersv = basisfunder (ii, pl, uu, u_knotl, nders)
 %
 %    You should have received a copy of the GNU General Public License
 %    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+  dersv = zeros(numel(uu), nders+1, pl+1);
 
   for jj = 1:numel(uu)
 
