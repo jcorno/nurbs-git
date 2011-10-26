@@ -62,6 +62,7 @@ Vector and Transformation Utilities
  vecrotx
  vecroty
  vecrotz
+ vecrot
  vecscale
  vectrans
 Misc Utilities
