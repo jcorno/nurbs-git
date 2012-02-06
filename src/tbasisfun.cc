@@ -68,7 +68,7 @@ double onebasisfunder__ (double u, octave_idx_type p, RowVector U)
 }
 
    
-DEFUN_DLD(tbasisfunder, args, nargout,"\
+DEFUN_DLD(tbasisfun, args, nargout,"\
 TBASISFUN: Compute a B- or T-Spline basis function, and its derivatives, from its local knot vector.\n\
 \n\
  usage:\n\

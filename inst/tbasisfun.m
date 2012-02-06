@@ -1,4 +1,4 @@
-function [N, Nder] = tbasisfunder (u, p, U)
+function [N, Nder] = tbasisfun (u, p, U)
 %
 % TBASISFUN: Compute a B- or T-Spline basis function, and its derivatives, from its local knot vector.
 %
