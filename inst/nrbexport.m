@@ -76,4 +76,5 @@ for iptc = 1:npatch
   end
 end
 
+fclose (fid);
 end
