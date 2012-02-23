@@ -28,6 +28,37 @@ double onebasisfun__ (double u, octave_idx_type p, RowVector U)
     return (N);
   else if (p == 0)
     return (1.0);
+  else if (p == 1) {
+    if (u < U(1)) {
+      N = (u - U(0)) / (U(1) - U(0));
+      return (N);
+    }
+    else {
+      N = (U(2) - u) / (U(2) - U(1));
+      return (N);
+    }
+  }
+  else if (p == 2) {
+    double ln = u - U(0);
+    double dn = U(3) - u;
+    double ld = U(2) - U(0); 
+    double dd = U(3) - U(1);
+    if (u < U(1)) {
+      N = ln*ln / (ld * (U(1) - U(0)));
+      return (N);
+    }
+    else if (u > U(2)) {
+      N = dn*dn / (dd * (U(3) - U(2)));
+      return (N);
+    }
+    else {
+      if (ld != 0)
+        N = N + ln * (U(2) - u) / ((U(2) - U(1)) * ld);
+      if (dd != 0)
+        N = N + dn * (u - U(1)) / ((U(2) - U(1)) * dd);
+      return (N);
+    }
+  }
  
   double ln = u - U(0);
   double ld = U(U.length () - 2) - U(0);

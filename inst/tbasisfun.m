@@ -40,7 +40,9 @@ function [N, Nder] = tbasisfun (u, p, U)
   
   if (~ iscell (U))
     U = sort (U);
-    assert (numel (U) == p+2)
+    if (numel (U) ~= p+2)
+      error ('tbasisfun: knot vector and degree do not correspond')
+    end
     
     N = onebasisfun__ (u, p, U);
 
@@ -50,7 +52,9 @@ function [N, Nder] = tbasisfun (u, p, U)
     
   elseif (size(U,2) == 2)
     U{1} = sort(U{1}); U{2} = sort(U{2});
-    assert (numel(U{1}) == p(1)+2 && numel(U{2}) == p(2)+2)
+    if (numel(U{1}) ~= p(1)+2 || numel(U{2}) ~= p(2)+2)
+      error ('tbasisfun: knot vector and degree do not correspond')
+    end
     
     Nu = onebasisfun__ (u(1,:), p(1), U{1});
     Nv = onebasisfun__ (u(2,:), p(2), U{2});
@@ -67,8 +71,10 @@ function [N, Nder] = tbasisfun (u, p, U)
     
   elseif (size(U,2) == 3)
     U{1} = sort(U{1}); U{2} = sort(U{2}); U{3} = sort(U{3});
-    assert (numel(U{1}) == p(1)+2 && numel(U{2}) == p(2)+2 && numel(U{3}) == p(3)+2)
-    
+    if (numel(U{1}) ~= p(1)+2 || numel(U{2}) ~= p(2)+2 || numel(U{3}) ~= p(3)+2)
+      error ('tbasisfun: knot vector and degree do not correspond')
+    end
+
     Nu = onebasisfun__ (u(1,:), p(1), U{1});
     Nv = onebasisfun__ (u(2,:), p(2), U{2});
     Nw = onebasisfun__ (u(3,:), p(3), U{3});

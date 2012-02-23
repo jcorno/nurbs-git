@@ -16,6 +16,32 @@ function N = onebasisfun__ (u, p, U)
     elseif (p == 0)
       N(ii) = 1;
       continue;
+    elseif (p == 1)
+      if (u(ii) < U(2))
+        N(ii) = (u(ii) - U(1)) / (U(2) - U(1));
+        continue;
+      else
+        N(ii) = (U(end) - u(ii)) / (U(3) - U(2));
+        continue;
+      end
+
+    elseif (p == 2)
+      if (u(ii) < U(2))
+        N(ii) = (u(ii) - U(1))^2 / ((U(3) - U(1)) * (U(2) - U(1)));
+        continue;
+      elseif (u(ii) > U(3))
+        N(ii) = (U(4) - u(ii))^2 / ((U(4) - U(2)) * (U(4) - U(3)));
+        continue;
+      else
+        ld = U(3) - U(1); dd = U(4) - U(2);
+        if (ld ~= 0)
+          N(ii) = N(ii) + (u(ii) - U(1))*(U(3) - u(ii)) / ((U(3) - U(2)) * ld);
+        end
+        if (dd ~= 0)
+          N(ii) = N(ii) + (U(4) - u(ii))*(u(ii) - U(2)) / ((U(3) - U(2)) * dd);
+        end
+      end
+
     else
       ln = u(ii) - U(1);
       ld = U(end-1) - U(1);
