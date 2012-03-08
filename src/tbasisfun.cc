@@ -18,86 +18,114 @@
 #include <octave/oct.h>
 #include <iostream>
 
-double onebasisfun__ (double u, octave_idx_type p, RowVector U)
+void onebasisfun__ (double u, octave_idx_type p, RowVector U, double *N)
 {
-
-  //std::cout << "u=" << u << " " << "p=" << p << " \n" << "U=" << U;
-  
-  double N = 0.0;
+  *N = 0.0;
   if ((u <= U.min ()) || ( u > U.max ()))
-    return (N);
+    return;
   else if (p == 0)
-    return (1.0);
-  else if (p == 1) {
-    if (u < U(1)) {
-      N = (u - U(0)) / (U(1) - U(0));
-      return (N);
+    {
+      *N = 1.0;
+      return;
     }
-    else {
-      N = (U(2) - u) / (U(2) - U(1));
-      return (N);
+  else if (p == 1) 
+    {
+      if (u < U(1)) 
+        {
+          *N = (u - U(0)) / (U(1) - U(0));
+          return;
+        }
+      else 
+        {
+          *N = (U(2) - u) / (U(2) - U(1));
+          return;
+        }
     }
-  }
-  else if (p == 2) {
-    double ln = u - U(0);
-    double dn = U(3) - u;
-    double ld = U(2) - U(0); 
-    double dd = U(3) - U(1);
-    if (u < U(1)) {
-      N = ln*ln / (ld * (U(1) - U(0)));
-      return (N);
+  else if (p == 2) 
+    {
+      double ln = u - U(0);
+      double dn = U(3) - u;
+      double ld = U(2) - U(0); 
+      double dd = U(3) - U(1);
+      if (u < U(1)) 
+        {
+          *N = ln*ln / (ld * (U(1) - U(0)));
+          return;
+        }
+      else if (u > U(2)) 
+        {
+          *N = dn*dn / (dd * (U(3) - U(2)));
+          return;
+        }
+      else 
+        {
+          if (ld != 0)            
+            *N += ln * (U(2) - u) / ((U(2) - U(1)) * ld);
+          
+          if (dd != 0)
+            *N += dn * (u - U(1)) / ((U(2) - U(1)) * dd);
+          return;
+        }
     }
-    else if (u > U(2)) {
-      N = dn*dn / (dd * (U(3) - U(2)));
-      return (N);
-    }
-    else {
-      if (ld != 0)
-        N = N + ln * (U(2) - u) / ((U(2) - U(1)) * ld);
-      if (dd != 0)
-        N = N + dn * (u - U(1)) / ((U(2) - U(1)) * dd);
-      return (N);
-    }
-  }
  
   double ln = u - U(0);
   double ld = U(U.length () - 2) - U(0);
   if (ld != 0)
-    N += ln * onebasisfun__ (u, p-1, U.extract (0, U.length () - 2))/ ld; 
-    
+    {
+      double tmp;
+      onebasisfun__ (u, p-1, U.extract (0, U.length () - 2), &tmp);
+      *N += ln * tmp / ld; 
+    }
   double dn = U(U.length () - 1) - u;
   double dd = U(U.length () - 1) - U(1);
   if (dd != 0)
-    N += dn * onebasisfun__ (u, p-1, U.extract (1, U.length () - 1))/ dd;
-    
-  return (N);
+    {
+      double tmp;
+      onebasisfun__ (u, p-1, U.extract (1, U.length () - 1), &tmp);
+      *N += dn * tmp / dd;
+    }
+  return;
 }
 
 
-double onebasisfunder__ (double u, octave_idx_type p, RowVector U)
+void onebasisfunder__ (double u, octave_idx_type p, RowVector U, double *N, double *Nder)
 {
-
-  //std::cout << "u=" << u << " " << "p=" << p << " \n" << "U=" << U;
+  double aux;
+  *N = 0.0; *Nder = 0.0;                                                                                                                                             
+  if ((u <= U.min ()) || ( u > U.max ()))                                             
+    return;
   
-  double N = 0.0;
-  if ((u <= U.min ()) || ( u > U.max ()))
-    return (N);
-  else if (p == 0)
-    return (0.0);
-  else {
- 
-  double ld = U(U.length () - 2) - U(0);
-  if (ld != 0)
-    N += p * onebasisfun__ (u, p-1, U.extract (0, U.length () - 2))/ ld; 
+  else if (p == 0)                                                                    
+    {                                                                                 
+      *N = 1.0;                                                                        
+      *Nder = 0.0;                                                                     
+      return;
+    }
+  
+  else {                                                                             
     
-  double dd = U(U.length () - 1) - U(1);
-  if (dd != 0)
-    N -= p * onebasisfun__ (u, p-1, U.extract (1, U.length () - 1))/ dd;
+    double ln = u - U(0);                                                              
+    double ld = U(U.length () - 2) - U(0);       
+                                      
+    if (ld != 0)                                                                     
+      {
+        onebasisfun__ (u, p-1, U.extract (0, U.length () - 2), &aux);
+        aux = aux / ld;      
+        *N += ln * aux;                                                               
+        *Nder += p * aux;                                                             
+      }                                                                              
     
-  return (N);
+    double dn = U(U.length () - 1) - u;                                                
+    double dd = U(U.length () - 1) - U(1);                                             
+    if (dd != 0)                                                                                                           
+      { 
+        onebasisfun__ (u, p-1, U.extract (1, U.length () - 1), &aux);
+        aux = aux / dd;
+        *N    += dn *aux;
+        *Nder -= p * aux;
+      } 
   }
 }
-
    
 DEFUN_DLD(tbasisfun, args, nargout,"\
 TBASISFUN: Compute a B- or T-Spline basis function, and its derivatives, from its local knot vector.\n\
@@ -126,6 +154,8 @@ TBASISFUN: Compute a B- or T-Spline basis function, and its derivatives, from it
   Matrix u = args(0).matrix_value ();
 
   RowVector N(u.cols ());
+  double *Nptr = N.fortran_vec ();
+
   if (! args(2).is_cell ())
     {
 
@@ -133,87 +163,96 @@ TBASISFUN: Compute a B- or T-Spline basis function, and its derivatives, from it
       RowVector U = args(2).row_vector_value (true, true);
       assert (U.numel () == p+2);
       
-      for (octave_idx_type ii=0; ii<u.numel (); ii++)
-	N(ii) = onebasisfun__ (u(ii), p, U);
+      if (nargout == 1)
+        for (octave_idx_type ii = 0; ii < u.numel (); ii++)
+          onebasisfun__ (u(ii), p, U, &(Nptr[ii]));
 
-      if (nargout == 2) {
-        RowVector Nder(u.cols ());
-        for (octave_idx_type ii=0; ii<u.numel (); ii++)
-          Nder(ii) = onebasisfunder__ (u(ii), p, U);
-        retval(1) = Nder;
-      }
+      if (nargout == 2) 
+        {
+          RowVector Nder(u.cols ());
+          double *Nderptr = Nder.fortran_vec ();
 
-    }  else {
-    RowVector p = args(1).row_vector_value ();
+          for (octave_idx_type ii=0; ii<u.numel (); ii++)
+            onebasisfunder__ (u(ii), p, U, &(Nptr[ii]), &(Nderptr[ii]));
 
-    if (p.length() == 2) {
-      Cell C = args(2).cell_value ();
-      RowVector U = C(0).row_vector_value (true, true);
-      RowVector V = C(1).row_vector_value (true, true);
-    
-      if (nargout == 1) {
-	for (octave_idx_type ii=0; ii<u.cols (); ii++)
-	  {
-	    N(ii) = onebasisfun__ (u(0, ii), octave_idx_type(p(0)), U) *
-	      onebasisfun__ (u(1, ii), octave_idx_type(p(1)), V);
-	//std::cout << "N=" << N(ii) << "\n\n\n";
-	  }
-      }
-      else if (nargout == 2) {
-	double Nu, Nv;
-        Matrix Nder (2, u.cols());
-        for (octave_idx_type ii=0; ii<u.cols (); ii++)
-          {
-	    Nu = onebasisfun__ (u(0, ii), octave_idx_type(p(0)), U);
-	    Nv = onebasisfun__ (u(1, ii), octave_idx_type(p(1)), V);
-	    N(ii) = Nu * Nv;
-
-            Nder(0,ii) = onebasisfunder__ (u(0, ii), octave_idx_type(p(0)), U) *
-              Nv;
-            Nder(1,ii) = onebasisfunder__ (u(1, ii), octave_idx_type(p(1)), V) *
-	      Nu;
-	//std::cout << "N=" << N(ii) << "\n\n\n";
+          retval(1) = Nder;
+        }      
+    } 
+  else 
+    {
+      RowVector p = args(1).row_vector_value ();
+      if (p.length() == 2) 
+        {
+          Cell C = args(2).cell_value ();
+          RowVector U = C(0).row_vector_value (true, true);
+          RowVector V = C(1).row_vector_value (true, true);
+          
+          if (nargout == 1) 
+            {
+              for (octave_idx_type ii=0; ii<u.cols (); ii++)
+                {
+                  double Nu, Nv;
+                  onebasisfun__ (u(0, ii), octave_idx_type(p(0)), U, &Nu);
+                  onebasisfun__ (u(1, ii), octave_idx_type(p(1)), V, &Nv);
+                  Nptr[ii] = Nu * Nv;
+                }
+            }
+          else if (nargout == 2) 
+            {
+              double Nu, Nv, Ndu, Ndv;
+              Matrix Nder (2, u.cols());
+              double *Nderptr = Nder.fortran_vec ();
+              for (octave_idx_type ii = 0; ii < u.cols (); ii++)
+                {
+                  onebasisfunder__ (u(0, ii), octave_idx_type(p(0)), U, &Nu, &Ndu);
+                  onebasisfunder__ (u(1, ii), octave_idx_type(p(1)), V, &Nv, &Ndv);
+                  Nptr[ii] = Nu * Nv;
+                
+                  Nderptr[0 + (2 * ii)] = Ndu * Nv;
+                  Nderptr[1 + (2 * ii)] = Ndv * Nu;
+                }
+              retval(1) = Nder;
+            }
+        
+        } 
+      else if (p.length() == 3) 
+        {
+          Cell C = args(2).cell_value ();
+          RowVector U = C(0).row_vector_value (true, true);
+          RowVector V = C(1).row_vector_value (true, true);
+          RowVector W = C(2).row_vector_value (true, true);
+        
+          if (nargout == 1)
+            {
+              for (octave_idx_type ii = 0; ii < u.cols (); ii++)
+                {
+                  double Nu, Nv, Nw;
+                  onebasisfun__ (u(0, ii), octave_idx_type(p(0)), U, &Nu);
+                  onebasisfun__ (u(1, ii), octave_idx_type(p(1)), V, &Nv);
+                  onebasisfun__ (u(2, ii), octave_idx_type(p(2)), W, &Nw);
+                  Nptr[ii] = Nu * Nv * Nw;
+                }
+            }
+          else if (nargout == 2) 
+            {
+              double Nu, Nv, Nw, Ndu, Ndv, Ndw;
+              Matrix Nder (3, u.cols());
+              double *Nderptr = Nder.fortran_vec ();
+              for (octave_idx_type ii=0; ii<u.cols (); ii++)
+              {
+                onebasisfunder__ (u(0, ii), octave_idx_type(p(0)), U, &Nu, &Ndu);
+                onebasisfunder__ (u(1, ii), octave_idx_type(p(1)), V, &Nv, &Ndv);
+                onebasisfunder__ (u(2, ii), octave_idx_type(p(2)), W, &Nw, &Ndw);
+                Nptr[ii] = Nu * Nv * Nw;
+                Nderptr[0 + (3 * ii)] = Ndu * Nv * Nw;
+                Nderptr[1 + (3 * ii)] = Ndv * Nu * Nw;
+                Nderptr[2 + (3 * ii)] = Ndw * Nu * Nv;
+              }
+            retval(1) = Nder;
           }
-        retval(1) = Nder;
+        
       }
-
-    } else if (p.length() == 3) {
-      Cell C = args(2).cell_value ();
-      RowVector U = C(0).row_vector_value (true, true);
-      RowVector V = C(1).row_vector_value (true, true);
-      RowVector W = C(2).row_vector_value (true, true);
-    
-      if (nargout == 1) {
-	for (octave_idx_type ii=0; ii<u.cols (); ii++)
-	  {
-          N(ii) = onebasisfun__ (u(0, ii), octave_idx_type(p(0)), U) * 
-	    onebasisfun__ (u(1, ii), octave_idx_type(p(1)), V) *
-	    onebasisfun__ (u(2, ii), octave_idx_type(p(2)), W);
-	//std::cout << "N=" << N(ii) << "\n\n\n";
-	  }
-      }
-      else if (nargout == 2) {
-	double Nu, Nv, Nw;
-        Matrix Nder (3, u.cols());
-        for (octave_idx_type ii=0; ii<u.cols (); ii++)
-          {
-	    Nu = onebasisfun__ (u(0, ii), octave_idx_type(p(0)), U);
-	    Nv = onebasisfun__ (u(1, ii), octave_idx_type(p(1)), V);
-	    Nw = onebasisfun__ (u(2, ii), octave_idx_type(p(2)), W);
-            N(ii) = Nu * Nv * Nw;
-            Nder(0,ii) = onebasisfunder__ (u(0, ii), octave_idx_type(p(0)), U) *
-              Nv * Nw;
-            Nder(1,ii) = onebasisfunder__ (u(1, ii), octave_idx_type(p(1)), V) *
-              Nu * Nw;
-            Nder(2,ii) = onebasisfunder__ (u(2, ii), octave_idx_type(p(2)), W) *
-              Nu * Nv;
-	//std::cout << "N=" << N(ii) << "\n\n\n";
-          }
-        retval(1) = Nder;
-        }
-
     }
-  }
   retval(0) = octave_value (N);
   return retval;
 }
