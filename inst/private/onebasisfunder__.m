@@ -1,4 +1,4 @@
-function [N, Nder] = onebasisfunder2__ (u, p, U)
+function [N, Nder] = onebasisfunder__ (u, p, U)
 
 %  __ONEBASISFUNDER__: Undocumented internal function
 %
