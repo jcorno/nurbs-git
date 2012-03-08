@@ -150,20 +150,24 @@ TBASISFUN: Compute a B- or T-Spline basis function, and its derivatives, from it
       Cell C = args(2).cell_value ();
       RowVector U = C(0).row_vector_value (true, true);
       RowVector V = C(1).row_vector_value (true, true);
-      double Nu, Nv;
     
-      for (octave_idx_type ii=0; ii<u.cols (); ii++)
-        {
-          Nu = onebasisfun__ (u(0, ii), octave_idx_type(p(0)), U);
-          Nv = onebasisfun__ (u(1, ii), octave_idx_type(p(1)), V);
-          N(ii) = Nu * Nv;
+      if (nargout == 1) {
+	for (octave_idx_type ii=0; ii<u.cols (); ii++)
+	  {
+	    N(ii) = onebasisfun__ (u(0, ii), octave_idx_type(p(0)), U) *
+	      onebasisfun__ (u(1, ii), octave_idx_type(p(1)), V);
 	//std::cout << "N=" << N(ii) << "\n\n\n";
-        }
-
-      if (nargout == 2) {
+	  }
+      }
+      else if (nargout == 2) {
+	double Nu, Nv;
         Matrix Nder (2, u.cols());
         for (octave_idx_type ii=0; ii<u.cols (); ii++)
           {
+	    Nu = onebasisfun__ (u(0, ii), octave_idx_type(p(0)), U);
+	    Nv = onebasisfun__ (u(1, ii), octave_idx_type(p(1)), V);
+	    N(ii) = Nu * Nv;
+
             Nder(0,ii) = onebasisfunder__ (u(0, ii), octave_idx_type(p(0)), U) *
               Nv;
             Nder(1,ii) = onebasisfunder__ (u(1, ii), octave_idx_type(p(1)), V) *
@@ -171,28 +175,32 @@ TBASISFUN: Compute a B- or T-Spline basis function, and its derivatives, from it
 	//std::cout << "N=" << N(ii) << "\n\n\n";
           }
         retval(1) = Nder;
-        }
+      }
 
     } else if (p.length() == 3) {
       Cell C = args(2).cell_value ();
       RowVector U = C(0).row_vector_value (true, true);
       RowVector V = C(1).row_vector_value (true, true);
       RowVector W = C(2).row_vector_value (true, true);
-      double Nu, Nv, Nw;
     
-      for (octave_idx_type ii=0; ii<u.cols (); ii++)
-        {
-          Nu = onebasisfun__ (u(0, ii), octave_idx_type(p(0)), U);
-          Nv = onebasisfun__ (u(1, ii), octave_idx_type(p(1)), V);
-          Nw = onebasisfun__ (u(2, ii), octave_idx_type(p(2)), W);
-          N(ii) = Nu * Nv * Nw;
+      if (nargout == 1) {
+	for (octave_idx_type ii=0; ii<u.cols (); ii++)
+	  {
+          N(ii) = onebasisfun__ (u(0, ii), octave_idx_type(p(0)), U) * 
+	    onebasisfun__ (u(1, ii), octave_idx_type(p(1)), V) *
+	    onebasisfun__ (u(2, ii), octave_idx_type(p(2)), W);
 	//std::cout << "N=" << N(ii) << "\n\n\n";
-        }
-
-      if (nargout == 2) {
+	  }
+      }
+      else if (nargout == 2) {
+	double Nu, Nv, Nw;
         Matrix Nder (3, u.cols());
         for (octave_idx_type ii=0; ii<u.cols (); ii++)
           {
+	    Nu = onebasisfun__ (u(0, ii), octave_idx_type(p(0)), U);
+	    Nv = onebasisfun__ (u(1, ii), octave_idx_type(p(1)), V);
+	    Nw = onebasisfun__ (u(2, ii), octave_idx_type(p(2)), W);
+            N(ii) = Nu * Nv * Nw;
             Nder(0,ii) = onebasisfunder__ (u(0, ii), octave_idx_type(p(0)), U) *
               Nv * Nw;
             Nder(1,ii) = onebasisfunder__ (u(1, ii), octave_idx_type(p(1)), V) *
