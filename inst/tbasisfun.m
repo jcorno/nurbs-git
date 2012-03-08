@@ -44,10 +44,10 @@ function [N, Nder] = tbasisfun (u, p, U)
       error ('tbasisfun: knot vector and degree do not correspond')
     end
     
-    N = onebasisfun__ (u, p, U);
-
-    if (nargout == 2)
-      Nder = onebasisfunder__ (u, p, U);
+    if (nargout == 1)
+      N = onebasisfun__ (u, p, U);
+    else
+      [N, Nder] = onebasisfunder__ (u, p, U);
     end
     
   elseif (size(U,2) == 2)
@@ -56,15 +56,16 @@ function [N, Nder] = tbasisfun (u, p, U)
       error ('tbasisfun: knot vector and degree do not correspond')
     end
     
-    Nu = onebasisfun__ (u(1,:), p(1), U{1});
-    Nv = onebasisfun__ (u(2,:), p(2), U{2});
+    if (nargout == 1)
+      Nu = onebasisfun__ (u(1,:), p(1), U{1});
+      Nv = onebasisfun__ (u(2,:), p(2), U{2});
 
-    N = Nu.*Nv;
+      N = Nu.*Nv;
+    elseif (nargout == 2)
+      [Nu, Ndu] = onebasisfunder__ (u(1,:), p(1), U{1});
+      [Nv, Ndv] = onebasisfunder__ (u(2,:), p(2), U{2});
 
-    if (nargout == 2)
-      Ndu = onebasisfunder__ (u(1,:), p(1), U{1});
-      Ndv = onebasisfunder__ (u(2,:), p(2), U{2});
-      
+      N = Nu.*Nv;
       Nder(1,:) = Ndu.*Nv;
       Nder(2,:) = Nu.*Ndv;
     end
@@ -75,17 +76,18 @@ function [N, Nder] = tbasisfun (u, p, U)
       error ('tbasisfun: knot vector and degree do not correspond')
     end
 
-    Nu = onebasisfun__ (u(1,:), p(1), U{1});
-    Nv = onebasisfun__ (u(2,:), p(2), U{2});
-    Nw = onebasisfun__ (u(3,:), p(3), U{3});
+    if (nargout == 1)
+      Nu = onebasisfun__ (u(1,:), p(1), U{1});
+      Nv = onebasisfun__ (u(2,:), p(2), U{2});
+      Nw = onebasisfun__ (u(3,:), p(3), U{3});
 
-    N = Nu.*Nv.*Nw;
-
-    if (nargout == 2)
-      Ndu = onebasisfunder__ (u(1,:), p(1), U{1});
-      Ndv = onebasisfunder__ (u(2,:), p(2), U{2});
-      Ndw = onebasisfunder__ (u(3,:), p(3), U{3});
+      N = Nu.*Nv.*Nw;
+    else
+      [Nu, Ndu] = onebasisfunder__ (u(1,:), p(1), U{1});
+      [Nv, Ndv] = onebasisfunder__ (u(2,:), p(2), U{2});
+      [Nw, Ndw] = onebasisfunder__ (u(3,:), p(3), U{3});
       
+      N = Nu.*Nv.*Nw;
       Nder(1,:) = Ndu.*Nv.*Nw;
       Nder(2,:) = Nu.*Ndv.*Nw;
       Nder(3,:) = Nu.*Nv.*Ndw;
