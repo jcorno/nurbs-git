@@ -125,6 +125,8 @@ end
 %! aux1 = linspace(0,1,m); aux2 = linspace(0,1,n);
 %! nrb = nrbkntins  (nrb, {aux1(2:end-1), aux2(2:end-1)});
 %! u = rand (1, 30); v = rand (1, 10);
+%! u = u - min (u); u = u / max (u);
+%! v = v - min (v); v = v / max (v);
 %! [B, N] = nrbbasisfun ({u, v}, nrb);
 %! assert (sum(B, 2), ones(300, 1), 1e-6)
 %! assert (all (all (B<=1)), true)
