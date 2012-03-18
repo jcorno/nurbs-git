@@ -44,10 +44,10 @@ DEFUN_DLD(bspeval, args, nargout,"\
   octave_value_list retval;
   if (!bspeval_bad_arguments (args))
     {      
-      int             d = args(0).int_value();
-      const Matrix    c = args(1).matrix_value();
-      const RowVector k = args(2).row_vector_value();
-      const NDArray   u = args(3).array_value();
+      int       d = args(0).int_value();
+      Matrix    c = args(1).matrix_value();
+      RowVector k = args(2).row_vector_value();
+      NDArray   u = args(3).array_value();
       
       octave_idx_type nu = u.length();
       octave_idx_type mc = c.rows(),
