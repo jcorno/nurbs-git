@@ -34,10 +34,10 @@ DEFUN_DLD(nrb_srf_basisfun__, args, nargout,"\
 
       const Cell knots = nrb.contents("knots")(0).cell_value();
       const NDArray coefs = nrb.contents("coefs")(0).array_value();
-      octave_idx_type m   = (nrb.contents("number")(0).vector_value())(0) - 1; // m    = size (nrb.coefs, 2) -1;
-      octave_idx_type n   = (nrb.contents("number")(0).vector_value())(1) - 1; // n    = size (nrb.coefs, 3) -1;
-      octave_idx_type p = (nrb.contents("order")(0).vector_value())(0) - 1;    // p    = nrb.order(1) -1;
-      octave_idx_type q = (nrb.contents("order")(0).vector_value())(1) - 1;    // q    = nrb.order(2) -1;
+      octave_idx_type m   = static_cast<octave_idx_type> ((nrb.contents("number")(0).vector_value())(0)) - 1; // m    = size (nrb.coefs, 2) -1;
+      octave_idx_type n   = static_cast<octave_idx_type> ((nrb.contents("number")(0).vector_value())(1)) - 1; // n    = size (nrb.coefs, 3) -1;
+      octave_idx_type p   = static_cast<octave_idx_type> ((nrb.contents("order")(0).vector_value())(0)) - 1;  // p    = nrb.order(1) -1;
+      octave_idx_type q   = static_cast<octave_idx_type> ((nrb.contents("order")(0).vector_value())(1)) - 1;  // q    = nrb.order(2) -1;
 
       Array<idx_vector> idx(dim_vector (2, 1), idx_vector(':')); 
       idx(0) = 0;
@@ -95,15 +95,21 @@ DEFUN_DLD(nrb_srf_basisfun__, args, nargout,"\
       for (octave_idx_type k(0); k < npt; k++) 
 	for (octave_idx_type ii(0); ii < p+1; ii++) 
 	  for (octave_idx_type jj(0); jj < q+1; jj++) 
-	    denom(k) += NuIkuk(k, ii) * NvJkvk(k, jj) * w(Ik(k, ii), Jk(k, jj));
+	    denom(k) += NuIkuk(k, ii) * NvJkvk(k, jj) * 
+              w(static_cast<octave_idx_type> (Ik(k, ii)), 
+                static_cast<octave_idx_type> (Jk(k, jj)));
 
       
       for (octave_idx_type k(0); k < npt; k++) 
 	for (octave_idx_type ii(0); ii < p+1; ii++) 
 	  for (octave_idx_type jj(0); jj < q+1; jj++) 
 	    {
-	      RIkJk(k, octave_idx_type(ii+(p+1)*jj))  = NuIkuk(k, ii)*NvJkvk(k, jj) * w(Ik(k, ii), Jk(k, jj))/denom(k); 
-	      indIkJk(k, octave_idx_type(ii+(p+1)*jj))= Ik(k, ii)+(m+1)*Jk(k, jj)+1;
+
+	      RIkJk(k, octave_idx_type(ii+(p+1)*jj))  = NuIkuk(k, ii) * NvJkvk(k, jj) * 
+                w(static_cast<octave_idx_type> (Ik(k, ii)), static_cast<octave_idx_type> (Jk(k, jj)))
+                / denom(k); 
+
+	      indIkJk(k, octave_idx_type(ii+(p+1)*jj))= Ik(k, ii) + (m+1) * Jk(k, jj) + 1;
 	    }
 
       // for k=1:npt
