@@ -45,7 +45,7 @@ fprintf (fid, '%s\n', '#');
 fprintf (fid, '%s\n', ['# ' date]);
 fprintf (fid, '%s\n', '#');
 
-fprintf (fid, '%2i', ndim, 1);
+fprintf (fid, '%2i', ndim, npatch);
 fprintf (fid, '\n');
 for iptc = 1:npatch
   fprintf (fid, '%s %i', 'PATCH', iptc);
