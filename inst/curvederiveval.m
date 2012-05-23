@@ -39,6 +39,7 @@ function ck = curvederiveval (n, p, U, P, u, d)
   du = min (d, p);   
 
   span = findspan (n, p, u, U);
+  N = zeros (p+1, p+1);
   for ip=0:p
       N(1:ip+1,ip+1) = basisfun (span, u, ip, U)';
   end
