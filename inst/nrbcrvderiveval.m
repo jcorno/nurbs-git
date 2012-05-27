@@ -1,6 +1,3 @@
-function ck = nrbcrvderiveval (crv, u, d) 
-
-%
 % NRBCRVDERIVEVAL: Evaluate n-th order derivatives of a NURBS curve.
 %
 % usage: skl = nrbcrvderiveval (crv, u, d) 
@@ -34,26 +31,39 @@ function ck = nrbcrvderiveval (crv, u, d)
 %
 %    You should have received a copy of the GNU General Public License
 %    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-  
- ck = zeros (3, d+1, numel(u));
- 
- for iu = 1:numel(u);
-   wders = squeeze (curvederiveval (crv.number-1, crv.order-1,  ...
-				     crv.knots, squeeze (crv.coefs(4, :)), u(iu), d));
 
-   for idim = 1:3
-     Aders = squeeze (curvederiveval (crv.number-1, crv.order-1,  ...
-			crv.knots, squeeze (crv.coefs(idim, :)), u(iu), d));
-     for k=0:d
-       v = Aders(k+1);
-       for i=1:k
-	     v = v - nchoosek(k,i)*wders(i+1)*ck(idim, k-i+1, iu);
-       end
-	   ck(idim, k+1, iu) = v/wders(1);
-     end
-   end
- end
+function ck = nrbcrvderiveval (crv, u, d) 
+  ck = arrayfun (@(x) nrbcrvderiveval__ (crv, x, d), u, 'UniformOutput', false);
+  ck = cat (3, ck{:});
 end
+
+function ck = nrbcrvderiveval__ (crv, u, d)
+
+  persistent nc;
+  if isempty (nc)
+    nc = [0 0 0 0 0; 
+          1 0 0 0 0;
+          2 1 0 0 0; 
+          3 3 1 0 0; 
+          4 6 4 1 0];
+  end
+
+  ck = zeros (3, d+1);
+  wders = curvederiveval (crv.number-1, crv.order-1, crv.knots, squeeze (crv.coefs(4, :)), u, d);
+
+  for idim = 1:3
+  
+    Aders = curvederiveval (crv.number-1, crv.order-1, crv.knots, squeeze (crv.coefs(idim, :)), u, d);
+       
+    ck(idim, 1) = Aders(1) / wders(1);
+    for k = 1:d
+      ck(idim, k+1) = (Aders(k+1) - sum (nc(k+1, 1:k) .* wders(2:k+1).' .* squeeze (ck(idim, k:-1:1))))  / wders(1);
+    end
+      
+  end
+
+end
+
 
 %!test
 %! knots = [0 0 0 1 1 1];
@@ -61,8 +71,8 @@ end
 %! coefs(:,2) = [1; 0; 1; 1];
 %! coefs(:,3) = [1; 1; 1; 2];
 %! crv = nrbmak (coefs, knots);
-%! u = linspace (0, 1, 10);
-%! ck = nrbcrvderiveval (crv, u, 2);
+%! u = linspace (0, 1, 100);
+%! ck = nrbcrvderiveval (crv, u, 2); 
 %! w  = @(x) 1 + x.^2;
 %! dw = @(x) 2*x;
 %! F1 = @(x) (2*x - x.^2)./w(x);
@@ -76,4 +86,4 @@ end
 %! d2F3 = @(x) -2./w(x) - 2*x.*(2-2*x)./w(x).^2 - (8*x-6*x.^2)./w(x).^2 + 8*x.^2.*(2*x-x.^2)./w(x).^3;
 %! assert ([F1(u); F2(u); F3(u)], squeeze(ck(:, 1, :)), 1e2*eps);
 %! assert ([dF1(u); dF2(u); dF3(u)], squeeze(ck(:, 2, :)), 1e2*eps);
-%! assert ([d2F1(u); d2F2(u); d2F3(u)], squeeze(ck(:, 3, :)), 1e2*eps);
+%! assert ([d2F1(u); d2F2(u); d2F3(u)], squeeze(ck(:, 3, :)), 1e2*eps);                                   
