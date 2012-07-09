@@ -51,7 +51,33 @@ hold_flag = ishold;
 
 if (iscell (nurbs.knots))
   if (size (nurbs.knots,2) == 3)
-    error ('nrbctrlplot: not implemented for NURBS volumes');
+    nsub = 100;
+    nrbplot (nurbs, [nsub nsub nsub], 'light', light, 'colormap', cmap);
+    hold on
+% Plot the the control net
+    for ii = 1:size (nurbs.coefs, 2)
+     for jj = 1:size (nurbs.coefs, 3)
+      coefs = reshape (nurbs.coefs(1:3,ii,jj,:), 3, []);
+      weights = reshape (nurbs.coefs(4,ii,jj,:), 1, []);
+      plot3 (coefs(1,:)./weights, coefs(2,:)./weights, coefs(3,:)./weights,'k--')
+      plot3 (coefs(1,:)./weights, coefs(2,:)./weights, coefs(3,:)./weights,'r.','MarkerSize',20)
+     end
+     for kk = 1:size (nurbs.coefs, 4)
+      coefs = reshape (nurbs.coefs(1:3,ii,:,kk), 3, []);
+      weights = reshape (nurbs.coefs(4,ii,:,kk), 1, []);
+      plot3 (coefs(1,:)./weights, coefs(2,:)./weights, coefs(3,:)./weights,'k--')
+      plot3 (coefs(1,:)./weights, coefs(2,:)./weights, coefs(3,:)./weights,'r.','MarkerSize',20)
+     end
+    end
+    for jj = 1:size (nurbs.coefs, 3)
+     for kk = 1:size (nurbs.coefs, 4)
+      coefs = reshape (nurbs.coefs(1:3,:,jj,kk), 3, []);
+      weights = reshape (nurbs.coefs(4,:,jj,kk), 1, []);
+      plot3 (coefs(1,:)./weights, coefs(2,:)./weights, coefs(3,:)./weights,'k--')
+      plot3 (coefs(1,:)./weights, coefs(2,:)./weights, coefs(3,:)./weights,'r.','MarkerSize',20)
+     end
+    end
+
   elseif (size (nurbs.knots,2) == 2) % plot a NURBS surface
 
     nsub = 100;
