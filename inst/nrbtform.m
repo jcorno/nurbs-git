@@ -22,8 +22,8 @@ function nurbs = nrbtform(nurbs,tmat)
 %   The NURBS is transform as defined a transformation matrix of size (4,4),
 %   such as a rotation, translation or change in scale. The transformation
 %   matrix can define a single transformation or multiple series of
-%   transformations. The matrix can be simple constructed by the functions
-%   vecscale, vectrans, vecrotx, vecroty, and vecrotz.
+%   transformations. The matrix can be simply constructed by the functions
+%   vecscale, vectrans and vecrot, and also vecrotx, vecroty, and vecrotz.
 %     
 % Examples:
 % 
@@ -34,7 +34,7 @@ function nurbs = nrbtform(nurbs,tmat)
 % 
 % See also:
 % 
-%   vecscale, vectrans, vecrotx, vecroty, vecrotz
+%   vecscale, vectrans, vecrot, vecrotx, vecroty, vecrotz
 %
 %    Copyright (C) 2000 Mark Spink
 %    Copyright (C) 2010 Rafael Vazquez
