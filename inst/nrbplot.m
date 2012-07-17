@@ -95,7 +95,9 @@ subd = subd+1;
 % plot the curve or surface
 if (iscell (nurbs.knots))
  if (size (nurbs.knots,2) == 2) % plot a NURBS surface
-  p = nrbeval (nurbs, {linspace(0.0,1.0,subd(1)) linspace(0.0,1.0,subd(2))});
+  knt = nurbs.knots;
+  p = nrbeval (nurbs, {linspace(knt{1}(1),knt{1}(end),subd(1)) ...
+                       linspace(knt{2}(1),knt{2}(end),subd(2))});
   if (strcmp (light,'on'))
     % light surface
     surfl (squeeze(p(1,:,:)), squeeze(p(2,:,:)), squeeze(p(3,:,:)));
@@ -105,10 +107,11 @@ if (iscell (nurbs.knots))
     shading faceted;
   end
  elseif (size (nurbs.knots,2) == 3) % plot the boundaries of a NURBS volume
+  knt = nurbs.knots;
   hold_flag = ishold;
-  px = nrbeval (nurbs, {[0 1] linspace(0.0,1.0,subd(2)) linspace(0.0,1.0,subd(3))});
-  py = nrbeval (nurbs, {linspace(0.0,1.0,subd(1)) [0 1] linspace(0.0,1.0,subd(3))});
-  pz = nrbeval (nurbs, {linspace(0.0,1.0,subd(1)) linspace(0.0,1.0,subd(2)) [0 1]});
+  px = nrbeval (nurbs, {knt{1}([1 end]) linspace(knt{2}(1),knt{2}(end),subd(2)) linspace(knt{3}(1),knt{3}(end),subd(3))});
+  py = nrbeval (nurbs, {linspace(knt{1}(1),knt{1}(end),subd(1)) knt{2}([1 end]) linspace(knt{3}(1),knt{3}(end),subd(3))});
+  pz = nrbeval (nurbs, {linspace(knt{1}(1),knt{1}(end),subd(1)) linspace(knt{2}(1),knt{2}(end),subd(2)) knt{3}([1 end])});
   if (strcmp (light, 'on'))
     surfl (squeeze (pz(1,:,:,1)), squeeze (pz(2,:,:,1)), squeeze (pz(3,:,:,1)));
     hold on
@@ -138,7 +141,7 @@ if (iscell (nurbs.knots))
  end
 else
   % plot a NURBS curve
-  p = nrbeval (nurbs, linspace (0.0, 1.0, subd));
+  p = nrbeval (nurbs, linspace (nurbs.knots(1), nurbs.knots(end), subd));
 
   if (any (nurbs.coefs(3,:)))
     % 3D curve

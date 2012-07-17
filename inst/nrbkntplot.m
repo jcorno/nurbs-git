@@ -56,8 +56,8 @@ if (iscell (nurbs.knots))
    % And plot the knots
    knt1 = unique (nurbs.knots{1});
    knt2 = unique (nurbs.knots{2});
-   p1 = nrbeval (nurbs, {knt1, linspace(0.0,1.0,nsub)});
-   p2 = nrbeval (nurbs, {linspace(0.0,1.0,nsub), knt2});
+   p1 = nrbeval (nurbs, {knt1, linspace(knt2(1),knt2(end),nsub)});
+   p2 = nrbeval (nurbs, {linspace(knt1(1),knt1(end),nsub), knt2});
 
   if (any (nurbs.coefs(3,:)))
     % surface in a 3D space
@@ -88,18 +88,18 @@ if (iscell (nurbs.knots))
    knt1 = unique (nurbs.knots{1});
    knt2 = unique (nurbs.knots{2});
    knt3 = unique (nurbs.knots{3});
-   kv_face1 = nrbeval (nurbs, {0, knt2, linspace(0.0,1.0,nsub)});
-   kw_face1 = nrbeval (nurbs, {0, linspace(0.0,1.0,nsub), knt3});
-   kv_face2 = nrbeval (nurbs, {1, knt2, linspace(0.0,1.0,nsub)});
-   kw_face2 = nrbeval (nurbs, {1, linspace(0.0,1.0,nsub), knt3});
-   ku_face3 = nrbeval (nurbs, {knt1, 0, linspace(0.0,1.0,nsub)});
-   kw_face3 = nrbeval (nurbs, {linspace(0.0,1.0,nsub), 0, knt3});
-   ku_face4 = nrbeval (nurbs, {knt1, 1, linspace(0.0,1.0,nsub)});
-   kw_face4 = nrbeval (nurbs, {linspace(0.0,1.0,nsub), 1, knt3});
-   ku_face5 = nrbeval (nurbs, {knt1, linspace(0.0,1.0,nsub), 0});
-   kv_face5 = nrbeval (nurbs, {linspace(0.0,1.0,nsub), knt2, 0});
-   ku_face6 = nrbeval (nurbs, {knt1, linspace(0.0,1.0,nsub), 1});
-   kv_face6 = nrbeval (nurbs, {linspace(0.0,1.0,nsub), knt2, 1});
+   kv_face1 = nrbeval (nurbs, {knt1(1), knt2, linspace(knt3(1),knt3(end),nsub)});
+   kw_face1 = nrbeval (nurbs, {knt1(1), linspace(knt2(1),knt2(end),nsub), knt3});
+   kv_face2 = nrbeval (nurbs, {knt1(end), knt2, linspace(knt3(1),knt3(end),nsub)});
+   kw_face2 = nrbeval (nurbs, {knt1(end), linspace(knt2(1),knt2(end),nsub), knt3});
+   ku_face3 = nrbeval (nurbs, {knt1, knt2(1), linspace(knt3(1),knt3(end),nsub)});
+   kw_face3 = nrbeval (nurbs, {linspace(knt1(1),knt1(end),nsub), knt2(1), knt3});
+   ku_face4 = nrbeval (nurbs, {knt1, knt2(end), linspace(knt3(1),knt3(end),nsub)});
+   kw_face4 = nrbeval (nurbs, {linspace(knt1(1),knt1(end),nsub), knt2(end), knt3});
+   ku_face5 = nrbeval (nurbs, {knt1, linspace(knt2(1),knt2(end),nsub), knt3(1)});
+   kv_face5 = nrbeval (nurbs, {linspace(knt1(1),knt1(end),nsub), knt2, knt3(1)});
+   ku_face6 = nrbeval (nurbs, {knt1, linspace(knt2(1),knt2(end),nsub), knt3(end)});
+   kv_face6 = nrbeval (nurbs, {linspace(knt1(1),knt1(end),nsub), knt2, knt3(end)});
 
    for ii = 1:numel(knt1)
      plot3 (squeeze (ku_face3(1,ii,:,:)), squeeze (ku_face3(2,ii,:,:)), squeeze (ku_face3(3,ii,:,:))); 
