@@ -107,30 +107,15 @@ if (iscell (nurbs.knots))
     shading faceted;
   end
  elseif (size (nurbs.knots,2) == 3) % plot the boundaries of a NURBS volume
-  knt = nurbs.knots;
+  bnd = nrbextract (nurbs);
   hold_flag = ishold;
-  px = nrbeval (nurbs, {knt{1}([1 end]) linspace(knt{2}(1),knt{2}(end),subd(2)) linspace(knt{3}(1),knt{3}(end),subd(3))});
-  py = nrbeval (nurbs, {linspace(knt{1}(1),knt{1}(end),subd(1)) knt{2}([1 end]) linspace(knt{3}(1),knt{3}(end),subd(3))});
-  pz = nrbeval (nurbs, {linspace(knt{1}(1),knt{1}(end),subd(1)) linspace(knt{2}(1),knt{2}(end),subd(2)) knt{3}([1 end])});
-  if (strcmp (light, 'on'))
-    surfl (squeeze (pz(1,:,:,1)), squeeze (pz(2,:,:,1)), squeeze (pz(3,:,:,1)));
-    hold on
-    surfl (squeeze (pz(1,:,:,2)), squeeze (pz(2,:,:,2)), squeeze (pz(3,:,:,2)));
-    surfl (squeeze (py(1,:,1,:)), squeeze (py(2,:,1,:)), squeeze (py(3,:,1,:)));
-    surfl (squeeze (py(1,:,2,:)), squeeze (py(2,:,2,:)), squeeze (py(3,:,2,:)));
-    surfl (squeeze (px(1,1,:,:)), squeeze (px(2,1,:,:)), squeeze (px(3,1,:,:)));
-    surfl (squeeze (px(1,2,:,:)), squeeze (px(2,2,:,:)), squeeze (px(3,2,:,:)));
-    shading interp;
-  else
-    surf (squeeze (pz(1,:,:,1)), squeeze (pz(2,:,:,1)), squeeze (pz(3,:,:,1)));
-    hold on
-    surf (squeeze (pz(1,:,:,2)), squeeze (pz(2,:,:,2)), squeeze (pz(3,:,:,2)));
-    surf (squeeze (py(1,:,1,:)), squeeze (py(2,:,1,:)), squeeze (py(3,:,1,:)));
-    surf (squeeze (py(1,:,2,:)), squeeze (py(2,:,2,:)), squeeze (py(3,:,2,:)));
-    surf (squeeze (px(1,1,:,:)), squeeze (px(2,1,:,:)), squeeze (px(3,1,:,:)));
-    surf (squeeze (px(1,2,:,:)), squeeze (px(2,2,:,:)), squeeze (px(3,2,:,:)));
-    shading faceted;
-  end
+  nrbplot (bnd(1), subd(2:3));
+  hold on
+  nrbplot (bnd(2), subd(2:3));
+  nrbplot (bnd(3), subd([1 3]));
+  nrbplot (bnd(4), subd([1 3]));
+  nrbplot (bnd(5), subd(1:2));
+  nrbplot (bnd(6), subd(1:2));
   
   if (~hold_flag)
     hold off
