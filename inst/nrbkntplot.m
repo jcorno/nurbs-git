@@ -20,7 +20,7 @@ function nrbkntplot (nurbs)
 % 
 %   nrbctrlplot
 %
-%    Copyright (C) 2011 Rafael Vazquez
+%    Copyright (C) 2011, 2012 Rafael Vazquez
 %
 %    This program is free software: you can redistribute it and/or modify
 %    it under the terms of the GNU General Public License as published by
@@ -80,46 +80,15 @@ if (iscell (nurbs.knots))
 
 
  elseif (size (nurbs.knots,2) == 3) % plot a NURBS volume
-   nsub = 30;
-   nrbplot (nurbs, [nsub nsub nsub], 'light', light, 'colormap', cmap);
+   nsub = 100;
+
+   % Plot the boundaries
+   bnd = nrbextract (nurbs);
+   nrbkntplot (bnd(1));
    hold on
-
-   % And plot the knots
-   knt1 = unique (nurbs.knots{1});
-   knt2 = unique (nurbs.knots{2});
-   knt3 = unique (nurbs.knots{3});
-   kv_face1 = nrbeval (nurbs, {knt1(1), knt2, linspace(knt3(1),knt3(end),nsub)});
-   kw_face1 = nrbeval (nurbs, {knt1(1), linspace(knt2(1),knt2(end),nsub), knt3});
-   kv_face2 = nrbeval (nurbs, {knt1(end), knt2, linspace(knt3(1),knt3(end),nsub)});
-   kw_face2 = nrbeval (nurbs, {knt1(end), linspace(knt2(1),knt2(end),nsub), knt3});
-   ku_face3 = nrbeval (nurbs, {knt1, knt2(1), linspace(knt3(1),knt3(end),nsub)});
-   kw_face3 = nrbeval (nurbs, {linspace(knt1(1),knt1(end),nsub), knt2(1), knt3});
-   ku_face4 = nrbeval (nurbs, {knt1, knt2(end), linspace(knt3(1),knt3(end),nsub)});
-   kw_face4 = nrbeval (nurbs, {linspace(knt1(1),knt1(end),nsub), knt2(end), knt3});
-   ku_face5 = nrbeval (nurbs, {knt1, linspace(knt2(1),knt2(end),nsub), knt3(1)});
-   kv_face5 = nrbeval (nurbs, {linspace(knt1(1),knt1(end),nsub), knt2, knt3(1)});
-   ku_face6 = nrbeval (nurbs, {knt1, linspace(knt2(1),knt2(end),nsub), knt3(end)});
-   kv_face6 = nrbeval (nurbs, {linspace(knt1(1),knt1(end),nsub), knt2, knt3(end)});
-
-   for ii = 1:numel(knt1)
-     plot3 (squeeze (ku_face3(1,ii,:,:)), squeeze (ku_face3(2,ii,:,:)), squeeze (ku_face3(3,ii,:,:))); 
-     plot3 (squeeze (ku_face4(1,ii,:,:)), squeeze (ku_face4(2,ii,:,:)), squeeze (ku_face4(3,ii,:,:))); 
-     plot3 (squeeze (ku_face5(1,ii,:,:)), squeeze (ku_face5(2,ii,:,:)), squeeze (ku_face5(3,ii,:,:))); 
-     plot3 (squeeze (ku_face6(1,ii,:,:)), squeeze (ku_face6(2,ii,:,:)), squeeze (ku_face6(3,ii,:,:))); 
+   for iface = 2:6
+     nrbkntplot (bnd(iface));
    end
-   for ii = 1:numel(knt2)
-     plot3 (squeeze (kv_face1(1,:,ii,:)), squeeze (kv_face1(2,:,ii,:)), squeeze (kv_face1(3,:,ii,:))); 
-     plot3 (squeeze (kv_face2(1,:,ii,:)), squeeze (kv_face2(2,:,ii,:)), squeeze (kv_face2(3,:,ii,:))); 
-     plot3 (squeeze (kv_face5(1,:,ii,:)), squeeze (kv_face5(2,:,ii,:)), squeeze (kv_face5(3,:,ii,:))); 
-     plot3 (squeeze (kv_face6(1,:,ii,:)), squeeze (kv_face6(2,:,ii,:)), squeeze (kv_face6(3,:,ii,:))); 
-   end
-   for ii = 1:numel(knt3)
-     plot3 (squeeze (kw_face1(1,:,:,ii)), squeeze(kw_face1(2,:,:,ii)), squeeze (kw_face1(3,:,:,ii))); 
-     plot3 (squeeze (kw_face2(1,:,:,ii)), squeeze(kw_face2(2,:,:,ii)), squeeze (kw_face2(3,:,:,ii))); 
-     plot3 (squeeze (kw_face3(1,:,:,ii)), squeeze(kw_face3(2,:,:,ii)), squeeze (kw_face3(3,:,:,ii))); 
-     plot3 (squeeze (kw_face4(1,:,:,ii)), squeeze(kw_face4(2,:,:,ii)), squeeze (kw_face4(3,:,:,ii))); 
-   end
- end
 
 else % plot a NURBS curve
   nsub = 1000;
