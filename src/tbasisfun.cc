@@ -87,6 +87,8 @@ void onebasisfun__ (double u, octave_idx_type p, RowVector U, double *N)
   return;
 }
 
+void onebasisfun__ (double u, double p, RowVector U, double *N)
+{ onebasisfun__ (u, static_cast<octave_idx_type> (p), U, N); }
 
 void onebasisfunder__ (double u, octave_idx_type p, RowVector U, double *N, double *Nder)
 {
