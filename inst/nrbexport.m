@@ -45,14 +45,14 @@ fprintf (fid, '%s\n', '#');
 fprintf (fid, '%s\n', ['# ' date]);
 fprintf (fid, '%s\n', '#');
 
-fprintf (fid, '%2i', ndim, npatch);
+fprintf (fid, '%4i', ndim, npatch);
 fprintf (fid, '\n');
 for iptc = 1:npatch
   fprintf (fid, '%s %i', 'PATCH', iptc);
   fprintf (fid, '\n');
-  fprintf (fid, '%2i', nurbs(iptc).order-1);
+  fprintf (fid, '%4i', nurbs(iptc).order-1);
   fprintf (fid, '\n');
-  fprintf (fid, '%2i', nurbs(iptc).number);
+  fprintf (fid, '%4i', nurbs(iptc).number);
   fprintf (fid, '\n');
   for ii = 1:ndim
     fprintf (fid, '%1.7f   ', nurbs(iptc).knots{ii});

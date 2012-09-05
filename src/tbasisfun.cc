@@ -93,33 +93,31 @@ void onebasisfun__ (double u, double p, RowVector U, double *N)
 void onebasisfunder__ (double u, octave_idx_type p, RowVector U, double *N, double *Nder)
 {
   double aux;
-  *N = 0.0; *Nder = 0.0;                                                                                                                                             
-  if ((u <= U.min ()) || ( u > U.max ()))                                             
+  *N = 0.0; *Nder = 0.0;
+  if ((u <= U.min ()) || ( u > U.max ()))       
     return;
-  
-  else if (p == 0)                                                                    
-    {                                                                                 
-      *N = 1.0;                                                                        
-      *Nder = 0.0;                                                                     
+  else if (p == 0)
+    {
+      *N = 1.0;
+      *Nder = 0.0;
       return;
-    }
-  
-  else {                                                                             
-    
-    double ln = u - U(0);                                                              
-    double ld = U(U.length () - 2) - U(0);       
-                                      
-    if (ld != 0)                                                                     
+    }  
+  else {    
+    double ln = u - U(0);
+    double ld = U(U.length () - 2) - U(0);
+
+    if (ld != 0)
       {
         onebasisfun__ (u, p-1, U.extract (0, U.length () - 2), &aux);
-        aux = aux / ld;      
-        *N += ln * aux;                                                               
-        *Nder += p * aux;                                                             
-      }                                                                              
+        aux = aux / ld;
+        *N += ln * aux;
+        *Nder += p * aux;
+      }
     
-    double dn = U(U.length () - 1) - u;                                                
-    double dd = U(U.length () - 1) - U(1);                                             
-    if (dd != 0)                                                                                                           
+    double dn = U(U.length () - 1) - u;
+    double dd = U(U.length () - 1) - U(1);
+
+    if (dd != 0)
       { 
         onebasisfun__ (u, p-1, U.extract (1, U.length () - 1), &aux);
         aux = aux / dd;

@@ -80,8 +80,6 @@ if (iscell (nurbs.knots))
 
 
  elseif (size (nurbs.knots,2) == 3) % plot a NURBS volume
-   nsub = 100;
-
    % Plot the boundaries
    bnd = nrbextract (nurbs);
    nrbkntplot (bnd(1));
