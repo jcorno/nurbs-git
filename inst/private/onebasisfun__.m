@@ -23,7 +23,7 @@ function Nip = onebasisfun__ (u, p, U)
       continue;
     end
     for jj = 1:p+1 % Initialize zero-th degree functions
-      if (u(ii) > U(jj) && u(ii) < U(jj+1))
+      if (u(ii) >= U(jj) && u(ii) < U(jj+1))
         N(jj) = 1;
       else
         N(jj) = 0;
