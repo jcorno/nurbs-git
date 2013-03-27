@@ -20,6 +20,10 @@ function dersv = basisfunder (ii, pl, uu, u_knotl, nders)
 %   
 %    Adapted from Algorithm A2.3 from 'The NURBS BOOK' pg72.
 %
+% See also: 
+%
+%    numbasisfun, basisfun
+%
 %    Copyright (C) 2009,2011 Rafael Vazquez
 %
 %    This program is free software: you can redistribute it and/or modify

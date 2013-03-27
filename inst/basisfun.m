@@ -19,6 +19,10 @@ function B = basisfun (iv, uv, p, U)
 %   
 %    Adapted from Algorithm A2.2 from 'The NURBS BOOK' pg70.
 %
+% See also: 
+%
+%    numbasisfun, basisfunder
+%
 % Copyright (C) 2000 Mark Spink
 % Copyright (C) 2007 Daniel Claxton
 % Copyright (C) 2009 Carlo de Falco

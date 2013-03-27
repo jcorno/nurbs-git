@@ -17,6 +17,10 @@ function B = numbasisfun (iv, uv, p, U)
 %   
 %      N - Basis functions (numel(u)x(p+1))
 %   
+% See also: 
+%
+%    basisfun, basisfunder
+%
 %    Copyright (C) 2009 Carlo de Falco
 %
 %    This program is free software: you can redistribute it and/or modify
