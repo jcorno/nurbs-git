@@ -43,7 +43,7 @@ nu = numel(u);
                                                 %   double **ctrl = vec2mat(c,mc,nc);
                                                 %
                                                 %   // Contruct the evaluated points
-p = zeros(mc,nu);                               %   double **pnt = vec2mat(p,mc,nu);
+                                                %   double **pnt = vec2mat(p,mc,nu);
                                                 %
                                                 %   // space for the basis functions
 %N = zeros(d+1,1);                               %   double *N = (double*) mxMalloc((d+1)*sizeof(double));
