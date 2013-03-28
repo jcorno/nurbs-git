@@ -22,7 +22,7 @@ function dersv = basisfunder (ii, pl, uu, u_knotl, nders)
 %
 % See also: 
 %
-%    numbasisfun, basisfun
+%    numbasisfun, basisfun, findspan
 %
 %    Copyright (C) 2009,2011 Rafael Vazquez
 %

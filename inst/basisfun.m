@@ -21,7 +21,7 @@ function B = basisfun (iv, uv, p, U)
 %
 % See also: 
 %
-%    numbasisfun, basisfunder
+%    numbasisfun, basisfunder, findspan
 %
 % Copyright (C) 2000 Mark Spink
 % Copyright (C) 2007 Daniel Claxton
