@@ -1,14 +1,16 @@
-function rnrb = nrbreverse(nrb)
+function nrb = nrbreverse(nrb, idir)
 %
-% NRBREVERSE: Reverse the evaluation direction of a NURBS curve or surface.
+% NRBREVERSE: Reverse the evaluation directions of a NURBS geometry.
 % 
 % Calling Sequence:
 % 
 %   rnrb = nrbreverse(nrb);
+%   rnrb = nrbreverse(nrb, idir);
 % 
 % INPUT:
 % 
 %   nrb		: NURBS data structure, see nrbmak.
+%   idir        : vector of directions to reverse.
 %
 % OUTPUT:
 % 
@@ -20,6 +22,7 @@ function rnrb = nrbreverse(nrb)
 %   curve or surface.
 %
 %    Copyright (C) 2000 Mark Spink
+%    Copyright (C) 2013 Rafael Vazquez
 %
 %    This program is free software: you can redistribute it and/or modify
 %    it under the terms of the GNU General Public License as published by
@@ -34,25 +37,25 @@ function rnrb = nrbreverse(nrb)
 %    You should have received a copy of the GNU General Public License
 %    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-if nargin ~= 1
+if (nargin > 2)
   error('Incorrect number of input arguments');
 end
 
-if iscell(nrb.knots)
- if size(nrb.knots,2) == 3
-  error('The function nrbreverse is not yet ready for volumes')
- else
-  % reverse a NURBS surface
-  coefs = nrb.coefs(:,:,end:-1:1);
-  rnrb = nrbmak(coefs(:,end:-1:1,:), {1.0-fliplr(nrb.knots{1}),...
-                1.0-fliplr(nrb.knots{2})});
- end
+if (iscell(nrb.knots))
+  % reverse a NURBS surface or volume
+  ndim = numel (nrb.knots);
+  if (nargin == 1 || isempty (idir))
+    idir = 1:ndim;
+  end
+  for ii = idir
+    nrb.knots{ii} = sort (nrb.knots{ii}(end) - nrb.knots{ii});
+    nrb.coefs = flipdim (nrb.coefs, ii+1);
+  end
 
 else
-
   % reverse a NURBS curve
-  rnrb = nrbmak(fliplr(nrb.coefs), 1.0-fliplr(nrb.knots));
-
+  nrb.knots = sort (nrb.knots(end) - nrb.knots);
+  nrb.coefs = fliplr (nrb.coefs);
 end
 
 end
