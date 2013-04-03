@@ -10,6 +10,7 @@ Operations for constructing NURBS curves and surfaces
  nrbtform
  nrbreverse
  nrbtransp
+ nrbpermute
  nrbline
  nrbcirc
  nrbrect
