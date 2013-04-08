@@ -8,6 +8,6 @@ Description: Collection of routines for the creation, and manipulation of Non-Un
 Categories: splines
 Depends: octave (>= 3.2)
 Autoload: no
-License: GPLv2+
+License: GPLv3+
 Url: http://octave.sf.net
-SVNRelease: 11790
+SVNRelease: 11798
