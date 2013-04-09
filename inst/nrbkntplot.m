@@ -87,7 +87,7 @@ if (iscell (nurbs.knots))
    for iface = 2:6
      nrbkntplot (bnd(iface));
    end
-
+ end
 else % plot a NURBS curve
   nsub = 1000;
   nrbplot (nurbs, nsub);
