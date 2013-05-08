@@ -8,14 +8,18 @@ function varargout = nrbbasisfunder (points, nrb)
 %   [Bu, N]     = nrbbasisfunder (u, crv)
 %   [Bu, Bv]    = nrbbasisfunder ({u, v}, srf)
 %   [Bu, Bv, N] = nrbbasisfunder ({u, v}, srf)
-%   [Bu, Bv, N] = nrbbasisfunder (p, srf)
+%   [Bu, Bv, N] = nrbbasisfunder (pts, srf)
 %
 %    INPUT:
 %   
-%      u or p(1,:,:)  - parametric points along u direction
-%      v or p(2,:,:)  - parametric points along v direction
+%      u   - parametric coordinates along u direction
+%      v   - parametric coordinates along v direction
+%      pts - array of scattered points in parametric domain, array size: (2,num_points)
 %      crv - NURBS curve
 %      srf - NURBS surface
+%
+%    If the parametric coordinates are given in a cell-array, the values
+%     are computed in a tensor product set of points
 %   
 %    OUTPUT:
 %   
