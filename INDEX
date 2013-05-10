@@ -44,6 +44,7 @@ B-splines geometric entities
  surfderiveval
 NURBS geometric entities and functions
  nrbbasisfun
+ nrbmeasure
  nrbbasisfunder
  nrbnumbasisfun
  nrbcrvderiveval
