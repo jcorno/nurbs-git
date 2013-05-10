@@ -89,3 +89,4 @@ end
 %!   l(ii) = nrbmeasure (c, s, e(ii), 1e-7);
 %! endfor
 %! l2 = nrbmeasure (c, s, e, 1e-7);
+%! assert (l, l2, eps)
