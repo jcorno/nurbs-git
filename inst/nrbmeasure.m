@@ -47,7 +47,8 @@ function [dist, ddistds, ddistde] = nrbmeasure (nrbline, s, e, tol)
   end
 
   [ders, ders2] = nrbderiv (nrbline);
-  dist = quad (@(u) len (u, nrbline, ders), s, e, tol);
+  dist = arrayfun (@(x, y) quad (@(u) len (u, nrbline, ders), x, ...
+                                 y, tol), s, e);
   
   if (nargout > 1)
     ddistds = -len (s, nrbline, ders);
