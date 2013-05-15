@@ -1,32 +1,53 @@
-%% Copyright (C) 2013 Carlo de Falco
-%% 
-%%   This program is free software; you can redistribute it and/or modify
-%%   it under the terms of the GNU General Public License as published by
-%%   the Free Software Foundation; either version 3 of the License, or
-%%   (at your option) any later version.
-%%   
-%%   This program is distributed in the hope that it will be useful,
-%%   but WITHOUT ANY WARRANTY; without even the implied warranty of
-%%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-%%   GNU General Public License for more details.
-%%   
-%%   You should have received a copy of the GNU General Public License
-%%   along with Octave; see the file COPYING.  If not, see
-%%   <http://www.gnu.org/licenses/>.  
-
-%% -*- texinfo -*- 
-%% @deftypefn {Function File}{[@var{dist}, @var{ddds}, @var{ddde}]=} 
-%% nrbmeasure (@var{line}, @var{start}, @var{end}, @var{tol}) 
-%% Compute the distance @{dist} between the points @var{start} and @{end} along the
-%% line @var{line}. 
-%% Use the tolerance @var{tol} when computing integrals. The output
-%% parameters  @var{ddds}, @var{ddde} are the derivatives of
-%% @var{dist} with respect to @var{start} and @var{end} respectively.
-%% @seealso{}
-%% @end deftypefn
-
-%% Author: Carlo de Falco 
-
+% NRBMEASURE: Compute the distance between two given points along a NURBS curve.
+% 
+% Calling Sequence:
+% 
+%  [dist, ddistds, ddistde] = nrbmeasure (nrb)
+%  [dist, ddistds, ddistde] = nrbmeasure (nrb, s, e)
+%  [dist, ddistds, ddistde] = nrbmeasure (nrb, s, e, tol)
+% 
+% INPUT:
+% 
+%   nrb	: a NURBS curve, see nrbmak.
+%   s   : starting point in the parametric domain.
+%   e   : ending point in the parametric domain.
+%   tol : tolerance for numarical quadrature, to be used in quad.
+% 
+% OUTPUT:
+% 
+%   dist   : distance between the two points along the NURBS curve.
+%   ddistds: derivative of the distance function with respect to the point s.
+%   ddistde: derivative of the distance function with respect to the point e.
+% 
+% Description:
+% 
+%   Compute the distance between two given points along a NURBS curve, using 
+%   quad for numerical integration. The points are given by their coordinates
+%   in the parametric domain.
+%
+% Examples:
+%
+%  Compute the length of a circular arc constructed as a NURBS.
+%
+%   c = nrbcirc (1, [0 0], 0, pi/2);
+%   s = 0; e = 1;
+%   l = nrbmeasure (c, s, e, 1e-7);
+%
+% Copyright (C) 2013 Carlo de Falco
+% 
+%   This program is free software; you can redistribute it and/or modify
+%   it under the terms of the GNU General Public License as published by
+%   the Free Software Foundation; either version 3 of the License, or
+%   (at your option) any later version.
+   
+%   This program is distributed in the hope that it will be useful,
+%   but WITHOUT ANY WARRANTY; without even the implied warranty of
+%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+%   GNU General Public License for more details.
+%   
+%   You should have received a copy of the GNU General Public License
+%   along with Octave; see the file COPYING.  If not, see
+%   <http://www.gnu.org/licenses/>.  
 
 function [dist, ddistds, ddistde] = nrbmeasure (nrb, s, e, tol)
   
