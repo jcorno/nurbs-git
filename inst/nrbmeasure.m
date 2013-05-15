@@ -28,7 +28,7 @@
 %% Author: Carlo de Falco 
 
 
-function [dist, ddistds, ddistde] = nrbmeasure (nrbline, s, e, tol)
+function [dist, ddistds, ddistde] = nrbmeasure (nrb, s, e, tol)
   
   if (nargin < 4)
     tol = 1e-6;
@@ -40,27 +40,29 @@ function [dist, ddistds, ddistde] = nrbmeasure (nrbline, s, e, tol)
     end
   end
 
-  if (ismatrix (s) && isscalar (e))
-    e = repelems (e, size(s) .');
-  elseif (ismatrix (e) && isscalar (s))
-    s = repelems (s, size(e) .');
+  nrb.knots = (nrb.knots - nrb.knots(1)) / (nrb.knots(end) - nrb.knots(1));
+
+  if (numel (s) > 1 && isscalar (e))
+    e = e * ones (size(s));
+  elseif (numel (e) > 1 && isscalar (s))
+    s = s * ones (size(e));
   end
 
-  [ders, ders2] = nrbderiv (nrbline);
-  dist = arrayfun (@(x, y) quad (@(u) len (u, nrbline, ders), x, ...
+  ders = nrbderiv (nrb);
+  dist = arrayfun (@(x, y) quad (@(u) len (u, nrb, ders), x, ...
                                  y, tol), s, e);
   
   if (nargout > 1)
-    ddistds = -len (s, nrbline, ders);
+    ddistds = -len (s, nrb, ders);
     if (nargout > 2)
-      ddistde = +len (e, nrbline, ders);
+      ddistde = +len (e, nrb, ders);
     end
   end
 
 end
 
-function l = len (u, nrbline, ders)
-  [ignore, d] = nrbdeval (nrbline, ders, u);
+function l = len (u, nrb, ders)
+  [~, d] = nrbdeval (nrb, ders, u);
   f = d(1, :);
   g = d(2, :);
   h = d(3, :);
