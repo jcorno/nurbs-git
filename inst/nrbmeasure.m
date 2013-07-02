@@ -11,7 +11,7 @@
 %   nrb	: a NURBS curve, see nrbmak.
 %   s   : starting point in the parametric domain.
 %   e   : ending point in the parametric domain.
-%   tol : tolerance for numarical quadrature, to be used in quad.
+%   tol : tolerance for numerical quadrature, to be used in quad.
 % 
 % OUTPUT:
 % 
