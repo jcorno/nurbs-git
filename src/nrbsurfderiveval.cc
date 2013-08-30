@@ -91,9 +91,9 @@ DEFUN_DLD(nrbsurfderiveval, args, nargout,"\
   //function skl = nrbsurfderiveval (srf, uv, d) 
   octave_value_list retval;
 
-  Octave_map      srf = args(0).map_value();
-  Matrix          uv = args(1).matrix_value ();
-  octave_idx_type d = args(2).idx_type_value ();
+  octave_scalar_map srf = args(0).map_value();
+  Matrix            uv = args(1).matrix_value ();
+  octave_idx_type   d = args(2).idx_type_value ();
 
   if (! error_state)
     {
@@ -104,19 +104,19 @@ DEFUN_DLD(nrbsurfderiveval, args, nargout,"\
       NDArray skl (idxa, 0.0);
       
       octave_idx_type n = octave_idx_type 
-	((srf.contents("number")(0).row_vector_value())(0) - 1);
+	((srf.contents("number").row_vector_value())(0) - 1);
       octave_idx_type m = octave_idx_type 
-	((srf.contents("number")(0).row_vector_value())(1) - 1);
+	((srf.contents("number").row_vector_value())(1) - 1);
       octave_idx_type p = octave_idx_type 
-	((srf.contents("order")(0).row_vector_value())(0) - 1);
+	((srf.contents("order").row_vector_value())(0) - 1);
       octave_idx_type q = octave_idx_type 
-	((srf.contents("order")(0).row_vector_value())(1) - 1);
+	((srf.contents("order").row_vector_value())(1) - 1);
       
-      Cell knots = srf.contents("knots")(0).cell_value();
+      Cell knots = srf.contents("knots").cell_value();
       RowVector knotsu = knots.elem (0).row_vector_value ();
       RowVector knotsv = knots.elem (1).row_vector_value ();
       
-      NDArray coefs  = srf.contents("coefs")(0).array_value();
+      NDArray coefs  = srf.contents("coefs").array_value();
       
       Array<idx_vector> idx(dim_vector (3, 1), idx_vector(':'));	 
       idx (0) = idx_vector (3);

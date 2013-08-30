@@ -27,17 +27,17 @@ DEFUN_DLD(nrb_srf_basisfun__, args, nargout,"\
   octave_value_list retval, newargs;
 
   const NDArray points = args(0).array_value();
-  const Octave_map nrb = args(1).map_value();
+  const octave_scalar_map nrb = args(1).map_value();
 
   if (!error_state) 
     {
 
-      const Cell knots = nrb.contents("knots")(0).cell_value();
-      const NDArray coefs = nrb.contents("coefs")(0).array_value();
-      octave_idx_type m   = static_cast<octave_idx_type> ((nrb.contents("number")(0).vector_value())(0)) - 1; // m    = size (nrb.coefs, 2) -1;
-      octave_idx_type n   = static_cast<octave_idx_type> ((nrb.contents("number")(0).vector_value())(1)) - 1; // n    = size (nrb.coefs, 3) -1;
-      octave_idx_type p   = static_cast<octave_idx_type> ((nrb.contents("order")(0).vector_value())(0)) - 1;  // p    = nrb.order(1) -1;
-      octave_idx_type q   = static_cast<octave_idx_type> ((nrb.contents("order")(0).vector_value())(1)) - 1;  // q    = nrb.order(2) -1;
+      const Cell knots = nrb.contents("knots").cell_value();
+      const NDArray coefs = nrb.contents("coefs").array_value();
+      octave_idx_type m   = static_cast<octave_idx_type> ((nrb.contents("number").vector_value())(0)) - 1; // m    = size (nrb.coefs, 2) -1;
+      octave_idx_type n   = static_cast<octave_idx_type> ((nrb.contents("number").vector_value())(1)) - 1; // n    = size (nrb.coefs, 3) -1;
+      octave_idx_type p   = static_cast<octave_idx_type> ((nrb.contents("order").vector_value())(0)) - 1;  // p    = nrb.order(1) -1;
+      octave_idx_type q   = static_cast<octave_idx_type> ((nrb.contents("order").vector_value())(1)) - 1;  // q    = nrb.order(2) -1;
 
       Array<idx_vector> idx(dim_vector (2, 1), idx_vector(':')); 
       idx(0) = 0;
