@@ -28,7 +28,7 @@ DEFUN_DLD(nrb_srf_basisfun_der__, args, nargout,"\
   octave_value_list retval, newargs;
 
   const NDArray points = args(0).array_value();
-  const octave_scalar_map nrb = args(1).map_value();
+  const octave_scalar_map nrb = args(1).scalar_map_value();
 
   if (!error_state) 
     {

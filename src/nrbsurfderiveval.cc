@@ -91,7 +91,7 @@ DEFUN_DLD(nrbsurfderiveval, args, nargout,"\
   //function skl = nrbsurfderiveval (srf, uv, d) 
   octave_value_list retval;
 
-  octave_scalar_map srf = args(0).map_value();
+  octave_scalar_map srf = args(0).scalar_map_value();
   Matrix            uv = args(1).matrix_value ();
   octave_idx_type   d = args(2).idx_type_value ();
 
