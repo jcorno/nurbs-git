@@ -132,9 +132,9 @@ if iscell(knots)
    uknots = sort(knots{1});
    vknots = sort(knots{2});
    wknots = sort(knots{3});
-   uknots = (uknots-uknots(1))/(uknots(end)-uknots(1));
-   vknots = (vknots-vknots(1))/(vknots(end)-vknots(1));
-   wknots = (wknots-wknots(1))/(wknots(end)-wknots(1));
+   uknots = (uknots-uknots(uorder))/(uknots(end-uorder+1)-uknots(uorder));
+   vknots = (vknots-vknots(vorder))/(vknots(end-vorder+1)-vknots(vorder));
+   wknots = (wknots-wknots(worder))/(wknots(end-worder+1)-wknots(worder));
    nurbs.knots = {uknots vknots wknots};
    nurbs.order = [uorder vorder worder];
 
@@ -152,8 +152,8 @@ if iscell(knots)
    vorder = size(knots{2},2)-np(3);
    uknots = sort(knots{1});
    vknots = sort(knots{2});
-   uknots = (uknots-uknots(1))/(uknots(end)-uknots(1));
-   vknots = (vknots-vknots(1))/(vknots(end)-vknots(1));
+   uknots = (uknots-uknots(uorder))/(uknots(end-uorder+1)-uknots(uorder));
+   vknots = (vknots-vknots(vorder))/(vknots(end-vorder+1)-vknots(vorder));
    nurbs.knots = {uknots vknots};
    nurbs.order = [uorder vorder];
    
@@ -169,9 +169,10 @@ else
   else
     nurbs.coefs = coefs;
   end
-  nurbs.order = size(knots,2)-np(2);
+  order = size (knots,2) - np(2);
+  nurbs.order = order;
   knots = sort(knots);
-  nurbs.knots = (knots-knots(1))/(knots(end)-knots(1));
+  nurbs.knots = (knots-knots(order))/(knots(end-order+1)-knots(order));
 
 end
 
