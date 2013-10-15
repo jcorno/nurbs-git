@@ -34,6 +34,7 @@ function [rcrv, t] = crvkntremove (crv, u, r, s, num, d)
 % 
 %   Remove knot u from the NURBS curve crv at most num times. 
 %   Check that the maximum deviation of the curve be less than d.
+%   Based on algorithm A5.8 NURBS Book (pag183)
 %  
 % SEE ALSO:
 % 
@@ -59,7 +60,7 @@ function [rcrv, t] = crvkntremove (crv, u, r, s, num, d)
                                 crv.coefs, u, r, s, num, d);
   rcrv = nrbmak (Pw, U);
 
-endfunction
+end
 
 %!test 
 %! crv  = nrbdegelev (nrbline (), 3);
@@ -69,7 +70,7 @@ endfunction
 %! assert (t, 3);
 
 %!test 
-%! crv  = nrbcirc ();;
+%! crv  = nrbcirc ();
 %! acrv = nrbkntins (crv, [.3 .3]);
 %! [rcrv, t] = crvkntremove (acrv, .3, 7, 2, 2, 1e-10);
 %! assert (crv.knots, rcrv.knots, 1e-10);
@@ -116,12 +117,12 @@ function [U, Pw, t] = RemoveCurveKnot (n, p, U, Pw, u, r, s, num, d)
         remflag = 1;
       else
         alfi = (u-U(i)) / (U(i+ord+t)-U(i));
-        if (norm (Pw(:,i) - (alfi.*temp(:,ii+t+1+1) + 
+        if (norm (Pw(:,i) - (alfi.*temp(:,ii+t+1+1) + ...
                            (1-alfi).*temp(:,ii-1+1))) <= TOL)
           remflag = 1;
-        endif
-      endif  
-    endif
+        end%if
+      end%if  
+    end%if
     if (remflag == 0)
       break; % cannot remove any more knots -> get out of for loop
     else
@@ -134,7 +135,7 @@ function [U, Pw, t] = RemoveCurveKnot (n, p, U, Pw, u, r, s, num, d)
         i = i + 1;
         j = j - 1;
       end
-    endif
+    end%if
     first = first - 1;
     last = last + 1;
     t = t + 1;
@@ -142,7 +143,7 @@ function [U, Pw, t] = RemoveCurveKnot (n, p, U, Pw, u, r, s, num, d)
 
   if (t == 0)
     return;
-  endif
+  end%if
   
   % shift knots
   for k = r+1:m
@@ -157,7 +158,7 @@ function [U, Pw, t] = RemoveCurveKnot (n, p, U, Pw, u, r, s, num, d)
       i = i+1;
     else
       j = j-1;
-    endif
+    end%if
   end
   
   % shift points
@@ -169,3 +170,4 @@ function [U, Pw, t] = RemoveCurveKnot (n, p, U, Pw, u, r, s, num, d)
   
   return;
 end
+
