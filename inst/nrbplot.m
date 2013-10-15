@@ -97,8 +97,9 @@ subd = subd+1;
 if (iscell (nurbs.knots))
  if (size (nurbs.knots,2) == 2) % plot a NURBS surface
   knt = nurbs.knots;
-  p = nrbeval (nurbs, {linspace(knt{1}(1),knt{1}(end),subd(1)) ...
-                       linspace(knt{2}(1),knt{2}(end),subd(2))});
+  order = nurbs.order;
+  p = nrbeval (nurbs, {linspace(knt{1}(order(1)),knt{1}(end-order(1)+1),subd(1)) ...
+                       linspace(knt{2}(order(2)),knt{2}(end-order(2)+1),subd(2))});
   if (strcmp (light,'on'))
     % light surface
     surfl (squeeze(p(1,:,:)), squeeze(p(2,:,:)), squeeze(p(3,:,:)));
@@ -127,7 +128,8 @@ if (iscell (nurbs.knots))
  end
 else
   % plot a NURBS curve
-  p = nrbeval (nurbs, linspace (nurbs.knots(1), nurbs.knots(end), subd));
+  order = nurbs.order;
+  p = nrbeval (nurbs, linspace (nurbs.knots(order), nurbs.knots(end-order+1), subd));
 
   if (any (nurbs.coefs(3,:)))
     % 3D curve

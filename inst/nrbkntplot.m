@@ -54,8 +54,8 @@ if (iscell (nurbs.knots))
    hold on
 
    % And plot the knots
-   knt1 = unique (nurbs.knots{1});
-   knt2 = unique (nurbs.knots{2});
+   knt1 = unique (nurbs.knots{1}(nurbs.order(1):end-nurbs.order(1)+1));
+   knt2 = unique (nurbs.knots{2}(nurbs.order(2):end-nurbs.order(2)+1));
    p1 = nrbeval (nurbs, {knt1, linspace(knt2(1),knt2(end),nsub)});
    p2 = nrbeval (nurbs, {linspace(knt1(1),knt1(end),nsub), knt2});
 
@@ -94,7 +94,8 @@ else % plot a NURBS curve
   hold on
 
   % And plot the knots
-   p = nrbeval (nurbs, unique (nurbs.knots));
+   order = nurbs.order;
+   p = nrbeval (nurbs, unique (nurbs.knots(order:end-order+1)));
 
    if (any (nurbs.coefs(3,:))) % plot a 3D curve
      plot3 (p(1,:), p(2,:), p(3,:), 'x'); 
