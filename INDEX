@@ -29,6 +29,7 @@ Operations for constructing NURBS curves and surfaces
  nrbtestcrv
  nrbtestsrf
  nrbunclamp
+ nrbmultipatch
 B-Spline functions
  bspeval
  bspderiv
