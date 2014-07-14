@@ -91,6 +91,11 @@ end
 degree = nurbs.order-1;
 
 if iscell(nurbs.knots)
+ fmax = @(x,y) any (y > max(x)); fmin = @(x,y) any (y < min(x));
+ if (any(cellfun(fmax, nurbs.knots, iknots)) || any(cellfun(fmin, nurbs.knots, iknots)))
+   error ('Trying to insert a knot outside the interval of definition')
+ end
+    
  if size(nurbs.knots,2)==3
   % NURBS represents a volume
   num1 = nurbs.number(1);
@@ -160,6 +165,9 @@ if iscell(nurbs.knots)
  end
 else
 
+  if (any(iknots > max(nurbs.knots)) || any(iknots < min(nurbs.knots)))
+    error ('Trying to insert a knot outside the interval of definition')
+  end
   % NURBS represents a curve
   if isempty(iknots)
     coefs = nurbs.coefs;
