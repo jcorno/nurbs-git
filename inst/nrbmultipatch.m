@@ -66,7 +66,7 @@ num_interfaces = 0;
 
 boundary.nsides = 0;
 boundary.patches = [];
-boundary.sides = [];
+boundary.faces = [];
 
 for i1 = 1:npatch
   nrb_faces1 = nrbextract (nurbs(i1));
@@ -119,8 +119,8 @@ for i1 = 1:npatch
       interfaces(num_interfaces) = intrfc;
     else
       boundary.nsides = boundary.nsides + 1;
-      boundary.patches = [boundary.patches, i1];
-      boundary.sides = [boundary.sides, j1];
+      boundary.patches = [boundary.patches; i1];
+      boundary.faces = [boundary.faces; j1];
     end
   end
 end
