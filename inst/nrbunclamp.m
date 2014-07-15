@@ -38,6 +38,10 @@ function ucrv = nrbunclamp (crv, k)
 %    You should have received a copy of the GNU General Public License
 %    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+  if (iscell (crv.knots))
+     error ('nrbunclamp: the function is only implemented for curves') 
+  end
+
   p  = crv.order - 1;
   U  = crv.knots;
   n  = crv.number;
