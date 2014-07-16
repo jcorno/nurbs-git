@@ -2,6 +2,7 @@ function crvs = nrbextract(srf)
 
 %
 % NRBEXTRACT: construct NURBS curves by extracting the boundaries of a NURBS surface, or NURBS surfaces by extracting the boundary of a NURBS volume.
+% It only works for geometries constructed with open knot vectors.
 % 
 % Calling Sequence:
 % 
@@ -28,7 +29,7 @@ function crvs = nrbextract(srf)
 %    5: W = 0 (only for volumes)
 %    6: W = 1 (only for volumes)
 %
-%    Copyright (C) 2010 Rafael Vazquez
+%    Copyright (C) 2010,2014 Rafael Vazquez
 %
 %    This program is free software: you can redistribute it and/or modify
 %    it under the terms of the GNU General Public License as published by
@@ -44,7 +45,15 @@ function crvs = nrbextract(srf)
 %    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 if (~iscell (srf.knots))
-  error('The boundary information is only extracted for NURBS surfaces or volumes');
+  error('The boundary information is only extracted for NURBS surfaces or volumes');  
+end
+
+for idim = 1:numel(srf.knots)
+  ord = srf.order(idim);
+  if (srf.knots{idim}(1) ~= srf.knots{idim}(ord) || ...
+      srf.knots{idim}(end) ~= srf.knots{idim}(end-ord+1))
+    error ('nrbextract: only working for open knot vectors')
+  end
 end
 
 if (numel (srf.knots) == 2)
