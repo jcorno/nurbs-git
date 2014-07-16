@@ -1,16 +1,17 @@
-function ucrv = nrbunclamp (crv, k)
+function ucrv = nrbunclamp (crv, k, xdim)
 
 % NRBUNCLAMP: Compute the knot vector and control points of the unclamped curve
 %
 % Calling Sequence:
 % 
 %   ucrv = nrbrunclamp (crv, k)
+%   ucrv = nrbrunclamp (crv, k, dim)
 % 
 % INPUT:
 % 
 %   crv	: NURBS curve, see nrbmak.
-% 
 %   k   : continuity for the unclamping (from 0 up to p-1)
+%   dim : dimension in which to unclamp (all by default).
 %
 % OUTPUT:
 % 
@@ -23,7 +24,7 @@ function ucrv = nrbunclamp (crv, k)
 %
 %    Adapted from Algorithm A12.1 from 'The NURBS BOOK' pg577.
 % 
-%    Copyright (C) 2013 Rafael Vazquez
+%    Copyright (C) 2013, 2014 Rafael Vazquez
 %
 %    This program is free software: you can redistribute it and/or modify
 %    it under the terms of the GNU General Public License as published by
@@ -38,47 +39,72 @@ function ucrv = nrbunclamp (crv, k)
 %    You should have received a copy of the GNU General Public License
 %    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-  if (iscell (crv.knots))
-     error ('nrbunclamp: the function is only implemented for curves') 
+if (iscell (crv.knots))
+  knt = crv.knots;
+  curve = false;
+else
+  knt = {crv.knots};
+  curve = true;
+end
+
+ndim = numel (knt);
+if (nargin < 3)
+  xdim = 1:ndim;
+end
+
+%if (iscell (crv.knots))
+  if (numel(k) ~= ndim)
+    k = k * ones(1, ndim);
   end
 
-  p  = crv.order - 1;
-  U  = crv.knots;
-  n  = crv.number;
   Pw = crv.coefs;
-  m = n + p + 1;
+  for idim = xdim
+    p  = crv.order(idim) - 1;
+    U  = knt{idim};
+    n  = crv.number(idim);
+    m = n + p + 1;
+    kk = k(idim);
 
-  if (k >= p)
-    warning ('Taking the maximum k allowed, degree - 1')
-    k = p - 1;
-  end
+    if (kk >= p)
+      warning ('Taking the maximum k allowed, degree - 1')
+      kk = p - 1;
+    end
 
   % Unclamp at left end
-  for ii=0:k
-    U(k-ii+1) = U(k-ii+2) - (U(n+1-ii) - U(n-ii));
-  end
-
-  for ii = p-k-1:p-2
-    for jj = ii:-1:0
-      alpha = (U(p+1) - U(p+jj-ii)) / (U(p+jj+2) - U(p+jj-ii));
-      Pw(:,jj+1) = (Pw(:,jj+1) - alpha*Pw(:,jj+2))/(1-alpha);
+    for ii=0:kk
+      U(kk-ii+1) = U(kk-ii+2) - (U(n+1-ii) - U(n-ii));
     end
-  end
+
+    Pw = permute (Pw, [1, circshift([2 3 4], [0, 1-idim])]);
+    for ii = p-kk-1:p-2
+      for jj = ii:-1:0
+        alpha = (U(p+1) - U(p+jj-ii)) / (U(p+jj+2) - U(p+jj-ii));
+        Pw(:,jj+1,:,:) = (Pw(:,jj+1,:,:) - alpha*Pw(:,jj+2,:,:))/(1-alpha);
+      end
+    end
 
 
   % Unclamp at right end
-  for ii=0:k
-    U(m-k+ii) = U(m-k+ii-1) + U(p+ii+1+1) - U(p+ii+1);
-  end
-
-  for ii = p-k-1:p-2
-    for jj = ii:-1:0
-      alpha = (U(n+1)-U(n-jj))/(U(n+2-jj+ii)-U(n-jj));
-      Pw(:,n-jj) = (Pw(:,n-jj) - (1-alpha)*Pw(:,n-jj-1))/alpha;
+    for ii=0:kk
+      U(m-kk+ii) = U(m-kk+ii-1) + U(p+ii+1+1) - U(p+ii+1);
     end
-  end
+    
+    for ii = p-kk-1:p-2
+      for jj = ii:-1:0
+        alpha = (U(n+1)-U(n-jj))/(U(n+2-jj+ii)-U(n-jj));
+        Pw(:,n-jj,:,:) = (Pw(:,n-jj,:,:) - (1-alpha)*Pw(:,n-jj-1,:,:))/alpha;
+      end
+    end
+    
+    Pw = permute (Pw, [1, circshift([2 3 4], [0, idim-1])]);
+    knt{idim} = U;
 
-ucrv = nrbmak (Pw, U);
+  end
+  if (~curve)
+    ucrv = nrbmak (Pw, knt);
+  else
+    ucrv = nrbmak (Pw, knt{:});
+  end
   
 %!demo
 %! crv = nrbcirc (1,[],0,2*pi/3);
