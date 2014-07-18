@@ -108,10 +108,12 @@ for i1 = 1:npatch
       intrfc.side1 = j1;
       intrfc.patch2 = i2;
       intrfc.side2 = non_set_faces{i2}(j2);
-      intrfc.flag = flag;
       if (ndim ==3)
+        intrfc.flag = flag;
         intrfc.ornt1 = ornt1;
         intrfc.ornt2 = ornt2;
+      else
+        intrfc.ornt = flag;
       end
 
       non_set_faces{i2} = setdiff (non_set_faces{i2}, non_set_faces{i2}(j2));
