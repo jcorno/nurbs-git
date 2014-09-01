@@ -107,6 +107,9 @@ function nurbs = nrbmak(coefs,knots)
 %    You should have received a copy of the GNU General Public License
 %    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+nurbs = struct ('form', 'B-NURBS', 'dim', 4, 'number', [], 'coefs', [], ...
+                'knots', [], 'order', []);
+
 nurbs.form   = 'B-NURBS';
 nurbs.dim    = 4;
 np = size(coefs);
