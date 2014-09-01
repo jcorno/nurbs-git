@@ -53,3 +53,11 @@ end
 %! srf = nrbtransp(srf);
 %! nrbplot(srf,[20 5]);
 %! hold off
+
+%!test
+%! srf  = nrbrevolve(nrbline([1 0],[2 0]), [0 0 0], [0 0 1], pi/2);
+%! srft = nrbtransp(srf);
+%! assert (srf.number, fliplr(srft.number));
+%! assert (srf.order, fliplr(srft.order));
+%! assert (srf.knots, fliplr(srft.knots));
+%! assert (srf.coefs, permute(srft.coefs, [1 3 2]));

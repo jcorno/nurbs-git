@@ -79,3 +79,22 @@ end
 %! nrbplot(crv2,100)
 %! title('The curve and its reverse are the same')
 %! hold off
+
+%!test
+%! srf  = nrbrevolve(nrbline([1 0],[2 0]), [0 0 0], [0 0 1], pi/2);
+%! srf  = nrbkntins (srf, {0.3, 0.6});
+%! srf2 = nrbreverse (srf);
+%! assert (srf.knots, cellfun(@(x) sort(1-x), srf2.knots, 'UniformOutput', false), 1e-15)
+%! assert (srf.coefs, srf2.coefs(:,end:-1:1,end:-1:1))
+
+%!test
+%! srf  = nrbrevolve(nrbline([1 0],[2 0]), [0 0 0], [0 0 1], pi/2);
+%! srf  = nrbkntins (srf, {0.3, 0.6});
+%! srf2 = nrbreverse (srf, 1);
+%! knt{1} = sort(1-srf2.knots{1}); knt{2} = srf2.knots{2};
+%! assert (srf.knots, knt, 1e-15)
+%! assert (srf.coefs, srf2.coefs(:,end:-1:1,:))
+%! srf2 = nrbreverse (srf, 2);
+%! knt{1} = srf2.knots{1}; knt{2} = sort(1-srf2.knots{2});
+%! assert (srf.knots, knt, 1e-15)
+%! assert (srf.coefs, srf2.coefs(:,:,end:-1:1))

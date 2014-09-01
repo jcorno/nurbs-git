@@ -55,3 +55,18 @@ tvol = nrbmak (permute (vol.coefs, [1, ord+1]), {vol.knots{ord}});
 %! vol = nrbpermute(vol,[2 3 1]);
 %! nrbplot(vol,[5 10 20]);
 %! hold off
+
+%!test
+%! vol = nrbrevolve (nrb4surf ([1 0], [2 0], [1 1], [2 1]), [0 0 0], [0 1 0], pi/8);
+%! perm1 = [1 3 2];
+%! perm2 = [2 1 3];
+%! vol2 = nrbpermute (vol, perm1);
+%! vol3 = nrbpermute (vol, perm2);
+%! assert (vol.number(perm1), vol2.number)
+%! assert (vol.order(perm1), vol2.order)
+%! assert ({vol.knots{perm1}}, vol2.knots)
+%! assert (permute(vol.coefs, [1, perm1+1]), vol2.coefs)
+%! assert (vol.number(perm2), vol3.number)
+%! assert (vol.order(perm2), vol3.order)
+%! assert ({vol.knots{perm2}}, vol3.knots)
+%! assert (permute(vol.coefs, [1, perm2+1]), vol3.coefs)
