@@ -22,14 +22,16 @@ Operations for constructing NURBS curves and surfaces
  nrbrevolve
  nrbruled
  nrbcoons
- nrbplot
- nrbctrlplot
- nrbkntplot
- nrbexport
  nrbtestcrv
  nrbtestsrf
  nrbunclamp
  nrbmultipatch
+Plot and export
+ nrbplot
+ nrbctrlplot
+ nrbkntplot
+ nrbexport
+ nrb2iges
 B-Spline functions
  bspeval
  bspderiv
