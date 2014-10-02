@@ -1,4 +1,4 @@
-function nrbexport (nurbs, filename)
+function nrbexport (varargin)
 
 %
 % NRBEXPORT: export NURBS geometries to a format compatible with the one used in GeoPDEs (version 0.6).
@@ -6,11 +6,14 @@ function nrbexport (nurbs, filename)
 % Calling Sequence:
 % 
 %   nrbexport (nurbs, filename);
+%   nrbexport (nurbs, interfaces, boundaries, filename);
 % 
 % INPUT:
 % 
-%   nurbs    : NURBS curve, surface or volume, see nrbmak.
-%   filename : name of the output file.
+%   nurbs    :  NURBS curve, surface or volume, see nrbmak.
+%   interfaces: interface information for GeoPDEs (see nrbmultipatch)
+%   boundaries: boundary information for GeoPDEs (see nrbmultipatch)
+%   filename :  name of the output file.
 % 
 % 
 % Description:
@@ -18,7 +21,7 @@ function nrbexport (nurbs, filename)
 %   The data of the nurbs structure is written in the file, in a format 
 %     that can be read by GeoPDEs.
 %
-%    Copyright (C) 2011 Rafael Vazquez
+%    Copyright (C) 2011, 2014 Rafael Vazquez
 %
 %    This program is free software: you can redistribute it and/or modify
 %    it under the terms of the GNU General Public License as published by
@@ -33,6 +36,24 @@ function nrbexport (nurbs, filename)
 %    You should have received a copy of the GNU General Public License
 %    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+if (nargin == 2)
+  nurbs = varargin{1};
+  filename = varargin{2};
+  if (numel (nurbs) > 1)
+    warning ('Automatically creating the interface information with nrbmultipatch')
+    [interfaces, boundaries] = nrbmultipatch (nurbs);
+  else
+    interfaces = []; boundaries = [];
+  end
+elseif (nargin == 4)
+  nurbs = varargin{1};
+  interfaces = varargin{2};
+  boundaries = varargin{3};
+  filename = varargin{4};
+else
+  error ('nrbexport: wrong number of input arguments') 
+end
+
 fid = fopen (filename, 'w');
 if (fid < 0)
   error ('nrbexport: cannot open file %s', filename);
@@ -45,11 +66,10 @@ fprintf (fid, '%s\n', '#');
 fprintf (fid, '%s\n', ['# ' date]);
 fprintf (fid, '%s\n', '#');
 
-fprintf (fid, '%4i', ndim, npatch);
+fprintf (fid, '%4i', ndim, npatch, numel(interfaces), 1);
 fprintf (fid, '\n');
 for iptc = 1:npatch
-  fprintf (fid, '%s %i', 'PATCH', iptc);
-  fprintf (fid, '\n');
+  fprintf (fid, '%s %i \n', 'PATCH', iptc);
   fprintf (fid, '%4i', nurbs(iptc).order-1);
   fprintf (fid, '\n');
   fprintf (fid, '%4i', nurbs(iptc).number);
@@ -73,6 +93,39 @@ for iptc = 1:npatch
     end
     fprintf (fid, '%1.15f   ', nurbs(iptc).coefs(4,:,:,:));
     fprintf (fid, '\n');
+  end
+end
+
+for intrfc = 1:numel(interfaces)
+  if (isfield (interfaces, 'ref'))
+    fprintf (fid, '%s \n', interfaces(intrfc).ref);
+  else
+    fprintf (fid, '%s %i \n', 'INTERFACE', intrfc);
+  end
+  fprintf (fid, '%i %i \n', interfaces(intrfc).patch1, interfaces(intrfc).side1);
+  fprintf (fid, '%i %i \n', interfaces(intrfc).patch2, interfaces(intrfc).side2);
+  if (ndim == 2)
+    fprintf (fid, '%i \n', interfaces(intrfc).ornt);
+  elseif (ndim == 3)
+    fprintf (fid, '%i %i %i \n', interfaces(intrfc).flag, interfaces(intrfc).ornt1, interfaces(intrfc).ornt2);
+  end
+end
+
+% The subdomain part should be fixed
+fprintf (fid, '%s \n', 'SUBDOMAIN 1');
+fprintf (fid, '%i ', 1:npatch);
+fprintf (fid, '\n');
+    
+
+for ibnd = 1:numel (boundaries)
+  if (isfield (boundaries, 'name'))
+    fprintf (fid, '%s \n', boundaries(ibnd).name);
+  else
+    fprintf (fid, '%s %i \n', 'BOUNDARY', ibnd);
+  end
+  fprintf (fid, '%i \n', boundaries(ibnd).nsides);
+  for ii = 1:boundaries(ibnd).nsides
+    fprintf (fid, '%i %i \n', boundaries(ibnd).patches(ii), boundaries(ibnd).faces(ii));
   end
 end
 
