@@ -62,18 +62,18 @@ if (iscell (nurbs.knots))
   if (any (nurbs.coefs(3,:)))
     % surface in a 3D space
     for ii = 1:numel(knt1)
-      plot3 (squeeze(p1(1,ii,:)), squeeze(p1(2,ii,:)), squeeze(p1(3,ii,:)));
+      plot3 (squeeze(p1(1,ii,:)), squeeze(p1(2,ii,:)), squeeze(p1(3,ii,:)),'k');
     end
     for ii = 1:numel(knt2)
-      plot3 (squeeze(p2(1,:,ii)), squeeze(p2(2,:,ii)), squeeze(p2(3,:,ii))); 
+      plot3 (squeeze(p2(1,:,ii)), squeeze(p2(2,:,ii)), squeeze(p2(3,:,ii)),'k'); 
     end
   else
     % plain surface
     for ii = 1:numel(knt1)
-      plot (squeeze(p1(1,ii,:)), squeeze (p1(2,ii,:))); 
+      plot (squeeze(p1(1,ii,:)), squeeze (p1(2,ii,:)),'k'); 
     end
     for ii = 1:numel(knt2)
-      plot (p2(1,:,ii),p2(2,:,ii));
+      plot (p2(1,:,ii),p2(2,:,ii),'k');
     end
   end
 
@@ -98,9 +98,9 @@ else % plot a NURBS curve
    p = nrbeval (nurbs, unique (nurbs.knots(order:end-order+1)));
 
    if (any (nurbs.coefs(3,:))) % plot a 3D curve
-     plot3 (p(1,:), p(2,:), p(3,:), 'x'); 
+     plot3 (p(1,:), p(2,:), p(3,:), 'rx'); 
    else                     % plot a 2D curve
-     plot (p(1,:), p(2,:), 'x'); 
+     plot (p(1,:), p(2,:), 'rx'); 
    end
 
 end
