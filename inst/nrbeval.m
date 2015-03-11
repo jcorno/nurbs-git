@@ -247,6 +247,10 @@ else
   %% NURBS structure represents a curve
   %%  tt represent a vector of parametric points in the u direction
 
+  if (iscell (tt) && numel (tt) == 1)
+    tt = cell2mat (tt);
+  end
+  
   st = size (tt);
   
   val = bspeval(nurbs.order-1,nurbs.coefs,nurbs.knots,tt(:)');

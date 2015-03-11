@@ -166,14 +166,20 @@ else
   [cup,cuw] = nrbeval (dnurbs,tt);
   temp1 = cuw(ones(3,1),:);
   jac = (cup-temp1.*pnt)./temp;
+  if (iscell (tt))
+    jac = {jac};
+  end
 
   % second derivative
   if (nargout == 3 && exist ('dnurbs2'))
     [cuup,cuuw] = nrbeval (dnurbs2, tt);
     temp2 = cuuw(ones(3,1),:);
     hess = (cuup - (2*cup.*temp1 + cp.*temp2)./temp + 2*cp.*temp1.^2./temp.^2)./temp;
+    if (iscell (tt))
+      hess = {hess};
+    end
   end
-
+  
 end
 
 varargout{1} = pnt;
