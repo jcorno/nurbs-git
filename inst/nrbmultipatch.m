@@ -130,6 +130,9 @@ end
 if (num_interfaces == 0)
    interfaces = []; 
 end
+if (boundary.nsides == 0)
+  boundary = [];
+end
 
 end
 
