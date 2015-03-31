@@ -61,12 +61,24 @@ end
 
 ndim = numel (nurbs(1).order);
 npatch = numel (nurbs);
-fprintf (fid, '%s\n', '# nurbs mesh v.0.7');
+rdim = 1;
+for iptc = 1:npatch
+  if (any (abs(nurbs(iptc).coefs(3,:)) > 1e-12))
+    rdim = 3;
+    break
+  elseif (any (abs(nurbs(iptc).coefs(2,:)) > 1e-12))
+    rdim = 2;
+  end
+end
+
+fprintf (fid, '%s\n', '# nurbs mesh v.1.0');
 fprintf (fid, '%s\n', '#');
 fprintf (fid, '%s\n', ['# ' date]);
 fprintf (fid, '%s\n', '#');
 
-fprintf (fid, '%4i', ndim, npatch, numel(interfaces), 1);
+fprintf (fid, '%2i', ndim, rdim);
+fprintf (fid, '\n');
+fprintf (fid, '%2i', numel(interfaces), 1);
 fprintf (fid, '\n');
 for iptc = 1:npatch
   fprintf (fid, '%s %i \n', 'PATCH', iptc);
@@ -79,21 +91,12 @@ for iptc = 1:npatch
     fprintf (fid, '\n');
   end
 
-  if (ndim == 2)
-    for ii = 1:ndim
-      fprintf (fid, '%1.15f   ', nurbs(iptc).coefs(ii,:,:));
-      fprintf (fid, '\n');
-    end
-    fprintf (fid, '%1.15f   ', nurbs(iptc).coefs(4,:,:));
-    fprintf (fid, '\n');
-  elseif (ndim == 3)
-    for ii = 1:ndim
-      fprintf (fid, '%1.15f   ', nurbs(iptc).coefs(ii,:,:,:));
-      fprintf (fid, '\n');
-    end
-    fprintf (fid, '%1.15f   ', nurbs(iptc).coefs(4,:,:,:));
+  for ii = 1:rdim
+    fprintf (fid, '%1.15f   ', nurbs(iptc).coefs(ii,:,:));
     fprintf (fid, '\n');
   end
+  fprintf (fid, '%1.15f   ', nurbs(iptc).coefs(4,:,:));
+  fprintf (fid, '\n');
 end
 
 for intrfc = 1:numel(interfaces)
