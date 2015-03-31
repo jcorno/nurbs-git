@@ -76,9 +76,7 @@ fprintf (fid, '%s\n', '#');
 fprintf (fid, '%s\n', ['# ' date]);
 fprintf (fid, '%s\n', '#');
 
-fprintf (fid, '%2i', ndim, rdim);
-fprintf (fid, '\n');
-fprintf (fid, '%2i', numel(interfaces), 1);
+fprintf (fid, '%2i', ndim, rdim, numel(interfaces), 1);
 fprintf (fid, '\n');
 for iptc = 1:npatch
   fprintf (fid, '%s %i \n', 'PATCH', iptc);
