@@ -7,6 +7,7 @@ function nrbexport (varargin)
 % 
 %   nrbexport (nurbs, filename);
 %   nrbexport (nurbs, interfaces, boundaries, filename);
+%   nrbexport (nurbs, interfaces, boundaries, subdomains, filename);
 % 
 % INPUT:
 % 
@@ -21,7 +22,7 @@ function nrbexport (varargin)
 %   The data of the nurbs structure is written in the file, in a format 
 %     that can be read by GeoPDEs.
 %
-%    Copyright (C) 2011, 2014 Rafael Vazquez
+%    Copyright (C) 2011, 2014, 2015 Rafael Vazquez
 %
 %    This program is free software: you can redistribute it and/or modify
 %    it under the terms of the GNU General Public License as published by
@@ -43,13 +44,20 @@ if (nargin == 2)
     warning ('Automatically creating the interface information with nrbmultipatch')
     [interfaces, boundaries] = nrbmultipatch (nurbs);
   else
-    interfaces = []; boundaries = [];
+    interfaces = []; boundaries = []; subdomains = [];
   end
 elseif (nargin == 4)
   nurbs = varargin{1};
   interfaces = varargin{2};
   boundaries = varargin{3};
   filename = varargin{4};
+  subdomains = [];
+elseif (nargin == 5)
+  nurbs = varargin{1};
+  interfaces = varargin{2};
+  boundaries = varargin{3};
+  subdomains = varargin{4};
+  filename = varargin{5};
 else
   error ('nrbexport: wrong number of input arguments') 
 end
@@ -76,7 +84,7 @@ fprintf (fid, '%s\n', '#');
 fprintf (fid, '%s\n', ['# ' date]);
 fprintf (fid, '%s\n', '#');
 
-fprintf (fid, '%2i', ndim, rdim, numel(interfaces), 1);
+fprintf (fid, '%2i', ndim, rdim, npatch, numel(interfaces), numel(subdomains));
 fprintf (fid, '\n');
 for iptc = 1:npatch
   fprintf (fid, '%s %i \n', 'PATCH', iptc);
@@ -112,10 +120,12 @@ for intrfc = 1:numel(interfaces)
   end
 end
 
+for isubd = 1:numel(subdomains)
 % The subdomain part should be fixed
-fprintf (fid, '%s \n', 'SUBDOMAIN 1');
-fprintf (fid, '%i ', 1:npatch);
-fprintf (fid, '\n');
+  fprintf (fid, '%s \n', subdomains(isubd).name);
+  fprintf (fid, '%i ', subdomains(isubd).patches);
+  fprintf (fid, '\n');  
+end
     
 
 for ibnd = 1:numel (boundaries)
