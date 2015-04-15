@@ -1,3 +1,12 @@
+Summary of important user-visible changes for nurbs 1.3.10:
+-------------------------------------------------------------------
+
+ ** 1.3.10 is being released to allow compatibility with Octave 4.0
+
+ * src/low_level_functions.cc(findspan): return an error if a point
+                                         is outside the knotspan
+
+
 Summary of important user-visible changes for nurbs 1.3.9:
 -------------------------------------------------------------------
 
