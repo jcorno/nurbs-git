@@ -120,7 +120,7 @@ DEFUN_DLD(nrbsurfderiveval, args, nargout,"\
       
       Array<idx_vector> idx(dim_vector (3, 1), idx_vector(':'));	 
       idx (0) = idx_vector (3);
-      Matrix weights (NDArray (coefs.index (idx).squeeze ()).matrix_value ());
+      Matrix weights (NDArray (coefs.index (idx).squeeze ()));
 
       for (octave_idx_type iu(0); iu<uv.cols (); iu++)
 	{
@@ -132,7 +132,7 @@ DEFUN_DLD(nrbsurfderiveval, args, nargout,"\
 	    {
 
 	      Matrix Aders; idx(0) = idx_vector (idim);
-	      Matrix P (NDArray (coefs.index (idx).squeeze ()).matrix_value ());
+	      Matrix P (NDArray (coefs.index (idx).squeeze ()));
 	      surfderiveval (n, p, knotsu, m, q, knotsv, P, uv(0,iu), uv(1,iu), d, Aders);;      
 	      
 	      for (octave_idx_type k(0); k<=d; k++)
