@@ -21,7 +21,8 @@
 #include "low_level_functions.h"
 #include <iostream>
 
-octave_idx_type findspan(int n, int p, double u, const RowVector& U)
+octave_idx_type
+findspan (int n, int p, double u, const RowVector& U)
 
 // Find the knot span of the parametric point u. 
 //
@@ -70,12 +71,17 @@ Below is the original implementation from the NURBS Book
 {
   // FIXME : this implementation has linear, rather than log complexity
   int ret = 0;
-  while ((ret++ < n) && (U(ret) <= u)) {
-  };
+  
+  if (u > U.xelem (U.numel () - 1) || u < U.xelem (0))
+    error ("Value %g is outside the knot span", u);
+  else
+    while ((ret++ < n) && (U(ret) <= u)) { };
+
   return (ret-1);
 }
 
-void basisfun(int i, double u, int p, const RowVector& U, RowVector& N)
+void
+basisfun (int i, double u, int p, const RowVector& U, RowVector& N)
 
 // Basis Function. 
 //
