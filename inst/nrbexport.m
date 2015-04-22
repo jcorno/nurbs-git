@@ -43,6 +43,7 @@ if (nargin == 2)
   if (numel (nurbs) > 1)
     warning ('Automatically creating the interface information with nrbmultipatch')
     [interfaces, boundaries] = nrbmultipatch (nurbs);
+    subdomains = [];
   else
     interfaces = []; boundaries = []; subdomains = [];
   end
