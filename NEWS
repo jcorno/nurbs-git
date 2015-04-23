@@ -6,6 +6,9 @@ Summary of important user-visible changes for nurbs 1.3.10:
  * src/low_level_functions.cc(findspan): return an error if a point
                                          is outside the knotspan
 
+ * inst/nrbexport: changed the format of geopdes files
+
+ * inst/nrbbasisfun: fixed bug to return indices in the 1D case
 
 Summary of important user-visible changes for nurbs 1.3.9:
 -------------------------------------------------------------------
