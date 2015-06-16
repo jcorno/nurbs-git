@@ -220,7 +220,7 @@ if (nargout == 2)
   if (iscell (dnurbs2))
     dnurbs2 = [dnurbs2{:}];
   end
-  if (any (arrayfun(@(x) any(isnan(x.coefs(:)) | iscell(x.coefs(:))), dnurbs2)))
+  if (any (arrayfun(@(x) any(isnan(x.coefs(:)) | isinf(x.coefs(:))), dnurbs2)))
     warning (['The structure for the second derivative contains Inf and/or NaN coefficients, ' ...
         'probably due to low continuity at repeated knots. This should not affect the ' ...
         'computation of the second derivatives, except at those knots.'])
