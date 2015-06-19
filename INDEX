@@ -39,6 +39,7 @@ B-Spline functions
  bspdegelev
  basisfun
  basisfunder
+ basiskntins
  findspan
  numbasisfun
  tbasisfun
