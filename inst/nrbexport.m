@@ -1,13 +1,16 @@
 function nrbexport (varargin)
 
 %
-% NRBEXPORT: export NURBS geometries to a format compatible with the one used in GeoPDEs (version 0.6).
+% NRBEXPORT: export NURBS geometries to a format compatible with the one used in GeoPDEs.
 % 
 % Calling Sequence:
 % 
 %   nrbexport (nurbs, filename);
 %   nrbexport (nurbs, interfaces, boundaries, filename);
 %   nrbexport (nurbs, interfaces, boundaries, subdomains, filename);
+%   nrbexport (nurbs, filename, version);
+%   nrbexport (nurbs, interfaces, boundaries, filename, version);
+%   nrbexport (nurbs, interfaces, boundaries, subdomains, filename, version);
 % 
 % INPUT:
 % 
@@ -15,12 +18,15 @@ function nrbexport (varargin)
 %   interfaces: interface information for GeoPDEs (see nrbmultipatch)
 %   boundaries: boundary information for GeoPDEs (see nrbmultipatch)
 %   filename :  name of the output file.
+%   version  :  either '-V0.7' or '-V2.1', to select the file format
 % 
 % 
 % Description:
 % 
 %   The data of the nurbs structure is written in the file, in a format 
-%     that can be read by GeoPDEs.
+%     that can be read by GeoPDEs. By default, the file is saved in the
+%     format used by GeoPDEs 2.1. For the format of GeoPDEs 2.0 use the
+%     option '-v0.7'. Earlier versions of GeoPDEs are not supported.
 %
 %    Copyright (C) 2011, 2014, 2015 Rafael Vazquez
 %
@@ -37,7 +43,13 @@ function nrbexport (varargin)
 %    You should have received a copy of the GNU General Public License
 %    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-if (nargin == 2)
+if (strcmpi (varargin{end}, '-v0.7'))
+  version = '0.7';
+else  
+  version = '2.1';
+end
+
+if (nargin == 2 || nargin == 3)
   nurbs = varargin{1};
   filename = varargin{2};
   if (numel (nurbs) > 1)
@@ -47,13 +59,13 @@ if (nargin == 2)
   else
     interfaces = []; boundaries = []; subdomains = [];
   end
-elseif (nargin == 4)
+elseif (nargin == 4 || (nargin == 5 && ischar(varargin{4})))
   nurbs = varargin{1};
   interfaces = varargin{2};
   boundaries = varargin{3};
   filename = varargin{4};
   subdomains = [];
-elseif (nargin == 5)
+elseif (nargin == 6 || (nargin == 5 && ~ischar(varargin{4})))
   nurbs = varargin{1};
   interfaces = varargin{2};
   boundaries = varargin{3};
@@ -71,27 +83,40 @@ end
 ndim = numel (nurbs(1).order);
 npatch = numel (nurbs);
 rdim = 1;
-for iptc = 1:npatch
-  if (any (abs(nurbs(iptc).coefs(3,:)) > 1e-12))
-    rdim = 3;
-    break
-  elseif (any (abs(nurbs(iptc).coefs(2,:)) > 1e-12))
-    rdim = 2;
+
+if (strcmp (version, '0.7'))
+  rdim = ndim;
+else
+  for iptc = 1:npatch
+    if (any (abs(nurbs(iptc).coefs(3,:)) > 1e-12))
+      rdim = 3;
+      break
+    elseif (any (abs(nurbs(iptc).coefs(2,:)) > 1e-12))
+      rdim = 2;
+    end
   end
 end
 
-fprintf (fid, '%s\n', '# nurbs mesh v.1.0');
+if (strcmp (version, '0.7'))
+  fprintf (fid, '%s\n', '# nurbs mesh v.0.7');
+else
+  fprintf (fid, '%s\n', '# nurbs mesh v.2.1');
+end
 fprintf (fid, '%s\n', '#');
 fprintf (fid, '%s\n', ['# ' date]);
 fprintf (fid, '%s\n', '#');
 
-fprintf (fid, '%2i', ndim, rdim, npatch, numel(interfaces), numel(subdomains));
+if (strcmp (version, '0.7'))
+  fprintf (fid, '%i ', ndim, npatch, numel(interfaces), numel(subdomains));
+else
+  fprintf (fid, '%i ', ndim, rdim, npatch, numel(interfaces), numel(subdomains));
+end
 fprintf (fid, '\n');
 for iptc = 1:npatch
   fprintf (fid, '%s %i \n', 'PATCH', iptc);
-  fprintf (fid, '%4i', nurbs(iptc).order-1);
+  fprintf (fid, '%i ', nurbs(iptc).order-1);
   fprintf (fid, '\n');
-  fprintf (fid, '%4i', nurbs(iptc).number);
+  fprintf (fid, '%i ', nurbs(iptc).number);
   fprintf (fid, '\n');
   for ii = 1:ndim
     fprintf (fid, '%1.7f   ', nurbs(iptc).knots{ii});
