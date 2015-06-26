@@ -125,7 +125,7 @@ if iscell(knots)
    nurbs.number = np(2:4);
    if (dim < 4)
      nurbs.coefs = repmat([0.0 0.0 0.0 1.0]',[1 np(2:4)]);
-     nurbs.coefs(1:dim,:,:) = coefs;  
+     nurbs.coefs(1:dim,:,:,:) = coefs;  
    else
      nurbs.coefs = coefs;
    end
