@@ -23,7 +23,7 @@ function deg = rad2deg(rad)
 % 
 %   Convert 0.3 radians to degrees
 % 
-%   rad = deg2rad(0.3);
+%   deg = rad2deg(0.3);
 %
 %    Copyright (C) 2000 Mark Spink
 %
