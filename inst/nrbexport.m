@@ -118,8 +118,13 @@ for iptc = 1:npatch
   fprintf (fid, '\n');
   fprintf (fid, '%i ', nurbs(iptc).number);
   fprintf (fid, '\n');
-  for ii = 1:ndim
-    fprintf (fid, '%1.7f   ', nurbs(iptc).knots{ii});
+  if (iscell (nurbs(iptc).knots))
+    for ii = 1:ndim
+      fprintf (fid, '%1.7f   ', nurbs(iptc).knots{ii});
+      fprintf (fid, '\n');
+    end
+  else
+    fprintf (fid, '%1.7f   ', nurbs(iptc).knots);
     fprintf (fid, '\n');
   end
 
