@@ -13,7 +13,7 @@ function S = basiskntins (deg,t,u)
 %
 % Calling Sequence:
 % 
-%    S = basisfun_kntins (deg, t, u);
+%    S = basiskntins (deg, t, u);
 %
 %    INPUT:
 %   
