@@ -46,7 +46,7 @@ DEFUN_DLD(nrb_srf_basisfun_der__, args, nargout,"\
       idx(0) = 1;
       const NDArray v(points.index (idx).squeeze ()); // v = points(2,:);      
       
-      octave_idx_type npt = u.length (); // npt = length(u);
+      octave_idx_type npt = u.numel (); // npt = length(u);
 
       RowVector M(p+1, 0.0), N (q+1, 0.0);
       Matrix Nout(npt, (p+1)*(q+1), 0.0);
@@ -76,7 +76,7 @@ DEFUN_DLD(nrb_srf_basisfun_der__, args, nargout,"\
       Matrix Ik = feval (std::string("numbasisfun"), newargs, 1)(0).matrix_value (); // Ik = numbasisfun (spu, u, p, U);
 
       RowVector spv(v);
-      for (octave_idx_type ii(0); ii < v.length(); ii++)
+      for (octave_idx_type ii(0); ii < v.numel (); ii++)
 	{
 	  spv(ii) = findspan(n, q, v(ii), V);
 	} // spv  =  findspan (n, q, v, V);
@@ -91,7 +91,7 @@ DEFUN_DLD(nrb_srf_basisfun_der__, args, nargout,"\
 	  NuIkuk.insert (M, ii, 0);
 	} // NuIkuk = basisfun (spu, u, p, U);
 
-      Matrix NvJkvk(v.length (), q+1, 0.0);
+      Matrix NvJkvk(v.numel (), q+1, 0.0);
       for (octave_idx_type ii(0); ii < npt; ii++)
 	{
 	  basisfun(int(spv(ii)), v(ii), q, V, N);

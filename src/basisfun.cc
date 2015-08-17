@@ -46,11 +46,11 @@ Calling Sequence:\n\
   int       p = args(2).idx_type_value();
   const RowVector U = args(3).row_vector_value();
   RowVector N(p+1, 0.0);
-  Matrix    B(u.length(), p+1, 0.0);
+  Matrix    B(u.numel (), p+1, 0.0);
   
   if (!error_state)
     {
-      for (octave_idx_type ii(0); ii < u.length(); ii++)
+      for (octave_idx_type ii(0); ii < u.numel (); ii++)
 	{
 	  basisfun(int(i(ii)), u(ii), p, U, N);
 	  B.insert(N, ii, 0);

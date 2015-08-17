@@ -50,12 +50,12 @@ DEFUN_DLD(basisfunder, args, nargout,"\n\
 
   if (!error_state)
     {
-      if (i.length () != u.length ())
+      if (i.numel () != u.numel ())
 	print_usage ();
  
-      NDArray dersv (dim_vector (i.length (), nd+1, pl+1), 0.0);
+      NDArray dersv (dim_vector (i.numel (), nd+1, pl+1), 0.0);
       NDArray ders(dim_vector(nd+1, pl+1), 0.0);
-      for ( octave_idx_type jj(0); jj < i.length (); jj++)
+      for ( octave_idx_type jj(0); jj < i.numel (); jj++)
 	{
 	  basisfunder (int (i(jj)), pl, u(jj), U, nd, ders);
 

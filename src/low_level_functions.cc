@@ -309,14 +309,16 @@ int surfderivcpts (octave_idx_type n, octave_idx_type  p, const RowVector& U,
 	  idxva (0) = idx_vector(k); idxva (1) = idx_vector(0);
 	  idxva (2) = idx_vector(i); idxva (3) = idx_vector(':');
 	  NDArray temp2 (pkl.index (idxva));
-	  curvederivcpts (m, q, V.extract (s1, V.length ()-1), temp2.squeeze (), dd, 0, s, temp);
+	  curvederivcpts (m, q, V.extract (s1, V.numel () - 1),
+                          temp2.squeeze (), dd, 0, s, temp);
 	  
 	  for (octave_idx_type l(1); l<=dd; l++)
 	    {
 
 	      for (octave_idx_type j(0); j<=s-l; j++)
 		{
-		  assert (k<idxa(0) && l<idxa(1) && i<idxa(2) && j<idxa(3));
+		  assert (k<idxa(0) && l<idxa(1)
+                          && i<idxa(2) && j<idxa(3));
 		  idxta (0) = k; idxta (1) = l;
 		  idxta (2) = i; idxta (3) = j;
 		  pkl(idxta) = temp (l, j);
