@@ -71,6 +71,8 @@ for j=1:nu_s
   S(row:deg+row,col:deg+col) = Sl;
 end
 
+maxval = max (S(:));
+S(S/maxval < 1e-16) = 0;
 end
 
 
