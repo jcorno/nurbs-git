@@ -67,12 +67,9 @@ Vector and Transformation Utilities
  vecangle
  vecdot
  veccross
+ vecrot
  vecrotx
  vecroty
  vecrotz
- vecrot
  vecscale
  vectrans
-Misc Utilities
- deg2rad
- rad2deg
