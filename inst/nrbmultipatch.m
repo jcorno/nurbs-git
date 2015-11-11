@@ -41,7 +41,10 @@ function [interfaces, boundary] = nrbmultipatch (nurbs)
 
 npatch = numel (nurbs);
 if (~iscell (nurbs(1).knots))
-  error ('Multipatch only works for 2D and 3D geometries')
+  ndim = 1;
+  face_corners = @(x) x.coefs;
+  tol = 1e-15;
+  compare_corners = @(nrb1, nrb2) max(abs(nrb1 - nrb2)) < tol;
 elseif (size(nurbs(1).knots,2) == 2)
   ndim = 2;
   face_corners = @(x) x.coefs(:, [1 end]);
@@ -55,9 +58,11 @@ end
 non_set_faces = cell (npatch, 1);
 for ii = 1:npatch
   if (~iscell (nurbs(ii).knots))
-    error ('Multipatch only works for 2D and 3D geometries')
+    if (ndim ~= 1)
+      error ('All the patches must have the same dimension (at least for now)')
+    end
   elseif (ndim ~= size(nurbs(ii).knots,2))
-    error ('All the patches must have the same dimension (at least for now)')
+    error ('All the patches must have the same dimension (at least for now)')      
   end
   non_set_faces{ii} = 1:2*ndim;
 end
@@ -94,7 +99,7 @@ for i1 = 1:npatch
           continue
         else
           corners2 = face_corners (nrb2);
-          if (ndim == 2)
+          if (ndim == 2 || ndim == 1)
             flag = compare_corners (corners1, corners2);
           elseif (ndim == 3)
             [flag, ornt1, ornt2] = compare_corners (corners1, corners2);
@@ -112,7 +117,7 @@ for i1 = 1:npatch
         intrfc.flag = flag;
         intrfc.ornt1 = ornt1;
         intrfc.ornt2 = ornt2;
-      else
+      elseif (ndim == 2)
         intrfc.ornt = flag;
       end
 
@@ -139,24 +144,26 @@ end
 
 
 function [flag, ornt1, ornt2] = compare_corners_bivariate (coefs1, coefs2)
+  tol = 1e-13;
+
   coefs1 = reshape (coefs1, 4, []);
   coefs2 = reshape (coefs2, 4, []);
 % Should use some sort of relative error
-  if (max (max (abs (coefs1 - coefs2))) < 1e-13)
+  if (max (max (abs (coefs1 - coefs2))) < tol)
     flag = 1; ornt1 = 1; ornt2 = 1;
-  elseif (max (max (abs (coefs1 - coefs2(:,[1 3 2 4])))) < 1e-13)
+  elseif (max (max (abs (coefs1 - coefs2(:,[1 3 2 4])))) < tol)
     flag = -1; ornt1 = 1; ornt2 = 1;
-  elseif (max (max (abs (coefs1 - coefs2(:,[3 1 4 2])))) < 1e-13)
+  elseif (max (max (abs (coefs1 - coefs2(:,[3 1 4 2])))) < tol)
     flag = -1; ornt1 = -1; ornt2 = 1;
-  elseif (max (max (abs (coefs1 - coefs2(:,[2 1 4 3])))) < 1e-13)
+  elseif (max (max (abs (coefs1 - coefs2(:,[2 1 4 3])))) < tol)
     flag = 1; ornt1 = -1; ornt2 = 1;
-  elseif (max (max (abs (coefs1 - coefs2(:,[4 3 2 1])))) < 1e-13)
+  elseif (max (max (abs (coefs1 - coefs2(:,[4 3 2 1])))) < tol)
     flag = 1; ornt1 = -1; ornt2 = -1;
-  elseif (max (max (abs (coefs1 - coefs2(:,[4 2 3 1])))) < 1e-13)
+  elseif (max (max (abs (coefs1 - coefs2(:,[4 2 3 1])))) < tol)
     flag = -1; ornt1 = -1; ornt2 = -1;
-  elseif (max (max (abs (coefs1 - coefs2(:,[2 4 1 3])))) < 1e-13)
+  elseif (max (max (abs (coefs1 - coefs2(:,[2 4 1 3])))) < tol)
     flag = -1; ornt1 = 1; ornt2 = -1;
-  elseif (max (max (abs (coefs1 - coefs2(:,[3 4 1 2])))) < 1e-13)
+  elseif (max (max (abs (coefs1 - coefs2(:,[3 4 1 2])))) < tol)
     flag = 1; ornt1 = 1; ornt2 = -1;
   else
     flag = 0; ornt1 = 0; ornt2 = 0;
@@ -164,12 +171,14 @@ function [flag, ornt1, ornt2] = compare_corners_bivariate (coefs1, coefs2)
 end
 
 function flag = compare_corners_univariate (coefs1, coefs2)
+  tol = 1e-13;
+
   coefs1 = reshape (coefs1, 4, []);
   coefs2 = reshape (coefs2, 4, []);
 % Should use some sort of relative error
-  if (max (max (abs (coefs1 - coefs2))) < 1e-13)
+  if (max (max (abs (coefs1 - coefs2))) < tol)
     flag = 1;
-  elseif (max (max (abs (coefs1 - coefs2(:,[end 1])))) < 1e-13)
+  elseif (max (max (abs (coefs1 - coefs2(:,[end 1])))) < tol)
     flag = -1;
   else
     flag = 0;
