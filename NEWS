@@ -1,5 +1,6 @@
 Summary of important user-visible changes for nurbs 1.3.11:
 -------------------------------------------------------------------
+ * nrbextract, nrbmultipatch: generalized for curves
 
  * inst/deg2rad, inst/rad2deg: removed functions from the package
 
