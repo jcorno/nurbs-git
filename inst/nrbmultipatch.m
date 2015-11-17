@@ -20,10 +20,10 @@ function [interfaces, boundary] = nrbmultipatch (nurbs)
 %        on how the two patches match, see below.
 %   boundary:   array with the boundary faces that do not belong to any interface
 %      - nsides:  total number of sides on the boundary array (numel(boundary))
-%      - patches: number of the patch to which the boundary belongs to
+%      - patches: number of the patch to which the boundary belongs
 %      - sides:   number of the local side on the patch
 % 
-%    Copyright (C) 2014 Rafael Vazquez
+%    Copyright (C) 2014, 2015 Rafael Vazquez
 %
 %    This program is free software: you can redistribute it and/or modify
 %    it under the terms of the GNU General Public License as published by
@@ -95,14 +95,19 @@ for i1 = 1:npatch
       while (~flag && j2 < numel (non_set_faces{i2}))
         j2 = j2 + 1;
         nrb2 = nrb_faces2(non_set_faces{i2}(j2));
-        if (numel(nrb1.coefs) ~= numel(nrb2.coefs))
-          continue
-        else
-          corners2 = face_corners (nrb2);
-          if (ndim == 2 || ndim == 1)
-            flag = compare_corners (corners1, corners2);
-          elseif (ndim == 3)
-            [flag, ornt1, ornt2] = compare_corners (corners1, corners2);
+
+        corners2 = face_corners (nrb2);
+        if (ndim == 2 || ndim == 1)
+          flag = compare_corners (corners1, corners2);
+        elseif (ndim == 3)
+          [flag, ornt1, ornt2] = compare_corners (corners1, corners2);
+        end
+        
+        if (flag)
+          if (numel(nrb1.coefs) ~= numel(nrb2.coefs))
+            flag = 0;
+            warning (['The corners of PATCH %d FACE %d, and PATCH %d FACE %d coincide, but the number ' ... 
+                'of control points is different. No information is saved in this case'], i1, j1, i2, j2)
           end
         end
       end
