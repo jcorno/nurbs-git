@@ -23,12 +23,8 @@ function S = basiskntins (deg,t,u)
 %   
 %    OUTPUT:
 %   
-%      B - Value of the basis functions at the points
-%          size(B)=[numel(u),(p+1)] for curves
-%          or [numel(u)*numel(v), (p+1)*(q+1)] for surfaces
-%
-%      N - Indices of the basis functions that are nonvanishing at each
-%          point. size(N) == size(B)
+%      S - The matrix relating the two spaces, of size (deg-nu, deg-nt) 
+%           with nu = numel(u)-deg-1, nt = numel(t)-deg-1
 %   
 %    Copyright (C) 2015 Rafael Vazquez
 %
