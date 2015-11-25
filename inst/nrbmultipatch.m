@@ -22,6 +22,9 @@ function [interfaces, boundary] = nrbmultipatch (nurbs)
 %      - nsides:  total number of sides on the boundary array (numel(boundary))
 %      - patches: number of the patch to which the boundary belongs
 %      - sides:   number of the local side on the patch
+%
+% The boundary faces are stored separately, that is, nsides=1 for each boundary.
+%  To join several faces under the same condition, the user should do it by hand.
 % 
 %    Copyright (C) 2014, 2015 Rafael Vazquez
 %
