@@ -69,9 +69,8 @@ end
 
 num_interfaces = 0;
 
-boundary.nsides = 0;
-boundary.patches = [];
-boundary.faces = [];
+num_boundaries = 0;
+boundary = struct ('nsides', 0, 'patches', [], 'faces', []);
 
 for i1 = 1:npatch
   nrb_faces1 = nrbextract (nurbs(i1));
@@ -130,9 +129,11 @@ for i1 = 1:npatch
       num_interfaces = num_interfaces + 1;
       interfaces(num_interfaces) = intrfc;
     else
-      boundary.nsides = boundary.nsides + 1;
-      boundary.patches = [boundary.patches; i1];
-      boundary.faces = [boundary.faces; j1];
+      bndry.nsides = 1;
+      bndry.patches = i1;
+      bndry.faces = j1;
+      num_boundaries = num_boundaries + 1;
+      boundary(num_boundaries) = bndry;
     end
   end
 end
@@ -140,7 +141,7 @@ end
 if (num_interfaces == 0)
    interfaces = []; 
 end
-if (boundary.nsides == 0)
+if (num_boundaries == 0)
   boundary = [];
 end
 
