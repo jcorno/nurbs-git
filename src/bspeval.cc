@@ -16,7 +16,7 @@
 
 #include <octave/oct.h>
 #include "low_level_functions.h"
-#include <omp.h>
+//#include <omp.h>
 
 static bool bspeval_bad_arguments(const octave_value_list& args);
 
