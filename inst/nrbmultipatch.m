@@ -23,6 +23,9 @@ function [interfaces, boundary] = nrbmultipatch (nurbs)
 %      - patches: number of the patch to which the boundary belongs
 %      - sides:   number of the local side on the patch
 %
+% The faces of two patches must match conformingly: the control points must be the same,
+%  with the knot vectors (in each direction) related by an affine transformation.
+%
 % The boundary faces are stored separately, that is, nsides=1 for each boundary.
 %  To join several faces under the same condition, the user should do it by hand.
 % 
@@ -217,6 +220,8 @@ function [flag, ornt1, ornt2, MsgFlag] = compare_sides_bivariate (nrb1, nrb2)
   end
 
 end
+
+
 
 % Compare the sides of two surfaces
 function [flag, MsgFlag] = compare_sides_univariate (nrb1, nrb2)
