@@ -45,17 +45,14 @@ function [interfaces, boundary] = nrbmultipatch (nurbs)
 npatch = numel (nurbs);
 if (~iscell (nurbs(1).knots))
   ndim = 1;
-  face_corners = @(x) x.coefs;
   tol = 1e-15;
-  compare_corners = @(nrb1, nrb2) max(abs(nrb1 - nrb2)) < tol;
+  compare_sides = @(nrb1, nrb2) max(abs(nrb1.coefs - nrb2.coefs)) < tol;
 elseif (size(nurbs(1).knots,2) == 2)
   ndim = 2;
-  face_corners = @(x) x.coefs(:, [1 end]);
-  compare_corners = @(nrb1, nrb2) compare_corners_univariate (nrb1, nrb2);
+  compare_sides = @(nrb1, nrb2) compare_sides_univariate (nrb1, nrb2);
 elseif (size(nurbs(1).knots,2) == 3)
   ndim = 3;
-  face_corners = @(x) x.coefs(:, [1 end], [1 end]);
-  compare_corners = @(nrb1, nrb2) compare_corners_bivariate (nrb1, nrb2);
+  compare_sides = @(nrb1, nrb2) compare_sides_bivariate (nrb1, nrb2);
 end
 
 non_set_faces = cell (npatch, 1);
@@ -84,7 +81,7 @@ for i1 = 1:npatch
     if (isempty (intersect (non_set_faces{i1}, j1))); continue; end
 
     nrb1 = nrb_faces1(j1);
-    corners1 = face_corners (nrb1);
+%     corners1 = face_corners (nrb1);
 
     non_set_faces{i1} = setdiff (non_set_faces{i1}, j1);
     flag = 0;
@@ -98,20 +95,16 @@ for i1 = 1:npatch
         j2 = j2 + 1;
         nrb2 = nrb_faces2(non_set_faces{i2}(j2));
 
-        corners2 = face_corners (nrb2);
         if (ndim == 2 || ndim == 1)
-          flag = compare_corners (corners1, corners2);
+          [flag, MsgFlag] = compare_sides (nrb1, nrb2);
         elseif (ndim == 3)
-          [flag, ornt1, ornt2] = compare_corners (corners1, corners2);
+          [flag, ornt1, ornt2, MsgFlag] = compare_sides (nrb1, nrb2);
+        end
+
+        if (MsgFlag)
+          display_warning (MsgFlag, i1, j1, i2, j2);
         end
         
-        if (flag)
-          if (numel(nrb1.coefs) ~= numel(nrb2.coefs))
-            flag = 0;
-            warning (['The corners of PATCH %d FACE %d, and PATCH %d FACE %d coincide, but the number ' ... 
-                'of control points is different. No information is saved in this case'], i1, j1, i2, j2)
-          end
-        end
       end
     end
 
@@ -152,11 +145,20 @@ end
 
 
 
-function [flag, ornt1, ornt2] = compare_corners_bivariate (coefs1, coefs2)
+% Compare the sides of two volumes
+function [flag, ornt1, ornt2, MsgFlag] = compare_sides_bivariate (nrb1, nrb2)
+  MsgFlag = 0;
   tol = 1e-13;
 
-  coefs1 = reshape (coefs1, 4, []);
-  coefs2 = reshape (coefs2, 4, []);
+  face_corners = @(x) reshape (x.coefs(:, [1 end], [1 end]), 4, []);
+
+  coefs1 = face_corners (nrb1);
+  coefs2 = face_corners (nrb2);
+
+% Sort of relative error
+  tol = 1e-13 * max(abs(coefs1(1:3,1) - coefs1(1:3,end)));
+  tolknt = 1e-12;
+
 % Should use some sort of relative error
   if (max (max (abs (coefs1 - coefs2))) < tol)
     flag = 1; ornt1 = 1; ornt2 = 1;
@@ -177,19 +179,113 @@ function [flag, ornt1, ornt2] = compare_corners_bivariate (coefs1, coefs2)
   else
     flag = 0; ornt1 = 0; ornt2 = 0;
   end
+  
+% Reorder control points and knot vectors, to make comparisons easier
+  if (flag)
+    if (flag == -1)
+      nrb2 = nrbtransp (nrb2);
+    end
+    if (ornt1 == -1)
+      nrb2 = nrbreverse (nrb2, 1);
+    end
+    if (ornt2 == -1)
+      nrb2 = nrbreverse (nrb2, 2);
+    end
+      
+    if (nrb1.order ~= nrb2.order)
+      flag = 0;
+      MsgFlag = -3;
+    elseif (nrb1.number ~= nrb2.number)
+      flag = 0;
+      MsgFlag = -1;
+    elseif (any (cellfun (@numel, nrb1.knots) ~= cellfun (@numel, nrb2.knots))) % This is redundant
+      flag = 0;
+      MsgFlag = -4;
+    else
+% Pass the knots to the [0 1] interval to compare
+      pass_to_01 = @(x) (x - x(1)) / (x(end) - x(1));
+      knt1 = cellfun (pass_to_01, nrb1.knots, 'UniformOutput', false);
+      knt2 = cellfun (pass_to_01, nrb2.knots, 'UniformOutput', false);
+      if (max (max (abs (nrb1.coefs - nrb2.coefs))) > tol)
+        flag = 0;
+        MsgFlag = -2;
+      elseif ((max (abs (knt1{1} - knt2{1})) > tolknt) || (max (abs (knt1{2} - knt2{2})) > tolknt))
+        flag = 0;
+        MsgFlag = -5;
+      end      
+    end
+  end
+
 end
 
-function flag = compare_corners_univariate (coefs1, coefs2)
-  tol = 1e-13;
+% Compare the sides of two surfaces
+function [flag, MsgFlag] = compare_sides_univariate (nrb1, nrb2)
+  MsgFlag = 0;
+  face_corners = @(x) reshape (x.coefs(:, [1 end]), 4, []);
 
-  coefs1 = reshape (coefs1, 4, []);
-  coefs2 = reshape (coefs2, 4, []);
-% Should use some sort of relative error
+  coefs1 = face_corners (nrb1);
+  coefs2 = face_corners (nrb2);
+  
+% Sort of relative error
+  tol = 1e-13 * max(abs(coefs1(1:3,1) - coefs1(1:3,end)));
+  tolknt = 1e-12;
+
   if (max (max (abs (coefs1 - coefs2))) < tol)
     flag = 1;
   elseif (max (max (abs (coefs1 - coefs2(:,[end 1])))) < tol)
     flag = -1;
   else
     flag = 0;
+  end
+
+  if (flag)
+% Reorder control points and knot vectors, to make comparisons easier
+    if (flag == -1)
+      nrb2 = nrbreverse (nrb2);
+    end
+
+    if (nrb1.order ~= nrb2.order)
+      flag = 0;
+      MsgFlag = -3;
+    elseif (nrb1.number ~= nrb2.number)
+      flag = 0;
+      MsgFlag = -1;
+    elseif (numel(nrb1.knots) ~= numel(nrb2.knots)) % This is redundant
+      flag = 0;
+      MsgFlag = -4;
+    else
+% Pass the knots to the [0 1] interval to compare
+      knt1 = (nrb1.knots - nrb1.knots(1)) / (nrb1.knots(end) - nrb1.knots(1));
+      knt2 = (nrb2.knots - nrb2.knots(1)) / (nrb2.knots(end) - nrb2.knots(1));
+      if (max (max (abs (nrb1.coefs - nrb2.coefs))) > tol)
+        flag = 0;
+        MsgFlag = -2;
+      elseif (max (abs (knt1 - knt2)) > tolknt)
+        flag = 0;
+        MsgFlag = -5;
+      end
+    end
+  end
+  
+end
+
+function display_warning (MsgFlag, patch1, face1, patch2, face2)
+
+  switch MsgFlag
+    case {-1}
+      warning (['The corners of PATCH %d FACE %d, and PATCH %d FACE %d coincide, but the number ' ... 
+                'of control points is different. No information is saved in this case'], patch1, face1, patch2, face2)
+    case {-2}
+      warning (['The corners of PATCH %d FACE %d, and PATCH %d FACE %d coincide, but the internal ' ... 
+                'control points do not. No information is saved in this case'], patch1, face1, patch2, face2)
+    case {-3}
+      warning (['The corners of PATCH %d FACE %d, and PATCH %d FACE %d coincide, but the degree ' ... 
+                'is different. No information is saved in this case'], patch1, face1, patch2, face2)
+    case {-4}
+      warning (['The corners of PATCH %d FACE %d, and PATCH %d FACE %d coincide, but the number ' ... 
+                'of knots is different. No information is saved in this case'], patch1, face1, patch2, face2)
+    case {-5}
+      warning (['The corners of PATCH %d FACE %d, and PATCH %d FACE %d coincide, but the ' ... 
+                'knot vectors are different. No information is saved in this case'], patch1, face1, patch2, face2)
   end
 end
