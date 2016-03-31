@@ -26,7 +26,7 @@ function [interfaces, boundary] = nrbmultipatch (nurbs)
 % The boundary faces are stored separately, that is, nsides=1 for each boundary.
 %  To join several faces under the same condition, the user should do it by hand.
 % 
-%    Copyright (C) 2014, 2015 Rafael Vazquez
+%    Copyright (C) 2014, 2015, 2016 Rafael Vazquez
 %
 %    This program is free software: you can redistribute it and/or modify
 %    it under the terms of the GNU General Public License as published by
@@ -206,7 +206,7 @@ function [flag, ornt1, ornt2, MsgFlag] = compare_sides_bivariate (nrb1, nrb2)
       pass_to_01 = @(x) (x - x(1)) / (x(end) - x(1));
       knt1 = cellfun (pass_to_01, nrb1.knots, 'UniformOutput', false);
       knt2 = cellfun (pass_to_01, nrb2.knots, 'UniformOutput', false);
-      if (max (max (abs (nrb1.coefs - nrb2.coefs))) > tol)
+      if (max (abs (nrb1.coefs(:) - nrb2.coefs(:))) > tol)
         flag = 0;
         MsgFlag = -2;
       elseif ((max (abs (knt1{1} - knt2{1})) > tolknt) || (max (abs (knt1{2} - knt2{2})) > tolknt))
@@ -257,7 +257,7 @@ function [flag, MsgFlag] = compare_sides_univariate (nrb1, nrb2)
 % Pass the knots to the [0 1] interval to compare
       knt1 = (nrb1.knots - nrb1.knots(1)) / (nrb1.knots(end) - nrb1.knots(1));
       knt2 = (nrb2.knots - nrb2.knots(1)) / (nrb2.knots(end) - nrb2.knots(1));
-      if (max (max (abs (nrb1.coefs - nrb2.coefs))) > tol)
+      if (max (abs (nrb1.coefs(:) - nrb2.coefs(:))) > tol)
         flag = 0;
         MsgFlag = -2;
       elseif (max (abs (knt1 - knt2)) > tolknt)
