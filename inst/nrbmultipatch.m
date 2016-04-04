@@ -98,7 +98,10 @@ for i1 = 1:npatch
         j2 = j2 + 1;
         nrb2 = nrb_faces2(non_set_faces{i2}(j2));
 
-        if (ndim == 2 || ndim == 1)
+        if (ndim == 1)
+          flag = compare_sides (nrb1, nrb2);
+          MsgFlag = false;
+        elseif (ndim == 2)
           [flag, MsgFlag] = compare_sides (nrb1, nrb2);
         elseif (ndim == 3)
           [flag, ornt1, ornt2, MsgFlag] = compare_sides (nrb1, nrb2);
