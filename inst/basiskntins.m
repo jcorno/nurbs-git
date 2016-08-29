@@ -64,11 +64,13 @@ for j=1:nu_s
   su = su+u_mult(j);
   row = row+u_mult(j);
   Sl = bs2bs(deg,t,u,st,su);
+    maxval = max (Sl(:));
+    Sl(Sl/maxval < 1e-16) = 0;
   S(row:deg+row,col:deg+col) = Sl;
 end
 
-maxval = max (S(:));
-S(S/maxval < 1e-16) = 0;
+% maxval = max (S(:));
+% S(S/maxval < 1e-16) = 0;
 end
 
 
