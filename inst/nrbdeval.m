@@ -7,7 +7,7 @@ function varargout = nrbdeval (nurbs, dnurbs, varargin)
 %     [pnt, jac] = nrbdeval (vol, dvol, {tu tv tw})
 %     [pnt, jac, hess] = nrbdeval (crv, dcrv, dcrv2, tt)
 %     [pnt, jac, hess] = nrbdeval (srf, dsrf, dsrf2, {tu tv})
-%     [pnt, jac, hess] = nrbdeval (vol, dvol, {tu tv tw})
+%     [pnt, jac, hess] = nrbdeval (vol, dvol, dvol2, {tu tv tw})
 %
 % INPUTS:
 %
