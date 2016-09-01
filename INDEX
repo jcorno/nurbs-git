@@ -38,6 +38,8 @@ B-Spline functions
  bspderiv
  bspkntins
  bspdegelev
+ bspinterpcrv
+ bspinterpsurf
  basisfun
  basisfunder
  basiskntins

@@ -1,6 +1,8 @@
 Summary of important user-visible changes for nurbs 1.3.13:
 -------------------------------------------------------------------
  * inst/nrbsquare.m: added new function
+ * inst/bspinterpcrv.m: added new function
+ * inst/bspinterpsurf.m: added new function
 
 Summary of important user-visible changes for nurbs 1.3.12:
 -------------------------------------------------------------------
