@@ -6,6 +6,7 @@ Basic operations for NURBS curves, surfaces and volumes
  nrbderiv
  nrbdeval
  nrbeval
+ nrbinverse
  crvkntremove
 Operations for constructing NURBS curves and surfaces
  nrbtform
