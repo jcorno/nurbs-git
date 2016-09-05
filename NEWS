@@ -5,7 +5,7 @@ Summary of important user-visible changes for nurbs 1.3.13:
  * inst/bspinterpsurf.m: added new function
  * inst/nrbinverse.m: added new function
  * inst/nrbbasisfun.m: faster version for cell-arrays. Working version for volumes
- * inst/nrbnumbasisfun.m: faster version for cell-arrays. Working version for volumes
+ * inst/nrbnumbasisfun.m: faster version for cell-arrays. Working version for volumes. Now using 0-based indexing for cuves (different from basisfun).
 
 Summary of important user-visible changes for nurbs 1.3.12:
 -------------------------------------------------------------------

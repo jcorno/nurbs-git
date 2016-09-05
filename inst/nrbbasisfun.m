@@ -79,7 +79,8 @@ function [B, id] = nrbbasisfun (points, nrb)
   if (ndim == 1)
      id = num{1};
      B = reshape (w(num{1}), size(N{1})) .* N{1};
-     B = B ./ sum(B,2);
+     B = bsxfun (@(x,y) x./y, B, sum(B,2));
+%      B = B ./ sum(B,2);
   else
     if (iscell (points))
       npts_dim = cellfun (@numel, points);
