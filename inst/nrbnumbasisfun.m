@@ -61,7 +61,7 @@ function idx = nrbnumbasisfun (points, nrb)
       for idim = 1:ndim
         pts_dim = points{idim};
         sp{idim} = findspan (nrb.number(idim)-1, nrb.order(idim)-1, pts_dim, nrb.knots{idim});
-        N{idim} = basisfun(sp{idim}, pts_dim, nrb.order(idim)-1, nrb.knots{idim});
+%         N{idim} = basisfun(sp{idim}, pts_dim, nrb.order(idim)-1, nrb.knots{idim});
         num{idim} = numbasisfun (sp{idim}, pts_dim, nrb.order(idim)-1, nrb.knots{idim}) + 1;
       end
       npts_dim = cellfun (@numel, points);
@@ -86,7 +86,7 @@ function idx = nrbnumbasisfun (points, nrb)
       for idim = 1:ndim
         pts_dim = points(idim,:);
         sp{idim} = findspan (nrb.number(idim)-1, nrb.order(idim)-1, pts_dim, nrb.knots{idim});
-        N{idim} = basisfun(sp{idim}, pts_dim, nrb.order(idim)-1, nrb.knots{idim});
+%         N{idim} = basisfun(sp{idim}, pts_dim, nrb.order(idim)-1, nrb.knots{idim});
         num{idim} = numbasisfun (sp{idim}, pts_dim, nrb.order(idim)-1, nrb.knots{idim}) + 1;
       end
       npts = numel (points(1,:));
