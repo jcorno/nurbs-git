@@ -8,14 +8,18 @@ function [B, id] = nrbbasisfun (points, nrb)
 %    B     = nrbbasisfun ({u, v}, srf)
 %   [B, N] = nrbbasisfun ({u, v}, srf)
 %   [B, N] = nrbbasisfun (pts, srf)
+%   [B, N] = nrbbasisfun ({u, v, w}, vol)
+%   [B, N] = nrbbasisfun (pts, vol)
 %
 %    INPUT:
 %   
 %      u   - parametric coordinates along u direction
 %      v   - parametric coordinates along v direction
-%      pts - array of scattered points in parametric domain, array size: (2,num_points)
+%      w   - parametric coordinates along w direction
+%      pts - array of scattered points in parametric domain, array size: (ndim,num_points)
 %      crv - NURBS curve
 %      srf - NURBS surface
+%      vol - NURBS volume
 %   
 %    If the parametric coordinates are given in a cell-array, the values
 %     are computed in a tensor product set of points
@@ -23,8 +27,7 @@ function [B, id] = nrbbasisfun (points, nrb)
 %    OUTPUT:
 %   
 %      B - Value of the basis functions at the points
-%          size(B)=[numel(u),(p+1)] for curves
-%          or [numel(u)*numel(v), (p+1)*(q+1)] for surfaces
+%          size(B)=[npts, prod(nrb.order)]
 %
 %      N - Indices of the basis functions that are nonvanishing at each
 %          point. size(N) == size(B)

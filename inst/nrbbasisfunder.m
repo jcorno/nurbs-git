@@ -1,4 +1,4 @@
-function varargout = nrbbasisfunder2 (points, nrb)
+function varargout = nrbbasisfunder (points, nrb)
 
 % NRBBASISFUNDER:  NURBS basis functions derivatives
 %
@@ -9,14 +9,18 @@ function varargout = nrbbasisfunder2 (points, nrb)
 %   [Bu, Bv]    = nrbbasisfunder ({u, v}, srf)
 %   [Bu, Bv, N] = nrbbasisfunder ({u, v}, srf)
 %   [Bu, Bv, N] = nrbbasisfunder (pts, srf)
+%   [Bu, Bv, Bw, N] = nrbbasisfunder ({u, v, w}, vol)
+%   [Bu, Bv, Bw, N] = nrbbasisfunder (pts, vol)
 %
 %    INPUT:
 %   
 %      u   - parametric coordinates along u direction
 %      v   - parametric coordinates along v direction
-%      pts - array of scattered points in parametric domain, array size: (2,num_points)
+%      w   - parametric coordinates along w direction
+%      pts - array of scattered points in parametric domain, array size: (ndim,num_points)
 %      crv - NURBS curve
 %      srf - NURBS surface
+%      vol - NURBS volume
 %
 %    If the parametric coordinates are given in a cell-array, the values
 %     are computed in a tensor product set of points
@@ -24,17 +28,19 @@ function varargout = nrbbasisfunder2 (points, nrb)
 %    OUTPUT:
 %   
 %      Bu - Basis functions derivatives WRT direction u
-%           size(Bu)=[numel(u),(p+1)] for curves
-%           or [numel(u)*numel(v), (p+1)*(q+1)] for surfaces
+%           size(Bu)=[npts, prod(nrb.order)]
 %
 %      Bv - Basis functions derivatives WRT direction v
-%           size(Bv)=[numel(v),(p+1)] for curves
-%           or [numel(u)*numel(v), (p+1)*(q+1)] for surfaces
+%           size(Bv) == size(Bu)
+%
+%      Bw - Basis functions derivatives WRT direction w
+%           size(Bw) == size(Bu)
 %
 %      N - Indices of the basis functions that are nonvanishing at each
-%          point. size(N) == size(B)
+%          point. size(N) == size(Bu)
 %   
 %    Copyright (C) 2009 Carlo de Falco
+%    Copyright (C) 2016 Rafael Vazquez
 %
 %    This program is free software: you can redistribute it and/or modify
 %    it under the terms of the GNU General Public License as published by
