@@ -64,6 +64,7 @@ NURBS geometric entities and functions
  nrbcrvderiveval
  nrbsurfderiveval
 Knots construction and refinement
+ aveknt
  kntuniform
  kntrefine
  kntbrkdegreg
