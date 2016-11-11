@@ -6,6 +6,8 @@ Basic operations for NURBS curves, surfaces and volumes
  nrbderiv
  nrbdeval
  nrbeval
+ nrbeval_der_w
+ nrbeval_der_p
  nrbinverse
  crvkntremove
 Operations for constructing NURBS curves and surfaces
@@ -28,6 +30,8 @@ Operations for constructing NURBS curves and surfaces
  nrbtestsrf
  nrbunclamp
  nrbmultipatch
+ nrbmodp
+ nrbmodw
 Plot and export
  nrbplot
  nrbctrlplot
