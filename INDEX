@@ -28,6 +28,7 @@ Operations for constructing NURBS curves and surfaces
  nrbcoons
  nrbtestcrv
  nrbtestsrf
+ nrbclamp
  nrbunclamp
  nrbmultipatch
  nrbmodp
